@@ -4,35 +4,37 @@ Mokesčių SUFLERIO AI paieškos prototipas. Idėja: paieška beveik kaip Google
 
 **Peržiūra:** https://richkus.github.io/ai-paieska/
 
-## Variantai
+## Versijos
 
-| Aplankas | Kas tai |
+Visos versijos yra viename puslapyje. Perjungiama apačioje kairėje per **Admin → Versija** arba nuoroda:
+
+| Nuoroda | Kas tai |
 |---|---|
-| [`v1/`](v1/) | **Inline patikslinimas.** Patikslinimas vyksta toje pačioje vietoje, žingsnių juosta rodo, kaip mažėja rezultatų. Rezultatas atsidaro šoniniame panel'yje ties citata. Filtrai vienoje juostoje abiem režimams, su AI dalį jų pritaiko pati (✦). |
-| [`v2/`](v2/) | **Dešinė kolona.** Vienas įvesties laukas viršuje, pakeitus tekstą prasideda nauja paieška. AI blokas be dėžučių: citatos + klausimas, į kurį atsakoma chip'ais arba „Kita…“. Dešinėje būsena: paieškos eiga, šaltiniai, ankstesnės paieškos. PRO citatos su paywall'u panel'yje. |
+| [`?v=1`](https://richkus.github.io/ai-paieska/?v=1) | **V1 · Inline patikslinimas.** Žingsnių juosta virš AI bloko, AI blokas dėžutėje, laisvas tekstas atskirame lauke. |
+| [`?v=2`](https://richkus.github.io/ai-paieska/?v=2) | **V2 · Dešinė kolona.** Vienas įvesties laukas viršuje, pakeitus tekstą prasideda nauja paieška. AI blokas be dėžučių: citatos + klausimas, į kurį atsakoma chip'ais arba „Kita…“. Dešinėje būsena: paieškos eiga, šaltiniai, ankstesnės paieškos. |
 
-Apačioje kairėje yra mygtukas **Admin** (tik prototipui). Jame galima perjungti scenarijus (konkreti situacija, platus klausimas, trumpa frazė, nėra rezultatų) ir atstatyti prototipą.
+Admin'e taip pat yra scenarijai (konkreti situacija, platus klausimas, trumpa frazė, nėra rezultatų) ir aktyvios versijos parametrai, jei jų yra. Senos nuorodos `v1/` ir `v2/` nukreipia į tą patį puslapį.
 
 ## Struktūra
 
 ```
+index.html         prototipas: visos versijos, Alpine.js
 assets/
   css/shell.css    karkasas: side meniu, viršutinė juosta, footeris (Figma 1:1)
-  css/search.css   paieškos puslapis, AI blokas, panel'is
+  css/search.css   paieškos puslapis, V1 AI blokas, panel'is
   css/search-v2.css V2: AI blokas be dėžučių, dešinė kolona, PRO paywall
   css/filters.css  filtrų juosta (pill filtrai, popover'iai, mobile bottom sheet)
   css/admin.css    prototipo admin skydelis (neutralus, ne brando)
   js/shell.js      įdeda karkasą į [data-shell] elementus
-  js/data.js       pavyzdiniai scenarijai ir rezultatai
+  js/data.js       pavyzdiniai scenarijai, rezultatai, filtrai
   img/             ikonos ir logotipas iš Figmos
-v1/, v2/          variantai (Alpine.js)
-index.html         variantų sąrašas
+v1/, v2/           nukreipimai į ?v=1 / ?v=2
 ```
 
-## Naujas variantas
+## Nauja versija
 
-1. Nukopijuok `v1/` į `v2/` ir keisk tik turinį.
-2. Karkasas ateina iš `assets/js/shell.js`, jo kartoti nereikia.
-3. Pridėk nuorodą į `index.html` ir lentelę čia.
+1. `index.html` JS dalyje `VERSIONS` sąraše pridėk `{ id: 'v3', label, desc, params }`.
+2. Markup'e pridėk bloką su `ver === 'v3'`. Karkasas, filtrai, rezultatai ir panel'is bendri.
+3. `params` yra tos versijos admin nustatymai, rodomi tik kai versija aktyvi. Tipai: `radio` (`options`) ir `check` (`text`), reikšmė pasiekiama per `p.<key>`.
 
 Karkasas: [Figma, „Ai: google paieška“](https://www.figma.com/design/Eg4Jdd6kmnopssrHpvWTbg/?node-id=3693-8115). Tekstai ir skaičiai yra pavyzdiniai.

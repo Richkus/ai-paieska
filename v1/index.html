@@ -9,6 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400..800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../assets/css/shell.css">
 <link rel="stylesheet" href="../assets/css/search.css">
+<link rel="stylesheet" href="../assets/css/admin.css">
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
 </head>
 <body>
@@ -193,14 +194,20 @@
     </template>
   </aside>
 
-  <!-- Prototipo scenarijai (tik prototipui) -->
-  <div class="proto" role="group" aria-label="Scenarijus">
-    <span class="proto-label"><i aria-hidden="true"></i>Scenarijus</span>
-    <div class="proto-seg">
+  <!-- Prototipo admin (tik prototipui) -->
+  <div class="ms-admin" @keydown.escape.window="adminOpen = false">
+    <div class="ms-admin-panel" x-show="adminOpen" x-cloak x-transition.opacity.scale.95.origin.bottom.left.duration.150ms @click.outside="adminOpen = false">
+      <div class="ms-admin-title">Prototipo nustatymai</div>
+      <div class="ms-admin-group">Scenarijus</div>
       <template x-for="(s, i) in S" :key="s.id">
-        <button type="button" :class="{ 'is-on': sc.id === s.id }" @click="loadScenario(i)" x-text="s.label"></button>
+        <label class="ms-admin-opt"><input type="radio" name="ms-scenario" :value="i" :checked="scIdx === i" @change="loadScenario(i)"><span x-text="s.label"></span></label>
       </template>
+      <button type="button" class="ms-admin-reset" @click="resetDemo()">Atstatyti ir grįžti į pradžią</button>
     </div>
+    <button type="button" class="ms-admin-btn" @click="adminOpen = !adminOpen" :aria-expanded="adminOpen" aria-label="Prototipo nustatymai">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M2 4h7M13 4h1M2 12h1M7 12h7"/><circle cx="11" cy="4" r="2"/><circle cx="5" cy="12" r="2"/></svg>
+      <span>Admin</span>
+    </button>
   </div>
 </div>
 
@@ -227,6 +234,7 @@
       vote: 0,
       mode: store.get('ai-paieska-mode') === 'classic' ? 'classic' : 'ai',
       panelOpen: false,
+      adminOpen: false,
       pId: null,
 
       init() { this.loadScenario(0); },
@@ -248,6 +256,7 @@
         return uniq.map((v, i) => i === uniq.length - 1 ? `<b>${v}</b>` : v).join(' → ') + ' rezultatų';
       },
 
+      resetDemo() { this.setMode('ai'); this.loadScenario(0); this.adminOpen = false; window.scrollTo({ top: 0, behavior: 'smooth' }); },
       setMode(m) { this.mode = m; store.set('ai-paieska-mode', m); },
       loadScenario(i) {
         this.scIdx = i; this.step = 0; this.trail = []; this.vote = 0; this.own = '';

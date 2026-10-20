@@ -1,0 +1,59 @@
+/* ==========================================================
+   Filtrų juosta (Linear / Reddit principu)
+   Viena eilutė: rezultatų skaičius · pill filtrai · rikiavimas.
+   Pritaikoma iš karto, be „Filtruoti“ mygtuko.
+   ========================================================== */
+.fb { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 4px 0 14px; border-bottom: 1px solid var(--ms-line); }
+.fb-count { margin-right: 6px; color: var(--ms-ink); font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.fb-count span { color: var(--ms-muted); font-weight: 400; }
+.fb-end { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+.fb-clear { padding: 0 6px; border: 0; background: none; color: var(--ms-sub); font-size: 13px; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--ms-line-strong); transition: color .15s; }
+.fb-clear:hover { color: var(--ms-ink); }
+
+/* Pill */
+.fb-item { position: relative; }
+.fb-pill { display: inline-flex; align-items: center; gap: 6px; max-width: 280px; height: 30px; padding: 0 10px 0 12px; border: 1px solid var(--ms-line); border-radius: 15px; background: #fff; color: var(--ms-sub); font-size: 13px; white-space: nowrap; transition: border-color .15s, background .15s, color .15s; }
+.fb-pill:hover { border-color: var(--ms-sidebar); color: var(--ms-ink); }
+.fb-pill[aria-expanded="true"] { border-color: var(--ms-teal); box-shadow: 0 0 0 3px rgba(83, 169, 177, .15); color: var(--ms-ink); }
+.fb-pill > span { overflow: hidden; text-overflow: ellipsis; }
+.fb-pill .is-chev { flex: 0 0 auto; color: var(--ms-muted); transition: transform .2s var(--ms-ease); }
+.fb-pill[aria-expanded="true"] .is-chev { transform: rotate(180deg); }
+.fb-pill.is-set { padding-right: 4px; border-color: var(--ms-sidebar); background: var(--ms-topbar); color: var(--ms-teal-dark); }
+.fb-pill.is-set b { font-weight: 600; }
+.fb-pill .is-more { color: var(--ms-sub); font-weight: 400; }
+.fb-pill .is-ai { color: var(--ai-accent, #3e9aa2); }
+.fb-x { display: grid; place-items: center; flex: 0 0 auto; width: 22px; height: 22px; border-radius: 50%; color: var(--ms-sub); font-size: 15px; line-height: 1; transition: background .15s, color .15s; }
+.fb-x:hover { background: rgba(15, 83, 84, .1); color: var(--ms-ink); }
+.fb-sort { border-color: transparent; background: none; padding-left: 8px; }
+.fb-sort:hover { border-color: var(--ms-line); }
+
+/* Popover */
+.fb-pop { position: absolute; top: calc(100% + 6px); left: 0; z-index: 40; width: 260px; padding: 6px; border: 1px solid var(--ms-line); border-radius: 12px; background: #fff; box-shadow: 0 12px 32px rgba(15, 40, 42, .14), 0 2px 6px rgba(15, 40, 42, .06); }
+.fb-pop.is-right { left: auto; right: 0; }
+.fb-pop-search { display: flex; align-items: center; gap: 8px; height: 34px; margin-bottom: 4px; padding: 0 10px; border-bottom: 1px solid var(--ms-line); }
+.fb-pop-search input { flex: 1; min-width: 0; border: 0; outline: none; background: none; font: inherit; font-size: 13px; color: var(--ms-ink); }
+.fb-pop-search input::placeholder { color: var(--ms-muted); }
+.fb-list { max-height: 292px; margin: 0; padding: 0; overflow-y: auto; list-style: none; }
+.fb-opt { display: flex; align-items: center; gap: 10px; width: 100%; padding: 7px 10px; border: 0; border-radius: 7px; background: none; color: var(--ms-ink-soft); font-size: 13.5px; text-align: left; transition: background .12s; }
+.fb-opt:hover, .fb-opt:focus-visible { background: var(--ms-surface-soft); outline: none; }
+.fb-opt span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fb-opt small { color: var(--ms-muted); font-size: 12px; font-variant-numeric: tabular-nums; }
+.fb-opt.is-zero { color: var(--ms-muted); }
+.fb-check { display: grid; place-items: center; flex: 0 0 16px; width: 16px; height: 16px; border: 1px solid #c3d3d4; border-radius: 4px; background: #fff; color: #fff; transition: background .12s, border-color .12s; }
+.fb-check.is-radio { border-radius: 50%; }
+.fb-opt.is-on .fb-check { border-color: var(--ms-teal-dark); background: var(--ms-teal-dark); }
+.fb-opt.is-on .fb-check.is-radio { background: #fff; border: 5px solid var(--ms-teal-dark); }
+.fb-opt.is-on .fb-check svg { display: block; }
+.fb-check svg { display: none; }
+.fb-pop-empty { padding: 10px; color: var(--ms-muted); font-size: 13px; }
+.fb-pop-foot { display: flex; justify-content: space-between; margin-top: 4px; padding: 6px 4px 2px; border-top: 1px solid var(--ms-line); }
+.fb-pop-foot button { padding: 4px 6px; border: 0; border-radius: 6px; background: none; color: var(--ms-sub); font-size: 12.5px; transition: background .12s, color .12s; }
+.fb-pop-foot button:hover { background: var(--ms-surface-soft); color: var(--ms-ink); }
+.fb-pop-sep { height: 1px; margin: 4px 6px; background: var(--ms-line); }
+
+@media (max-width: 860px) {
+  .fb-end { margin-left: 0; width: 100%; justify-content: space-between; }
+  .fb-pop { z-index: 460; position: fixed; top: auto; left: 0; right: 0; bottom: 0; width: auto; padding: 10px 10px calc(16px + env(safe-area-inset-bottom, 0px)); border-radius: 16px 16px 0 0; }
+  .fb-pop.is-right { left: 0; }
+  .fb-list { max-height: 50vh; }
+}

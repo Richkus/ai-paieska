@@ -202,3 +202,56 @@ window.SCENARIOS = [
     ],
   },
 ];
+
+/* ==========================================================
+   Filtrai. Reikšmės paimtos iš dabartinės paieškos (Rubrika, Tema,
+   Data); Formatas pavyzdinis. Rezultatams priskiriama pagal tipą.
+   ========================================================== */
+window.FILTERS = {
+  rub: {
+    label: 'Rubrika',
+    options: ['Mokesčių naujienos', 'Praktinės situacijos', 'Seminarai ir vaizdo įrašai', 'Video santraukos', 'Savaitės apžvalga', 'Skaičiuoklės', 'Testai', 'Tinklalaidės', 'Trumpai', 'Geroji praktika', 'PRO Mikroskopą', 'PRO komentarai', 'Profilaktika', 'PRO konsultacijos'],
+  },
+  tema: {
+    label: 'Tema',
+    search: true,
+    options: ['Darbo laikas', 'Darbo užmokestis', 'Komandiruotės', 'PVM', 'PVM sąskaitos faktūros', 'Transportas ir logistika', 'NT ir statyba', 'Gamyba ir tarptautinė prekyba', 'Išmanioji VMI', 'Paskolos', 'Ilgalaikis turtas', 'Automobiliai', 'Atostogos'],
+  },
+  fmt: {
+    label: 'Formatas',
+    options: ['Tekstas', 'Video', 'Skaičiuoklė', 'Testas', 'Dokumento forma'],
+  },
+  data: {
+    label: 'Data',
+    single: true,
+    options: [
+      { id: '30d', label: 'Pastarosios 30 dienų', from: '2026-09-20' },
+      { id: '6m', label: 'Pastarasis pusmetis', from: '2026-04-20' },
+      { id: '2026', label: '2026 metai', from: '2026-01-01', to: '2026-12-31' },
+      { id: '2025', label: '2025 metai', from: '2025-01-01', to: '2025-12-31' },
+      { id: '2024', label: '2024 metai', from: '2024-01-01', to: '2024-12-31' },
+      { id: 'old', label: '2023 metai ir anksčiau', to: '2023-12-31' },
+    ],
+  },
+};
+
+(function tagResults() {
+  const rub = { 'Praktinė situacija': 'Praktinės situacijos', 'Konsultacija': 'PRO konsultacijos', 'Straipsnis': 'Geroji praktika', 'Renginio įrašas': 'Seminarai ir vaizdo įrašai', 'Testas': 'Testai', 'Skaičiuoklė': 'Skaičiuoklės', 'Mokesčių naujiena': 'Mokesčių naujienos', 'Dokumento forma': 'Trumpai', 'Sąvadas': 'Geroji praktika' };
+  const fmt = { 'Renginio įrašas': 'Video', 'Testas': 'Testas', 'Skaičiuoklė': 'Skaičiuoklė', 'Dokumento forma': 'Dokumento forma' };
+  const tema = { r: 'Darbo laikas', k: 'Komandiruotės', p: 'PVM' };
+  Object.entries(window.RESULTS).forEach(([id, r]) => {
+    r.rub = rub[r.type] || 'Mokesčių naujienos';
+    r.fmt = fmt[r.type] || 'Tekstas';
+    r.tema = id === 'p3' ? 'PVM sąskaitos faktūros' : (id === 'r7' ? 'Darbo užmokestis' : tema[id[0]]);
+  });
+})();
+
+/* AI pačios pritaikyti filtrai pagal scenarijaus žingsnį */
+(function aiFilters() {
+  const S = Object.fromEntries(window.SCENARIOS.map(s => [s.id, s]));
+  S.savaitgalis.steps.forEach(s => { s.filters = { tema: ['Darbo laikas'] }; });
+  S.komandiruote.steps[1].filters = { tema: ['Komandiruotės'] };
+  S.komandiruote.steps[2].filters = { tema: ['Komandiruotės'] };
+  S.pvm.steps[1].filters = { tema: ['PVM'] };
+  S.pvm.steps[2].filters = { tema: ['PVM'], data: '2026' };
+})();

@@ -8,7 +8,7 @@ Mokesčių SUFLERIO AI paieškos prototipas. Idėja: paieška beveik kaip Google
 
 | Aplankas | Kas tai |
 |---|---|
-| [`v1/`](v1/) | **Inline patikslinimas.** Patikslinimas vyksta toje pačioje vietoje, žingsnių juosta rodo, kaip mažėja rezultatų. Rezultatas atsidaro šoniniame panel'yje ties citata. |
+| [`v1/`](v1/) | **Inline patikslinimas.** Patikslinimas vyksta toje pačioje vietoje, žingsnių juosta rodo, kaip mažėja rezultatų. Rezultatas atsidaro šoniniame panel'yje ties citata. Filtrai vienoje juostoje abiem režimams, su AI dalį jų pritaiko pati (✦). |
 
 Apačioje kairėje yra mygtukas **Admin** (tik prototipui). Jame galima perjungti scenarijus (konkreti situacija, platus klausimas, trumpa frazė, nėra rezultatų) ir atstatyti prototipą.
 
@@ -18,6 +18,7 @@ Apačioje kairėje yra mygtukas **Admin** (tik prototipui). Jame galima perjungt
 assets/
   css/shell.css    karkasas: side meniu, viršutinė juosta, footeris (Figma 1:1)
   css/search.css   paieškos puslapis, AI blokas, panel'is
+  css/filters.css  filtrų juosta (pill filtrai, popover'iai, mobile bottom sheet)
   css/admin.css    prototipo admin skydelis (neutralus, ne brando)
   js/shell.js      įdeda karkasą į [data-shell] elementus
   js/data.js       pavyzdiniai scenarijai ir rezultatai

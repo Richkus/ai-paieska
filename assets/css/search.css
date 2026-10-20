@@ -77,13 +77,6 @@
 @keyframes ai-in { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
 
 /* ---------- Klasikiniai rezultatai (kaip dabartinė paieška) ---------- */
-.sr-head { border-radius: 4px; overflow: hidden; margin-bottom: 8px; }
-.sr-head-bar { display: flex; align-items: center; gap: 12px; padding: 10px 20px; background: var(--ms-head-bar); color: #fff; font-size: 14px; }
-.sr-head-bar i { width: 1px; height: 16px; background: rgba(255, 255, 255, .6); }
-.sr-filters { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; padding: 14px 20px 18px; background: var(--ms-footer); }
-.sr-filters label { grid-column: 1 / -1; font-size: 13px; font-weight: 600; color: var(--ms-ink-soft); }
-.sr-filters select { height: 34px; padding: 0 10px; border: 1px solid #dbe4e4; border-radius: 4px; background: #fff; color: var(--ms-muted); font: inherit; font-size: 12px; font-weight: 700; letter-spacing: .03em; text-transform: uppercase; }
-
 .sr-list { margin: 0; padding: 0; list-style: none; }
 .sr-item { border-bottom: 1px solid var(--ms-line); }
 .sr-item button { display: grid; grid-template-columns: minmax(0, 1fr) 150px; gap: 28px; width: 100%; padding: 22px 0; border: 0; background: none; text-align: left; transition: background .15s; }
@@ -94,7 +87,8 @@
 .sr-meta em { font-style: normal; text-transform: none; color: var(--ms-link); }
 .sr-thumb { display: grid; place-items: center; height: 85px; border-radius: 8px; background: var(--ms-sidebar-active); color: var(--ms-teal-dark); font-size: 11px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; opacity: .8; }
 
-.sr-empty { padding: 40px 0; color: var(--ms-sub); text-align: center; }
+.sr-empty { padding: 48px 0; color: var(--ms-sub); text-align: center; }
+.sr-empty p { margin: 0 0 12px; }
 
 /* ---------- Šoninis panel'is (kaip mokesciu-naujienos „Panel“) ---------- */
 .pn-backdrop { position: fixed; inset: 0; z-index: 60; background: rgba(20, 45, 48, .34); }
@@ -119,7 +113,6 @@
 @media (max-width: 860px) {
   .ai { padding: 18px 16px 14px; }
   .ai-dirs { grid-template-columns: minmax(0, 1fr); }
-  .sr-filters { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .sr-item button { grid-template-columns: minmax(0, 1fr); }
   .sr-thumb { display: none; }
   .sr-counts { margin-left: 0; width: 100%; }

@@ -242,6 +242,7 @@ window.FILTERS = {
   Object.entries(window.RESULTS).forEach(([id, r]) => {
     r.rub = rub[r.type] || 'Mokesčių naujienos';
     r.fmt = fmt[r.type] || 'Tekstas';
+    r.pro = r.rub.startsWith('PRO');
     r.tema = id === 'p3' ? 'PVM sąskaitos faktūros' : (id === 'r7' ? 'Darbo užmokestis' : tema[id[0]]);
   });
 })();

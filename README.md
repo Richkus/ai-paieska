@@ -9,6 +9,7 @@ Mokesčių SUFLERIO AI paieškos prototipas. Idėja: paieška beveik kaip Google
 | Aplankas | Kas tai |
 |---|---|
 | [`v1/`](v1/) | **Inline patikslinimas.** Patikslinimas vyksta toje pačioje vietoje, žingsnių juosta rodo, kaip mažėja rezultatų. Rezultatas atsidaro šoniniame panel'yje ties citata. Filtrai vienoje juostoje abiem režimams, su AI dalį jų pritaiko pati (✦). |
+| [`v2/`](v2/) | **Dešinė kolona.** Vienas įvesties laukas viršuje, pakeitus tekstą prasideda nauja paieška. AI blokas be dėžučių: citatos + klausimas, į kurį atsakoma chip'ais arba „Kita…“. Dešinėje būsena: paieškos eiga, šaltiniai, ankstesnės paieškos. PRO citatos su paywall'u panel'yje. |
 
 Apačioje kairėje yra mygtukas **Admin** (tik prototipui). Jame galima perjungti scenarijus (konkreti situacija, platus klausimas, trumpa frazė, nėra rezultatų) ir atstatyti prototipą.
 
@@ -18,12 +19,13 @@ Apačioje kairėje yra mygtukas **Admin** (tik prototipui). Jame galima perjungt
 assets/
   css/shell.css    karkasas: side meniu, viršutinė juosta, footeris (Figma 1:1)
   css/search.css   paieškos puslapis, AI blokas, panel'is
+  css/search-v2.css V2: AI blokas be dėžučių, dešinė kolona, PRO paywall
   css/filters.css  filtrų juosta (pill filtrai, popover'iai, mobile bottom sheet)
   css/admin.css    prototipo admin skydelis (neutralus, ne brando)
   js/shell.js      įdeda karkasą į [data-shell] elementus
   js/data.js       pavyzdiniai scenarijai ir rezultatai
   img/             ikonos ir logotipas iš Figmos
-v1/index.html      variantas (Alpine.js)
+v1/, v2/          variantai (Alpine.js)
 index.html         variantų sąrašas
 ```
 

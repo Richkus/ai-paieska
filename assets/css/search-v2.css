@@ -1,0 +1,104 @@
+/* ==========================================================
+   V2: pagrindinė kolona (turinys ir veiksmai) + dešinė kolona (būsena).
+   AI blokas be dėžučių, patikslinimas = atsakymas į AI klausimą.
+   ========================================================== */
+.v2 { display: grid; grid-template-columns: minmax(0, 760px) 280px; gap: 40px; align-items: start; max-width: calc(760px + 40px + 280px + var(--ms-gutter) * 2); padding: 20px var(--ms-gutter) 72px; }
+.v2.is-classic { grid-template-columns: minmax(0, 760px) 280px; }
+.v2-main { min-width: 0; }
+
+/* ---------- AI blokas ---------- */
+.a2 { margin-bottom: 28px; padding-bottom: 24px; border-bottom: 1px solid var(--ms-line); }
+.a2-head { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 14px; }
+.a2-head > svg { flex: 0 0 auto; margin-top: 5px; color: var(--ai-accent); }
+.a2-head h2 { margin: 0; color: var(--ms-ink); font-size: 20px; font-weight: 600; line-height: 1.35; }
+.a2-info { position: relative; flex: 0 0 auto; display: grid; place-items: center; width: 22px; height: 22px; margin-top: 3px; padding: 0; border: 0; border-radius: 50%; background: none; color: var(--ms-muted); transition: background .15s, color .15s; }
+.a2-info:hover, .a2-info:focus-visible { background: var(--ms-pill); color: var(--ms-ink); outline: none; }
+.a2-tip { position: absolute; top: calc(100% + 6px); left: 50%; z-index: 20; width: 240px; padding: 8px 10px; border-radius: 8px; background: var(--ms-ink); color: #fff; font-size: 12.5px; font-weight: 400; line-height: 1.45; text-align: left; transform: translateX(-50%); pointer-events: none; }
+
+.a2-quotes { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; margin: 0 0 20px; padding: 0; list-style: none; }
+.a2-quote { padding-left: 14px; border-left: 2px solid var(--ai-line); }
+.a2-quote p { margin: 0 0 6px; color: var(--ms-ink-soft); font-size: 15px; line-height: 1.65; }
+.a2-src { min-width: 0; display: inline-flex; align-items: center; gap: 6px; max-width: 100%; padding: 0; border: 0; background: none; color: var(--ms-muted); font-size: 13px; text-align: left; transition: color .15s; }
+.a2-src:hover { color: var(--ms-link); }
+.a2-src span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.a2-src b { font-weight: 600; color: var(--ms-sub); }
+.a2-src:hover b { color: inherit; }
+.a2-pro { flex: 0 0 auto; display: inline-flex; align-items: center; gap: 3px; padding: 1px 5px; border-radius: 3px; background: #f6e3ef; color: var(--ms-pro); font-size: 10px; font-weight: 700; letter-spacing: .04em; }
+
+/* Klausimas ir atsakymai */
+.a2-ask { margin: 0 0 10px; color: var(--ms-ink); font-size: 15px; font-weight: 600; }
+.a2-answers { display: flex; flex-wrap: wrap; gap: 8px; }
+.a2-chip { display: inline-flex; align-items: center; gap: 8px; height: 32px; padding: 0 14px; border: 1px solid var(--ms-sidebar); border-radius: 16px; background: #fff; color: var(--ms-teal-dark); font-size: 14px; transition: background .15s, border-color .15s; }
+.a2-chip:hover { background: var(--ms-topbar); border-color: var(--ai-accent); }
+.a2-chip em { font-style: normal; color: var(--ms-muted); font-size: 12.5px; font-variant-numeric: tabular-nums; }
+.a2-chip.is-other { border-style: dashed; color: var(--ms-sub); }
+.a2-other { display: flex; align-items: center; gap: 8px; }
+.a2-other-field { flex: 1; display: flex; align-items: center; gap: 6px; height: 38px; padding: 0 5px 0 14px; border: 1px solid var(--ms-field-text); border-radius: 19px; background: #fff; box-shadow: 0 0 0 3px rgba(83, 169, 177, .15); }
+.a2-other-field input { flex: 1; min-width: 0; border: 0; outline: none; background: none; font: inherit; font-size: 14px; color: var(--ms-ink); }
+.a2-other-field input::placeholder { color: var(--ms-muted); }
+.a2-other-field button { display: grid; place-items: center; width: 28px; height: 28px; padding: 0; border: 0; border-radius: 50%; background: var(--ms-teal-dark); color: #fff; transition: opacity .15s; }
+.a2-other-field button:disabled { opacity: .3; cursor: default; }
+.a2-cancel { padding: 6px 8px; border: 0; border-radius: 6px; background: none; color: var(--ms-sub); font-size: 13px; transition: background .15s, color .15s; }
+.a2-cancel:hover { background: var(--ms-pill); color: var(--ms-ink); }
+.a2-hint { margin: 0; color: var(--ms-muted); font-size: 13px; }
+
+.a2-foot { display: flex; align-items: flex-end; gap: 16px; }
+.a2-foot > div:first-child { flex: 1; min-width: 0; }
+.a2-votes { flex: 0 0 auto; display: flex; gap: 4px; }
+.a2-vote { display: grid; place-items: center; width: 28px; height: 28px; padding: 0; border: 0; border-radius: 6px; background: none; color: var(--ms-muted); transition: background .15s, color .15s; }
+.a2-vote:hover { background: var(--ms-pill); color: var(--ms-ink); }
+.a2-vote.is-on { background: var(--ai-quote); color: var(--ms-teal-dark); }
+
+/* ---------- Dešinė kolona: būsena ---------- */
+.v2-side { position: sticky; top: calc(var(--ms-topbar-h) + 20px); display: grid; gap: 12px; }
+.v2-side-toggle { display: none; }
+.sc { padding: 14px 16px; border: 1px solid var(--ms-line); border-radius: 12px; background: #fff; }
+.sc h3 { display: flex; align-items: center; justify-content: space-between; margin: 0 0 10px; color: var(--ms-ink); font-size: 13px; font-weight: 600; }
+.sc h3 span { color: var(--ms-muted); font-weight: 400; font-variant-numeric: tabular-nums; }
+
+/* Žingsniai vertikaliai */
+.st { margin: 0; padding: 0; list-style: none; }
+.st li { position: relative; padding-left: 20px; }
+.st li::before { content: ''; position: absolute; left: 4px; top: 8px; width: 7px; height: 7px; border-radius: 50%; background: var(--ms-sidebar); }
+.st li:not(:last-child)::after { content: ''; position: absolute; left: 7px; top: 18px; bottom: -4px; width: 1px; background: var(--ms-line); }
+.st li.is-current::before { background: var(--ms-teal-dark); box-shadow: 0 0 0 3px var(--ai-quote); }
+.st-row { display: flex; align-items: flex-start; gap: 6px; width: 100%; margin-bottom: 6px; padding: 2px 4px 2px 0; border: 0; border-radius: 6px; background: none; text-align: left; transition: background .15s; }
+.st-row:hover { background: var(--ms-surface-soft); }
+.st-row span { flex: 1; min-width: 0; color: var(--ms-ink-soft); font-size: 13.5px; line-height: 1.4; }
+.st li.is-current .st-row span { color: var(--ms-ink); font-weight: 600; }
+.st-row small { flex: 0 0 auto; padding-top: 1px; color: var(--ms-muted); font-size: 12px; font-variant-numeric: tabular-nums; }
+.st-row i { flex: 0 0 auto; display: grid; place-items: center; width: 18px; height: 18px; border-radius: 50%; color: var(--ms-muted); font-style: normal; transition: background .15s, color .15s; }
+.st-row i:hover { background: rgba(15, 83, 84, .1); color: var(--ms-ink); }
+
+/* Šaltiniai ir ankstesnės paieškos */
+.sl { display: grid; gap: 2px; margin: 0 -8px; padding: 0; list-style: none; }
+.sl button { display: grid; gap: 2px; width: 100%; padding: 7px 8px; border: 0; border-radius: 8px; background: none; text-align: left; transition: background .15s; }
+.sl button:hover { background: var(--ms-surface-soft); }
+.sl small { display: flex; align-items: center; gap: 6px; color: var(--ms-muted); font-size: 11.5px; }
+.sl span { overflow: hidden; color: var(--ms-ink-soft); font-size: 13px; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.sl .is-hist span { -webkit-line-clamp: 1; }
+.sl-empty { margin: 0; color: var(--ms-muted); font-size: 13px; }
+
+/* Filtrų juostos „iš 1949“ */
+.fb-count small { margin-left: 4px; color: var(--ms-muted); font-size: 13px; font-weight: 400; }
+
+/* ---------- PRO paywall panel'yje ---------- */
+.pw { position: relative; margin-top: -8px; }
+.pw-fade { height: 90px; margin-bottom: -90px; background: linear-gradient(rgba(255, 255, 255, 0), #fff); position: relative; z-index: 1; }
+.pw-blur { color: var(--ms-muted); filter: blur(3px); user-select: none; }
+.pw-card { position: relative; z-index: 2; margin-top: 8px; padding: 24px; border: 1px solid var(--ms-line); border-radius: 12px; background: #fff; text-align: center; box-shadow: 0 8px 24px rgba(15, 40, 42, .06); }
+.pw-card h3 { margin: 0 0 6px; color: var(--ms-ink); font-size: 18px; }
+.pw-card p { margin: 0 auto 16px !important; max-width: 380px; color: var(--ms-sub) !important; font-size: 14px !important; }
+.pw-cta { text-decoration: none; display: inline-flex; align-items: center; height: 38px; padding: 0 20px; border: 0; border-radius: 6px; background: var(--ms-teal); color: #fff; font-size: 14px; font-weight: 600; }
+.pw-alt { text-decoration: none; display: block; margin-top: 10px; color: var(--ms-sub); font-size: 13px; }
+
+/* ---------- Mažesni ekranai: dešinė kolona virš turinio, suskleidžiama ---------- */
+@media (max-width: 1180px) {
+  .v2, .v2.is-classic { grid-template-columns: minmax(0, 1fr); gap: 20px; max-width: calc(760px + var(--ms-gutter) * 2); }
+  .v2-side { position: static; order: -1; gap: 8px; }
+  .v2-side-toggle { display: flex; align-items: center; justify-content: space-between; width: 100%; height: 40px; padding: 0 14px; border: 1px solid var(--ms-line); border-radius: 10px; background: #fff; color: var(--ms-ink-soft); font-size: 13.5px; }
+  .v2-side-toggle svg { transition: transform .2s var(--ms-ease); }
+  .v2-side-toggle[aria-expanded="true"] svg { transform: rotate(180deg); }
+  .v2-side .sc { display: none; }
+  .v2-side.is-open .sc { display: block; }
+}

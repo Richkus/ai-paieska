@@ -12,6 +12,7 @@ Visos versijos yra viename puslapyje. Perjungiama apačioje kairėje per **Admin
 |---|---|
 | [`?v=1`](https://richkus.github.io/ai-paieska/?v=1) | **V1 · Inline patikslinimas.** Žingsnių juosta virš AI bloko, AI blokas dėžutėje, laisvas tekstas atskirame lauke. |
 | [`?v=2`](https://richkus.github.io/ai-paieska/?v=2) | **V2 · Dešinė kolona.** Vienas įvesties laukas viršuje, pakeitus tekstą prasideda nauja paieška. AI blokas be dėžučių: citatos + klausimas, į kurį atsakoma chip'ais arba „Kita…“. Dešinėje būsena: paieškos eiga, šaltiniai, ankstesnės paieškos. |
+| [`?v=3`](https://richkus.github.io/ai-paieska/?v=3) | **V3 · Paieškos antraštė.** Paieškos puslapyje viršutinė juosta paaukštėja ir apima tab'us. Atsakius į AI klausimą, klausimas perrašomas paieškos lauke, po juo „Patikslinom jūsų klausimą · Ieškoti pagal pradinį“. Dešinė kolona kaip V2. |
 
 Prototipas prasideda nuo tuščios būsenos: paspaudus paieškos lauką rodomi pavyzdiniai klausimai, po Enter matosi įkėlimas ir tada rezultatai. Klausimas lieka paieškos lauke.
 

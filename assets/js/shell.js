@@ -5,7 +5,8 @@
    Naudojimas variacijoje (prieš Alpine):
      <script src="../assets/js/shell.js"></script>
    Paieškos laukas naudoja Alpine: puslapio x-data turi turėti
-   `query`, `submitSearch()`, `suggestOpen`, `showSuggest`, `suggestions`.
+   `query`, `submitSearch()`, `suggestOpen`, `showSuggest`, `suggestions`,
+   `rewriteFlash` (paryškina lauką, kai AI perrašo klausimą).
    ========================================================== */
 (function () {
   const IMG = new URL('../img/', document.currentScript.src).href;
@@ -42,7 +43,7 @@
     </ul>`;
 
   const topbar = `
-    <form class="ms-search" role="search" @submit.prevent="submitSearch()">
+    <form class="ms-search" role="search" :class="{ 'is-rewrite': rewriteFlash }" @submit.prevent="submitSearch()">
       <input type="search" x-model="query" x-ref="search" placeholder="Ieškokit frazės arba užduokit klausimą" aria-label="Paieška" autocomplete="off"
              @focus="suggestOpen = true" @blur="suggestOpen = false" @keydown.escape="suggestOpen = false; $el.blur()">
       <button type="button" class="ms-search-clear" x-show="query" x-cloak @click="query = ''; $el.previousElementSibling.focus()" aria-label="Išvalyti">×</button>

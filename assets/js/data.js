@@ -256,3 +256,14 @@ window.FILTERS = {
   S.pvm.steps[1].filters = { tema: ['PVM'] };
   S.pvm.steps[2].filters = { tema: ['PVM'], data: '2026' };
 })();
+
+/* V3: AI perrašytas klausimas po kiekvieno patikslinimo (įrašomas į paieškos lauką) */
+(function rewrites() {
+  const S = Object.fromEntries(window.SCENARIOS.map(s => [s.id, s]));
+  const rq = {
+    savaitgalis: ['Kaip suteikti laisvą dieną už darbą šeštadienį, kai jis nebuvo grafike?', 'Kaip žiniaraštyje pažymėti laisvą dieną už darbą poilsio dieną?'],
+    komandiruote: ['Kokio dydžio dienpinigiai ir kada jie neapmokestinami?', 'Kaip skaičiuoti dienpinigius komandiruotėje užsienyje?'],
+    pvm: ['Kada reikia registruotis PVM mokėtoju?', 'Ką daryti viršijus PVM mokėtojo registracijos ribą?'],
+  };
+  Object.entries(rq).forEach(([id, list]) => list.forEach((q, i) => { S[id].steps[i + 1].rq = q; }));
+})();

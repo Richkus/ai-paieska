@@ -149,3 +149,37 @@
   .home-tip { flex-wrap: wrap; }
   .home-grid { grid-template-columns: minmax(0, 1fr); }
 }
+
+/* ==========================================================
+   V3 · Paieškos antraštė
+   Paieškos puslapyje viršutinė juosta paaukštėja: laukas, „patikslinom“
+   eilutė ir tab'ai yra vienas blokas, rezultatai po juo.
+   ========================================================== */
+.ms-main.is-sh .ms-topbar { border-bottom: 0; }
+.ms-main.is-sh .ms-search { flex-basis: 720px; height: 38px; border-radius: 19px; }
+.ms-main.is-sh .ms-search input { font-size: 15.5px; }
+.sh { padding: 0 40px 0 31.5px; background: var(--ms-topbar); border-bottom: 1px solid var(--ms-line-strong); }
+.sh-rewrite { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; margin: -4px 0 0; padding: 0 0 6px 17px; color: var(--ms-sub); font-size: 13px; }
+.sh-rewrite svg { color: var(--ai-accent); }
+.sh-rewrite button { max-width: 420px; padding: 0; border: 0; background: none; color: var(--ms-link); font-size: 13px; text-align: left; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; vertical-align: bottom; }
+.sh-rewrite button:hover { text-decoration: underline; text-underline-offset: 3px; }
+.sh-modes { margin: 0; padding-left: 17px; border-bottom: 0; }
+.sh-modes button { padding: 8px 0 10px; }
+
+/* AI perrašė klausimą: laukas trumpam paryškinamas */
+.ms-search.is-rewrite { animation: rw-flash 1.5s var(--ms-ease); }
+.ms-search.is-rewrite input { animation: rw-text 1.5s var(--ms-ease); }
+@keyframes rw-flash { 0%, 100% { box-shadow: none; } 15%, 60% { border-color: var(--ai-accent); box-shadow: 0 0 0 4px rgba(62, 154, 162, .18); } }
+@keyframes rw-text { 0% { color: var(--ai-accent); } 60% { color: var(--ai-accent); } 100% { color: var(--ms-ink); } }
+
+/* Dešinėje: perrašytas klausimas + atsakymas mažai */
+.st-ans { display: block; margin-top: 1px; color: var(--ms-muted); font-size: 12px; font-style: normal; font-weight: 400; }
+.st li.is-current .st-ans { font-weight: 400; }
+
+@media (max-width: 860px) {
+  .sh { padding: 0 16px; }
+  .sh-rewrite, .sh-modes { padding-left: 0; }
+  .ms-main.is-sh .ms-search { height: 34px; flex-basis: 100%; }
+  .ms-main.is-sh .ms-topnav { display: none; }
+  .sh-rewrite button { max-width: 100%; white-space: normal; }
+}

@@ -151,11 +151,13 @@
         <template x-if="mode === 'ai' && ver === 'v2'">
           <section class="a2" aria-live="polite">
             <!-- Į ką ką tik atsakėt: lieka matoma, kad būtų aišku, kodėl pasikeitė -->
-            <div class="a2-answered" x-show="lastAnswer" x-cloak>
-              <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7" fill="currentColor" opacity=".15"/><path d="M5 8.2l2 2 4-4.2" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              <span x-text="lastAnswer && lastAnswer.q"></span>
-              <b x-text="lastAnswer && lastAnswer.a"></b>
-              <button type="button" x-show="!busy" @click="goStep(step - 1)">Keisti</button>
+            <div class="a2-answered" x-show="lastAnswer" x-cloak :title="lastAnswer && lastAnswer.q">
+              <span x-text="busy ? 'Tikslinam pagal jūsų atsakymą' : 'Patikslinta pagal jūsų atsakymą'"></span>
+              <span class="a2-ans">
+                <span x-text="lastAnswer && lastAnswer.a"></span>
+                <button type="button" :hidden="!!busy" @click="goStep(step - 1)" aria-label="Atšaukti patikslinimą" title="Atšaukti patikslinimą">×</button>
+              </span>
+              <span class="a2-delta" x-show="!busy && lastAnswer && lastAnswer.from" x-text="!busy && lastAnswer && lastAnswer.from ? lastAnswer.from + ' → ' + lastAnswer.to + ' ' + rezultatai(lastAnswer.to) : ''"></span>
             </div>
 
             <div class="sk is-inline" x-show="busy" x-cloak>
@@ -515,7 +517,8 @@
       get showSuggest() { return this.phase === 'start' || !this.query.trim(); },
       get lastAnswer() {
         if (this.busy) return { q: this.askText || this.ai.heading, a: this.busy };
-        return this.step > 0 ? this.answered[this.step - 1] : null;
+        if (this.step === 0) return null;
+        return { ...this.answered[this.step - 1], from: this.sc.steps[this.step - 1].count, to: this.sc.steps[this.step].count };
       },
       get askText() { return this.ai.kind === 'directions' ? '' : this.ai.ask; },
       get steps() { return [{ label: this.activeQuery || this.sc.query, count: this.sc.steps[0].count }, ...this.trail.map((t, i) => ({ label: t, count: this.sc.steps[i + 1].count }))]; },

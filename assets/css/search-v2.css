@@ -131,12 +131,14 @@
 .is-loading .v2-side { opacity: .4; pointer-events: none; }
 .is-busy .sr-list, .is-busy .fb .fb-item, .is-busy .fb-end { opacity: .35; pointer-events: none; transition: opacity .2s; }
 
-/* ---------- Atsakytas klausimas ---------- */
-.a2-answered { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; margin-bottom: 16px; padding: 8px 12px; border-radius: 10px; background: var(--ms-surface-soft); color: var(--ms-sub); font-size: 13.5px; }
-.a2-answered svg { flex: 0 0 auto; color: var(--ai-accent); }
-.a2-answered b { color: var(--ms-ink); font-weight: 600; }
-.a2-answered button { margin-left: auto; padding: 2px 6px; border: 0; border-radius: 6px; background: none; color: var(--ms-link); font-size: 13px; transition: background .15s; }
-.a2-answered button:hover { background: var(--ai-quote); }
+/* ---------- Ką ką tik patikslinot: priežastis → pasekmė ---------- */
+.a2-answered { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin-bottom: 14px; color: var(--ms-sub); font-size: 13px; }
+.a2-ans { display: inline-flex; align-items: center; gap: 2px; height: 26px; padding: 0 4px 0 11px; border: 1px solid var(--ms-sidebar); border-radius: 13px; background: var(--ms-topbar); color: var(--ms-teal-dark); font-size: 13px; font-weight: 600; }
+.a2-ans button { display: grid; place-items: center; width: 20px; height: 20px; padding: 0; border: 0; border-radius: 50%; background: none; color: var(--ms-sub); font-size: 15px; line-height: 1; transition: background .15s, color .15s; }
+.a2-ans button[hidden] { display: none; }
+.a2-ans:has(button[hidden]) { padding-right: 11px; }
+.a2-ans button:hover { background: rgba(15, 83, 84, .1); color: var(--ms-ink); }
+.a2-delta { color: var(--ms-muted); font-variant-numeric: tabular-nums; }
 
 /* ---------- Pokyčio paryškinimas ---------- */
 .fb-count.is-flash { animation: fx-flash 1.6s var(--ms-ease); border-radius: 6px; }

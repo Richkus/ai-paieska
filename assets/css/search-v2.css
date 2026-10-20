@@ -102,3 +102,48 @@
   .v2-side .sc { display: none; }
   .v2-side.is-open .sc { display: block; }
 }
+
+/* ---------- Pradinė būsena (low-fi „Naujausi“) ---------- */
+.home { max-width: calc(1080px + var(--ms-gutter) * 2); padding: 28px var(--ms-gutter) 72px; }
+.home h1 { margin: 0 0 16px; color: var(--ms-ink-soft); font-size: 20px; font-weight: 600; }
+.home-tip { display: flex; align-items: center; gap: 14px; margin-bottom: 32px; padding: 14px 16px; border: 1px solid var(--ai-line); border-radius: 12px; background: var(--ai-bg); }
+.home-tip > svg { flex: 0 0 auto; color: var(--ai-accent); }
+.home-tip div { flex: 1; min-width: 0; display: grid; gap: 2px; }
+.home-tip strong { color: var(--ms-ink); font-size: 14.5px; font-weight: 600; }
+.home-tip span { color: var(--ms-sub); font-size: 13.5px; }
+.home-tip button { flex: 0 0 auto; height: 34px; padding: 0 16px; border: 1px solid var(--ms-sidebar); border-radius: 17px; background: #fff; color: var(--ms-teal-dark); font-size: 14px; font-weight: 600; transition: background .15s, border-color .15s; }
+.home-tip button:hover { background: var(--ms-topbar); border-color: var(--ai-accent); }
+.home-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.home-card { display: grid; gap: 8px; padding: 0 0 16px; border: 1px solid var(--ms-line); border-radius: 10px; overflow: hidden; }
+.home-card i { height: 110px; margin-bottom: 6px; background: var(--ms-topbar); }
+.home-card b { height: 10px; margin: 0 14px; border-radius: 5px; background: var(--ms-pill); }
+.home-card b.is-short { width: 40%; }
+
+/* ---------- Skeleton: įkėlimas ir tikslinimas ---------- */
+.sk { display: grid; gap: 10px; margin-bottom: 28px; }
+.sk.is-inline { margin-bottom: 4px; }
+.sk-label { display: flex; align-items: center; gap: 8px; margin: 0 0 4px; color: var(--ai-accent); font-size: 14px; font-weight: 600; }
+.sk-label svg { animation: sk-spin 1.6s linear infinite; }
+.sk i { display: block; height: 12px; border-radius: 6px; background: linear-gradient(90deg, var(--ms-pill) 0%, #f7fafa 50%, var(--ms-pill) 100%); background-size: 200% 100%; animation: sk-shine 1.2s linear infinite; }
+@keyframes sk-shine { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+@keyframes sk-spin { to { transform: rotate(360deg); } }
+.is-loading .v2-main > :not(.sr-modes):not(.sk) { display: none !important; }
+.is-loading .v2-side { opacity: .4; pointer-events: none; }
+.is-busy .sr-list, .is-busy .fb .fb-item, .is-busy .fb-end { opacity: .35; pointer-events: none; transition: opacity .2s; }
+
+/* ---------- Atsakytas klausimas ---------- */
+.a2-answered { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; margin-bottom: 16px; padding: 8px 12px; border-radius: 10px; background: var(--ms-surface-soft); color: var(--ms-sub); font-size: 13.5px; }
+.a2-answered svg { flex: 0 0 auto; color: var(--ai-accent); }
+.a2-answered b { color: var(--ms-ink); font-weight: 600; }
+.a2-answered button { margin-left: auto; padding: 2px 6px; border: 0; border-radius: 6px; background: none; color: var(--ms-link); font-size: 13px; transition: background .15s; }
+.a2-answered button:hover { background: var(--ai-quote); }
+
+/* ---------- Pokyčio paryškinimas ---------- */
+.fb-count.is-flash { animation: fx-flash 1.6s var(--ms-ease); border-radius: 6px; }
+.st li.is-new .st-row { animation: fx-flash 1.6s var(--ms-ease); }
+@keyframes fx-flash { 0%, 100% { background: transparent; box-shadow: none; } 15%, 55% { background: var(--ai-quote); box-shadow: 0 0 0 4px var(--ai-quote); } }
+
+@media (max-width: 860px) {
+  .home-tip { flex-wrap: wrap; }
+  .home-grid { grid-template-columns: minmax(0, 1fr); }
+}

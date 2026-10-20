@@ -5,7 +5,7 @@
    Naudojimas variacijoje (prieš Alpine):
      <script src="../assets/js/shell.js"></script>
    Paieškos laukas naudoja Alpine: puslapio x-data turi turėti
-   `query` ir `submitSearch()`.
+   `query`, `submitSearch()`, `suggestOpen`, `showSuggest`, `suggestions`.
    ========================================================== */
 (function () {
   const IMG = new URL('../img/', document.currentScript.src).href;
@@ -43,9 +43,18 @@
 
   const topbar = `
     <form class="ms-search" role="search" @submit.prevent="submitSearch()">
-      <input type="search" x-model="query" placeholder="Ieškokit frazės arba užduokit klausimą" aria-label="Paieška" autocomplete="off">
+      <input type="search" x-model="query" x-ref="search" placeholder="Ieškokit frazės arba užduokit klausimą" aria-label="Paieška" autocomplete="off"
+             @focus="suggestOpen = true" @blur="suggestOpen = false" @keydown.escape="suggestOpen = false; $el.blur()">
       <button type="button" class="ms-search-clear" x-show="query" x-cloak @click="query = ''; $el.previousElementSibling.focus()" aria-label="Išvalyti">×</button>
       <button type="submit" class="ms-search-go" aria-label="Ieškoti">${img('ic-padidke.svg', 18, 18)}</button>
+      <div class="ms-suggest" x-show="suggestOpen && showSuggest" x-cloak x-transition.opacity.duration.120ms @mousedown.prevent>
+        <p>Pabandykit paklausti savais žodžiais</p>
+        <template x-for="s in suggestions" :key="s">
+          <button type="button" @click="query = s; suggestOpen = false; $refs.search.blur(); submitSearch()">
+            ${img('ic-padidke.svg', 13, 13)}<span x-text="s"></span>
+          </button>
+        </template>
+      </div>
     </form>
     <nav class="ms-topnav" aria-label="Paskyra">
       <a href="#">${img('ic-ragelis.svg', 24, 24)}<span>Susisiekti</span></a>

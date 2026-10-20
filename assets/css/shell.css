@@ -1,0 +1,121 @@
+/* ==========================================================
+   Suflerio karkasas (Figma: → Naujas interfeisas, 3693:8115)
+   Side meniu, viršutinė juosta, footeris. Bendras visoms variacijoms.
+   ========================================================== */
+:root {
+  color-scheme: light;
+  --ms-font: 'Open Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --ms-ink: #2f4347;
+  --ms-ink-soft: #405359;
+  --ms-sub: #5f7a7e;
+  --ms-muted: #8aa3a6;
+  --ms-line: #e3ecec;
+  --ms-line-strong: rgba(102, 153, 153, .29);
+  --ms-surface: #ffffff;
+  --ms-surface-soft: #f6fafa;
+  --ms-footer: #f3f6f6;
+  --ms-pill: #eef2f2;
+  --ms-mark: #e8eeee;
+
+  --ms-teal: #53a9b1;
+  --ms-teal-dark: #0f5354;
+  --ms-teal-ink: #00555a;
+  --ms-link: #1f8f97;
+  --ms-sidebar: #99cccc;
+  --ms-sidebar-active: #b3d9d9;
+  --ms-sidebar-line: #77a7a7;
+  --ms-topbar: #f1f7f7;
+  --ms-field-text: #669999;
+  --ms-head-bar: #729999;
+  --ms-pro: #b85399;
+
+  --ms-radius-sm: 6px;
+  --ms-radius-md: 10px;
+  --ms-frame: 5px;          /* teal rėmelis viršuje ir dešinėje */
+  --ms-frame-radius: 15px;  /* vidinis kampas kairėje viršuje */
+  --ms-sidebar-w: 272px;
+  --ms-topbar-h: 55px;
+  --ms-gutter: 48px;
+
+  --ms-ease: cubic-bezier(.22, .61, .36, 1);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; font-family: var(--ms-font); font-size: 15px; color: var(--ms-ink); background: var(--ms-sidebar); -webkit-font-smoothing: antialiased; }
+[x-cloak] { display: none !important; }
+button { font: inherit; color: inherit; cursor: pointer; }
+a { color: var(--ms-link); }
+img { display: block; }
+
+/* ---------- Shell ---------- */
+.ms-app { display: grid; grid-template-columns: var(--ms-sidebar-w) minmax(0, 1fr); min-height: 100vh; min-height: 100dvh; }
+
+.ms-sidebar { position: sticky; top: 0; height: 100vh; height: 100dvh; overflow-y: auto; padding: 29px 0 32px; background: var(--ms-sidebar); }
+.ms-logo { display: block; width: max-content; margin: 0 0 29px 29.5px; }
+.ms-nav { list-style: none; margin: 0; padding: 0; }
+.ms-nav a { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 35px; margin-right: 18px; padding: 0 12px 0 29.5px; color: var(--ms-teal-dark); text-decoration: none; font-size: 15px; line-height: 18px; border-radius: 0 20px 20px 0; transition: background .2s var(--ms-ease); }
+.ms-nav a:hover { background: rgba(255, 255, 255, .18); }
+.ms-nav a.is-active { background: var(--ms-sidebar-active); font-weight: 600; }
+.ms-nav--main a { min-height: 37px; font-weight: 600; justify-content: flex-start; }
+.ms-nav--main img { flex: 0 0 auto; }
+.ms-nav .ms-count { min-width: 32px; height: 18px; padding: 0 7px; border-radius: 11px; background: var(--ms-sidebar-line); color: #fff; font-size: 14px; font-weight: 600; line-height: 18px; text-align: center; }
+.ms-nav-sep { height: 3px; width: 213px; margin: 22px 0 22px 29.5px; background: var(--ms-sidebar-line); opacity: .45; border-radius: 2px; }
+.ms-nav-title { display: flex; align-items: center; gap: 4px; margin: 20px 0 4px 29.5px; color: var(--ms-teal-dark); font-size: 14px; font-weight: 600; line-height: 18px; }
+.ms-nav--pro a { min-height: 34px; }
+
+/* Baltas „lapas“ su teal rėmeliu viršuje / dešinėje ir užapvalintu kampu */
+.ms-main { display: flex; flex-direction: column; min-width: 0; margin: var(--ms-frame) var(--ms-frame) 0 0; background: var(--ms-surface); border-radius: var(--ms-frame-radius) var(--ms-frame-radius) 0 0; }
+
+.ms-topbar { position: sticky; top: 0; z-index: 30; flex: 0 0 auto; display: flex; align-items: center; gap: 24px; height: var(--ms-topbar-h); padding: 0 40px 0 31.5px; background: var(--ms-topbar); border-bottom: 1px solid var(--ms-line-strong); border-radius: var(--ms-frame-radius) var(--ms-frame-radius) 0 0; }
+.ms-topbar::before { content: ''; position: absolute; left: 0; right: 0; bottom: 100%; height: var(--ms-frame); background: var(--ms-sidebar); }
+
+.ms-search { position: relative; flex: 0 1 548px; min-width: 0; display: flex; align-items: center; height: 31px; padding: 0 12px 0 16px; background: #fff; border: 1px solid var(--ms-line-strong); border-radius: 16px; transition: box-shadow .2s var(--ms-ease), border-color .2s var(--ms-ease); }
+.ms-search:focus-within { border-color: var(--ms-field-text); box-shadow: 0 0 0 3px rgba(83, 169, 177, .2); }
+.ms-search input { flex: 1; min-width: 0; height: 100%; padding: 0; border: 0; outline: none; background: transparent; font: inherit; font-size: 15px; color: var(--ms-ink); }
+.ms-search input::placeholder { color: var(--ms-field-text); }
+.ms-search input::-webkit-search-cancel-button { display: none; }
+.ms-search-clear { flex: 0 0 auto; display: grid; place-items: center; width: 24px; height: 24px; margin-right: 4px; padding: 0; border: 0; border-radius: 50%; background: none; color: var(--ms-muted); font-size: 18px; line-height: 1; transition: background .15s; }
+.ms-search-clear:hover { background: var(--ms-pill); }
+.ms-search-go { flex: 0 0 auto; display: grid; place-items: center; width: 24px; height: 24px; padding: 0; border: 0; background: none; }
+
+.ms-topnav { margin-left: auto; display: flex; align-items: center; gap: 34px; }
+.ms-topnav a { display: flex; align-items: center; gap: 6px; color: var(--ms-teal-dark); font-size: 15px; font-weight: 600; line-height: 17px; text-decoration: none; white-space: nowrap; }
+.ms-topnav a img { opacity: .7; }
+.ms-ico-user { position: relative; width: 24px; height: 24px; opacity: .7; }
+.ms-ico-user img { position: absolute; }
+.ms-ico-user .is-ring { left: 1px; top: 1px; }
+.ms-ico-user .is-head { left: 4.1px; top: 5.1px; }
+
+.ms-content { flex: 1 0 auto; }
+
+/* ---------- Footeris ---------- */
+.ms-footer-band { height: 10px; background: var(--ms-topbar); }
+.ms-footer { background: var(--ms-footer); color: var(--ms-ink-soft); padding: 64px 0 0 31.5px; }
+.ms-footer-cols { display: grid; grid-template-columns: 253px 261px 241px 1fr; padding-bottom: 40px; }
+.ms-footer h4 { margin: 0 0 7px; font-size: 15px; font-weight: 600; line-height: 18px; }
+.ms-footer ul { list-style: none; margin: 0; padding: 0; }
+.ms-footer li { font-size: 15px; line-height: 34px; opacity: .81; }
+.ms-footer li img { display: inline-block; margin-left: 4px; vertical-align: 1px; }
+.ms-footer-sep { width: 176px; height: 1px; margin: 17px 0 23px 27px; background: var(--ms-line-strong); }
+.ms-footer-bottom { display: flex; align-items: center; gap: 10px; height: 64px; padding-right: 36px; border-top: 1px solid var(--ms-line-strong); font-size: 13px; line-height: 18px; }
+.ms-footer-bottom .is-copy { margin-left: auto; }
+.ms-social { display: grid; place-items: center; width: 31px; height: 31px; border-radius: 5.4px; background: var(--ms-sidebar-active); }
+
+/* ---------- Mažesni ekranai ---------- */
+@media (max-width: 1100px) {
+  .ms-footer-cols { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 24px; }
+  .ms-topnav { gap: 20px; }
+  .ms-topnav span { display: none; }
+}
+@media (max-width: 860px) {
+  :root { --ms-gutter: 16px; }
+  .ms-app { grid-template-columns: minmax(0, 1fr); }
+  .ms-sidebar { display: none; }
+  .ms-main { margin-left: var(--ms-frame); }
+  .ms-topbar { padding: 0 16px; gap: 12px; }
+  .ms-footer { padding-left: 16px; }
+  .ms-footer-cols { grid-template-columns: minmax(0, 1fr); }
+  .ms-footer-bottom { flex-wrap: wrap; height: auto; padding: 16px 16px 16px 0; }
+}

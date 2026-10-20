@@ -1,0 +1,14 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="20/home">
+<mask id="stroke0_0_24" maskUnits="userSpaceOnUse" x="2" y="1.84998" width="16" height="17" fill="black">
+<rect fill="white" x="2" y="1.84998" width="16" height="17"/>
+<path d="M4 8.17248L10 3.84998L16 8.17248V14.965C16 15.2925 15.8595 15.6066 15.6095 15.8383C15.3594 16.0699 15.0203 16.2 14.6667 16.2H5.33333C4.97971 16.2 4.64057 16.0699 4.39052 15.8383C4.14048 15.6066 4 15.2925 4 14.965V8.17248Z"/>
+</mask>
+<path id="Vector" d="M4 8.17248L10 3.84998L16 8.17248V14.965C16 15.2925 15.8595 15.6066 15.6095 15.8383C15.3594 16.0699 15.0203 16.2 14.6667 16.2H5.33333C4.97971 16.2 4.64057 16.0699 4.39052 15.8383C4.14048 15.6066 4 15.2925 4 14.965V8.17248Z" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke="#00555A" mask="url(#stroke0_0_24)"/>
+<mask id="stroke1_0_24" maskUnits="userSpaceOnUse" x="7" y="9.45001" width="6" height="9" fill="black">
+<rect fill="white" x="7" y="9.45001" width="6" height="9"/>
+<path d="M9 16.2V11.45H11V16.2"/>
+</mask>
+<path id="Vector_2" d="M9 16.2V11.45H11V16.2" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke="#00555A" mask="url(#stroke1_0_24)"/>
+</g>
+</svg>

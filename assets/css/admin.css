@@ -47,3 +47,4 @@
 .ms-admin-reset:hover { color: var(--ui-ink); background: var(--ui-hover); }
 
 @media (prefers-reduced-motion: reduce) { .ms-admin * { transition: none !important; } }
+body.is-shot .ms-admin { display: none; }

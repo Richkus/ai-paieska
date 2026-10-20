@@ -18,6 +18,8 @@ Prototipas prasideda nuo tuščios būsenos: paspaudus paieškos lauką rodomi p
 
 Admin'e taip pat yra scenarijai (konkreti situacija, platus klausimas, trumpa frazė, nėra rezultatų) ir aktyvios versijos parametrai, jei jų yra. Senos nuorodos `v1/` ir `v2/` nukreipia į tą patį puslapį.
 
+Konkrečią būseną galima atidaryti nuoroda: `?v=3&s=savaitgalis&step=1` (scenarijai: `savaitgalis`, `komandiruote`, `pvm`, `nera`). Pridėjus `&shot=1` paslepiamas Admin mygtukas, patogu ekranams.
+
 ## Struktūra
 
 ```

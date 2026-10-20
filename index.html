@@ -550,6 +550,23 @@
         this.query = this.activeQuery = this.origQuery = ''; this.phase = 'start';
         // Pavyzdinės ankstesnės paieškos
         this.history = [1, 2].map(i => ({ scIdx: i, query: this.S[i].query, step: 0, trail: [] }));
+        this.deepLink();
+      },
+      // ?s=<scenarijus>&step=<n>: atidaro rezultatus konkrečiame žingsnyje (ekranams ir nuorodoms)
+      deepLink() {
+        const q = new URLSearchParams(location.search), id = q.get('s');
+        if (q.get('shot')) document.body.classList.add('is-shot');   // ekranams be Admin mygtuko
+        const idx = this.S.findIndex(s => s.id === id);
+        if (idx < 0) return;
+        this.loadScenario(idx);
+        const n = Math.min(+q.get('step') || 0, this.sc.steps.length - 1);
+        for (let i = 0; i < n; i++) {
+          const ai = this.sc.steps[this.step].ai;
+          const label = ai.kind === 'directions' ? ai.directions[0].label : ai.chips[0];
+          this.answered.push({ q: ai.kind === 'directions' ? ai.heading : ai.ask, a: label });
+          this.trail.push(label); this.step++;
+        }
+        this.applyAi(); this.showRewrite();
       },
 
       get sc() { return this.S[this.scIdx]; },

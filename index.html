@@ -24,7 +24,7 @@
    2. Markup'e pridėk bloką su ver === 'vN'.
    3. params: version-specifiniai admin nustatymai, pasiekiami per p.<key>.
 -->
-<div class="ms-app" x-data="search()" @keydown.escape.window="closePanel()">
+<div class="ms-app" x-data="search()" @keydown.escape.window="closePanel(); pvClose()" @scroll.window.passive="pv.id && pvClose()">
   <aside class="ms-sidebar" data-shell="sidebar"></aside>
 
   <div class="ms-main">
@@ -98,7 +98,7 @@
                     <template x-for="qt in ai.quotes" :key="qt.id">
                       <li class="ai-quote">
                         <p x-text="'„' + R[qt.id].quote + '“'"></p>
-                        <button type="button" class="ai-src" @click="openPanel(qt.id, true)">
+                        <button type="button" class="ai-src" @click="pvClose(); openPanel(qt.id, true)" @mouseenter="pvEnter(qt.id, $el)" @mouseleave="pvLeave()" @focus="pvEnter(qt.id, $el)" @blur="pvLeave()">
                           <b x-text="R[qt.id].type"></b><span x-text="R[qt.id].title"></span>
                         </button>
                       </li>
@@ -180,7 +180,7 @@
                 <template x-for="qt in ai.quotes" :key="qt.id">
                   <li class="a2-quote">
                     <p x-text="'„' + R[qt.id].quote + '“'"></p>
-                    <button type="button" class="a2-src" @click="openPanel(qt.id, true)">
+                    <button type="button" class="a2-src" @click="pvClose(); openPanel(qt.id, true)" @mouseenter="pvEnter(qt.id, $el)" @mouseleave="pvLeave()" @focus="pvEnter(qt.id, $el)" @blur="pvLeave()">
                       <i class="a2-pro" x-show="R[qt.id].pro">PRO</i>
                       <b x-text="R[qt.id].type"></b><span x-text="'· ' + R[qt.id].title"></span>
                     </button>
@@ -323,7 +323,7 @@
           <h3>Šaltiniai <span x-text="sources.length"></span></h3>
           <ul class="sl">
             <template x-for="id in sources" :key="id">
-              <li><button type="button" @click="openPanel(id, true)">
+              <li><button type="button" @click="pvClose(); openPanel(id, true)" @mouseenter="pvEnter(id, $el)" @mouseleave="pvLeave()" @focus="pvEnter(id, $el)" @blur="pvLeave()">
                 <small><i class="a2-pro" x-show="R[id].pro">PRO</i><span style="display:inline" x-text="R[id].type + ' · ' + R[id].date"></span></small>
                 <span x-text="R[id].title"></span>
               </button></li>
@@ -405,6 +405,32 @@
       </div>
     </template>
   </aside>
+
+  <!-- Greita peržiūra užvedus pelę ant šaltinio (kaip Wikipedia / Notion) -->
+  <div class="pv" x-show="pv.id" x-cloak role="tooltip"
+       :class="'is-' + pv.place" :style="`left:${pv.x}px; top:${pv.y}px`"
+       x-transition:enter="pv-anim" x-transition:enter-start="pv-off" x-transition:leave="pv-anim" x-transition:leave-end="pv-off"
+       @mouseenter="pvKeep()" @mouseleave="pvLeave()">
+    <template x-if="pv.id">
+      <div class="pv-in">
+        <div class="pv-meta">
+          <i class="a2-pro" x-show="R[pv.id].pro">PRO</i>
+          <span x-text="R[pv.id].type + ' · ' + R[pv.id].date"></span>
+          <em x-show="R[pv.id].part" x-text="R[pv.id].part"></em>
+        </div>
+        <h4 x-text="R[pv.id].title"></h4>
+        <div class="pv-body" x-ref="pvBody">
+          <p x-text="R[pv.id].snippet"></p>
+          <p class="pn-filler">Pavyzdinis tekstas. Čia bus medžiagos turinys: situacijos aprašymas, kas svarbu ir į ką atkreipti dėmesį.</p>
+          <p class="pn-filler">Pavyzdinis tekstas. Dar viena pastraipa, kad matytųsi, kaip kortelė nuslenka iki citatos.</p>
+          <template x-if="R[pv.id].quote"><p class="pv-cite" x-text="R[pv.id].quote"></p></template>
+          <template x-if="!R[pv.id].pro"><p class="pn-filler">Pavyzdinis tekstas. Tolesni paaiškinimai ir pavyzdžiai.</p></template>
+          <template x-if="R[pv.id].pro"><p class="pv-lock">Visa medžiaga prieinama su PRO planu.</p></template>
+        </div>
+        <button type="button" class="pv-open" @click="openPanel(pv.id, true); pvClose()">Atidaryti <span aria-hidden="true">→</span></button>
+      </div>
+    </template>
+  </div>
 
   <!-- Prototipo admin (tik prototipui) -->
   <div class="ms-admin" @keydown.escape.window="adminOpen = false">
@@ -682,6 +708,31 @@
       },
       panelStep(d) { const id = this.list[this.pIndex + d]; if (id) this.openPanel(id); },
       closePanel() { this.panelOpen = false; },
+
+      // ---------- Greita peržiūra ----------
+      pv: { id: null, x: 0, y: 0, place: 'below' },
+      pvEnter(id, el) {
+        if (!window.matchMedia('(hover: hover)').matches || this.panelOpen) return;
+        clearTimeout(this._pvOut); clearTimeout(this._pvIn);
+        this._pvIn = setTimeout(() => {
+          const r = el.getBoundingClientRect(), W = 380, Hh = 360, gap = 8;
+          const below = r.bottom + gap + Hh < innerHeight || r.top < Hh + gap;
+          this.pv = {
+            id,
+            x: Math.max(12, Math.min(r.left, innerWidth - W - 12)),
+            y: below ? r.bottom + gap : r.top - gap - Hh,
+            place: below ? 'below' : 'above',
+          };
+          // Kortelėje iškart matosi citata
+          this.$nextTick(() => setTimeout(() => {
+            const b = this.$refs.pvBody, c = b && b.querySelector('.pv-cite');
+            if (b && c) b.scrollTop = c.offsetTop - 12;
+          }, 30));
+        }, this.pv.id ? 120 : 400);
+      },
+      pvLeave() { clearTimeout(this._pvIn); this._pvOut = setTimeout(() => this.pvClose(), 220); },
+      pvKeep() { clearTimeout(this._pvOut); },
+      pvClose() { clearTimeout(this._pvIn); clearTimeout(this._pvOut); this.pv = { ...this.pv, id: null }; },
     };
   }
 </script>

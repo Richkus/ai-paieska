@@ -123,3 +123,23 @@
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }
 .sr-modes { scroll-margin-top: 70px; }
+
+/* ---------- Greita peržiūra (hover ant šaltinio) ---------- */
+.pv { position: fixed; z-index: 55; width: 380px; height: 360px; }
+.pv.is-above { display: flex; flex-direction: column; justify-content: flex-end; }
+.pv-in { display: flex; flex-direction: column; max-height: 360px; padding: 14px 16px 10px; border: 1px solid var(--ms-line); border-radius: 12px; background: #fff; box-shadow: 0 16px 40px rgba(15, 40, 42, .16), 0 2px 6px rgba(15, 40, 42, .06); }
+.pv-meta { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; color: var(--ms-muted); font-size: 11.5px; }
+.pv-meta em { margin-left: auto; font-style: normal; color: var(--ms-link); }
+.pv h4 { margin: 0 0 8px; color: var(--ms-ink); font-size: 15px; font-weight: 700; line-height: 1.35; }
+.pv-body { flex: 1; min-height: 0; overflow-y: auto; margin: 0 -16px; padding: 0 16px; border-top: 1px solid var(--ms-line); scrollbar-width: thin; }
+.pv-body p { margin: 10px 0 0; color: var(--ms-ink-soft); font-size: 13.5px; line-height: 1.6; }
+.pv-cite { padding: 8px 10px; border-radius: 6px; background: var(--ai-quote); box-shadow: inset 3px 0 0 var(--ai-accent); }
+.pv-lock { color: var(--ms-pro) !important; font-weight: 600; }
+.pv-open { align-self: flex-start; margin-top: 8px; padding: 4px 8px; margin-left: -8px; border: 0; border-radius: 6px; background: none; color: var(--ms-link); font-size: 13px; font-weight: 600; transition: background .15s; }
+.pv-open:hover { background: var(--ms-surface-soft); }
+.pv-anim { transition: opacity .14s ease, transform .14s var(--ms-ease); }
+.pv-off { opacity: 0; transform: translateY(4px); }
+.pv:not(.is-above) { pointer-events: none; }
+.pv:not(.is-above) .pv-in { pointer-events: auto; }
+.pv.is-above { pointer-events: none; }
+.pv.is-above .pv-in { pointer-events: auto; }

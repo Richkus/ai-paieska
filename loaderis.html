@@ -15,34 +15,49 @@
   main { max-width: 760px; margin: 0 auto; }
   h1 { margin: 0 0 6px; font-size: 22px; }
   p.lead { margin: 0 0 28px; color: var(--sub); line-height: 1.6; }
-  .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+  .row { display: grid; grid-template-columns: 110px repeat(2, minmax(0, 1fr)); gap: 14px; align-items: stretch; margin-bottom: 14px; }
+  .row > b { align-self: center; font-size: 15px; }
+  .row > b small { display: block; margin-top: 2px; color: var(--sub); font-size: 12px; font-weight: 400; }
+  .row.is-rec .card { border-color: #99cccc; background: #f6fafa; }
+  h2.sub { margin: 32px 0 12px; font-size: 15px; }
+  .grid { display: grid; gap: 14px; }
+  .grid.one { grid-template-columns: minmax(0, 260px); }
   .card { display: grid; gap: 18px; justify-items: center; padding: 28px 16px 20px; border: 1px solid var(--line); border-radius: 14px; }
   .card h2 { margin: 0; font-size: 14px; font-weight: 600; }
   .card small { color: var(--sub); font-size: 12.5px; text-align: center; line-height: 1.5; }
   .inline { display: flex; align-items: center; gap: 8px; color: var(--ai-accent); font-size: 14px; font-weight: 600; }
-  @media (max-width: 640px) { .grid { grid-template-columns: minmax(0, 1fr); } }
+  @media (max-width: 640px) { .row { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } .row > b { grid-column: 1 / -1; } }
 </style>
 </head>
 <body>
 <main>
   <h1>Įkėlimo animacija</h1>
-  <p class="lead">Variantai, kai AI ieško ar tikslina. Viršuje padidinta, apačioje tikru dydžiu, kaip prototipe. Prototipe perjungiama per Admin → Įkėlimo animacija.</p>
-  <div class="grid" id="grid"></div>
+  <p class="lead">Taškai susidėlioja į S arba per S bėga banga. Kiekvienoje eilutėje kitas taškų skaičius. Kortelėje viršuje padidinta, apačioje tikru dydžiu, kaip prototipe. Prototipe perjungiama per Admin → Įkėlimo animacija ir Taškų skaičius.</p>
+  <div id="rows"></div>
+  <h2 class="sub">Palyginimui: žvaigždutė (kaip buvo)</h2>
+  <div class="grid one"><div class="card" id="spark"></div></div>
 </main>
 <script src="assets/js/loader.js"></script>
 <script>
-  const variants = [
-    ['morph', 'S susidėlioja', 'Taškai sukasi ratu, susidėlioja į S ir vėl išsiskleidžia'],
-    ['wave', 'S banga', 'Taškai stovi S forma, per juos bėga banga lyg S būtų rašoma'],
-    ['spark', 'Žvaigždutė', 'Kaip buvo iki šiol'],
+  const counts = [
+    [8, 'Aiški S, tankesnė'],
+    [7, 'Aiški S (siūloma)', true],
+    [6, 'Abstrakti, simbolinė S'],
+    [5, 'Labiausiai abstrakti'],
   ];
-  document.getElementById('grid').innerHTML = variants.map(([k, t, d]) => `
+  const card = (k, n, title) => `
     <div class="card">
-      ${LOADER(k, 72)}
-      <h2>${t}</h2>
-      <div class="inline">${LOADER(k, 18)} Ieškom SUFLERIO medžiagoje…</div>
-      <small>${d}</small>
+      ${LOADER(k, 72, n)}
+      <h2>${title}</h2>
+      <div class="inline">${LOADER(k, 18, n)} Ieškom SUFLERIO medžiagoje…</div>
+    </div>`;
+  document.getElementById('rows').innerHTML = counts.map(([n, note, rec]) => `
+    <div class="row${rec ? ' is-rec' : ''}">
+      <b>${n} taškai<small>${note}</small></b>
+      ${card('morph', n, 'S susidėlioja')}
+      ${card('wave', n, 'S banga')}
     </div>`).join('');
+  document.getElementById('spark').outerHTML = card('spark', 0, 'Žvaigždutė');
 </script>
 </body>
 </html>

@@ -78,7 +78,7 @@
 
         <!-- Įkėlimas po paieškos -->
         <div class="sk" x-show="phase === 'loading'" x-cloak aria-live="polite">
-          <p class="sk-label"><span x-html="LOADER(p.loader || 'morph')"></span> Ieškom SUFLERIO medžiagoje…</p>
+          <p class="sk-label"><span x-html="LOADER(p.loader || 'morph', 18, +(p.dots || 7))"></span> Ieškom SUFLERIO medžiagoje…</p>
           <i style="width:55%;height:20px"></i><i style="width:92%"></i><i style="width:80%"></i><i style="width:88%"></i><i style="width:40%"></i>
         </div>
 
@@ -178,7 +178,7 @@
             </div>
 
             <div class="sk is-inline" x-show="busy" x-cloak>
-              <p class="sk-label"><span x-html="LOADER(p.loader || 'morph')"></span> Ieškom pagal jūsų atsakymą…</p>
+              <p class="sk-label"><span x-html="LOADER(p.loader || 'morph', 18, +(p.dots || 7))"></span> Ieškom pagal jūsų atsakymą…</p>
               <i style="width:50%;height:20px"></i><i style="width:90%"></i><i style="width:76%"></i><i style="width:84%"></i>
             </div>
 
@@ -515,6 +515,9 @@
     { id: 'wave', label: 'S banga' },
     { id: 'spark', label: 'Žvaigždutė (kaip buvo)' },
   ] };
+  const DOTS_PARAM = { key: 'dots', label: 'Taškų skaičius S raidėje', type: 'radio', default: '7', options: [
+    { id: '8', label: '8 taškai' }, { id: '7', label: '7 taškai' }, { id: '6', label: '6 taškai' }, { id: '5', label: '5 taškai' },
+  ] };
   function search() {
     const store = {
       get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
@@ -543,9 +546,9 @@
       vote: 0,
       // ---------- Versijos ----------
       VERSIONS: [
-        { id: 'v1', label: 'V1 · Inline patikslinimas', desc: 'Žingsnių juosta virš AI bloko, laisvas tekstas atskirame lauke', params: [LOADER_PARAM] },
-        { id: 'v2', label: 'V2 · Dešinė kolona', desc: 'Vienas laukas, „Kita…“ atsakymas, dešinėje eiga, šaltiniai, istorija', params: [FILTERS_PARAM, LOADER_PARAM] },
-        { id: 'v3', label: 'V3 · Paieškos antraštė', desc: 'Juosta paieškos puslapyje apima tab\'us, atsakymas perrašo klausimą paieškos lauke', params: [FILTERS_PARAM, LOADER_PARAM] },
+        { id: 'v1', label: 'V1 · Inline patikslinimas', desc: 'Žingsnių juosta virš AI bloko, laisvas tekstas atskirame lauke', params: [LOADER_PARAM, DOTS_PARAM] },
+        { id: 'v2', label: 'V2 · Dešinė kolona', desc: 'Vienas laukas, „Kita…“ atsakymas, dešinėje eiga, šaltiniai, istorija', params: [FILTERS_PARAM, LOADER_PARAM, DOTS_PARAM] },
+        { id: 'v3', label: 'V3 · Paieškos antraštė', desc: 'Juosta paieškos puslapyje apima tab\'us, atsakymas perrašo klausimą paieškos lauke', params: [FILTERS_PARAM, LOADER_PARAM, DOTS_PARAM] },
       ],
       ver: (() => {
         const q = new URLSearchParams(location.search).get('v');

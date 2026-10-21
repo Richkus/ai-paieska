@@ -243,6 +243,14 @@
         <!-- Filtrų juosta: veikia abiem režimais. Su AI dalį filtrų pritaiko pati (✦) -->
         <div class="fb" x-show="baseList.length || anyFilter" @keydown.escape.stop="pop = ''">
           <span class="fb-count" :class="{ 'is-flash': flash }" x-html="busy ? 'Atnaujinam…' : countHtml"></span>
+          <!-- V2/V3: filtrai suskleisti po vienu mygtuku (admin parametras) -->
+          <button type="button" class="fb-toggle" x-show="fbCollapsible && !fbOpen" @click="fbOpen = true" :aria-expanded="fbOpen">
+            <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 4h7M13 4h1M2 12h1M7 12h7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/><circle cx="11" cy="4" r="2" stroke="currentColor" stroke-width="1.5" fill="none"/><circle cx="5" cy="12" r="2" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+            Filtrai
+            <b x-show="activeFilterCount" x-text="activeFilterCount"></b>
+          </button>
+          <div class="fb-pills" x-show="!fbCollapsible || fbOpen"
+               x-transition:enter="fb-anim" x-transition:enter-start="fb-off" x-transition:leave="fb-anim" x-transition:leave-end="fb-off">
           <template x-for="k in FKEYS" :key="k">
             <div class="fb-item" @click.outside="pop === k && (pop = '')">
               <button type="button" class="fb-pill" :class="{ 'is-set': has(k) }" :aria-expanded="pop === k" @click="togglePop(k)" :title="isAi(k) ? 'Pritaikė AI pagal jūsų klausimą' : ''">
@@ -274,6 +282,8 @@
               </div>
             </div>
           </template>
+          <button type="button" class="fb-close" x-show="fbCollapsible" @click="fbOpen = false; pop = ''" aria-label="Suskleisti filtrus" title="Suskleisti filtrus">×</button>
+          </div>
           <div class="fb-end">
             <button type="button" class="fb-clear" x-show="userFilter" @click="clearAll()">Išvalyti</button>
             <div class="fb-item" @click.outside="pop === 'sort' && (pop = '')">
@@ -492,6 +502,11 @@
 <script src="assets/js/shell.js"></script>
 <script src="assets/js/data.js"></script>
 <script>
+  // Admin parametras: filtrai po vienu mygtuku „Filtrai“ arba visada matomi
+  const FILTERS_PARAM = { key: 'filters', label: 'Filtrai', type: 'radio', default: 'collapsed', options: [
+    { id: 'collapsed', label: 'Suskleisti po mygtuku „Filtrai“' },
+    { id: 'open', label: 'Visada matomi' },
+  ] };
   function search() {
     const store = {
       get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
@@ -521,8 +536,8 @@
       // ---------- Versijos ----------
       VERSIONS: [
         { id: 'v1', label: 'V1 · Inline patikslinimas', desc: 'Žingsnių juosta virš AI bloko, laisvas tekstas atskirame lauke', params: [] },
-        { id: 'v2', label: 'V2 · Dešinė kolona', desc: 'Vienas laukas, „Kita…“ atsakymas, dešinėje eiga, šaltiniai, istorija', params: [] },
-        { id: 'v3', label: 'V3 · Paieškos antraštė', desc: 'Juosta paieškos puslapyje apima tab\'us, atsakymas perrašo klausimą paieškos lauke', params: [] },
+        { id: 'v2', label: 'V2 · Dešinė kolona', desc: 'Vienas laukas, „Kita…“ atsakymas, dešinėje eiga, šaltiniai, istorija', params: [FILTERS_PARAM] },
+        { id: 'v3', label: 'V3 · Paieškos antraštė', desc: 'Juosta paieškos puslapyje apima tab\'us, atsakymas perrašo klausimą paieškos lauke', params: [FILTERS_PARAM] },
       ],
       ver: (() => {
         const q = new URLSearchParams(location.search).get('v');
@@ -530,6 +545,9 @@
         return ['v1', 'v2', 'v3'].includes(v) ? v : 'v2';
       })(),
       p: {},             // aktyvios versijos admin parametrai
+      fbOpen: false,
+      get fbCollapsible() { return this.p.filters === 'collapsed'; },
+      get activeFilterCount() { return this.FKEYS.reduce((n, k) => n + this.vals(k).length, 0); },
       get verParams() { return (this.VERSIONS.find(v => v.id === this.ver) || {}).params || []; },
       setVer(v) {
         this.ver = v; store.set('ai-paieska-ver', v);
@@ -688,7 +706,7 @@
       loadScenario(i) {
         this.scIdx = i; this.step = 0; this.trail = []; this.vote = 0; this.own = '';
         this.query = this.activeQuery = this.origQuery = this.sc.query; this.closePanel(); this.other = false;
-        this.answered = []; this.busy = ''; this.phase = 'results';
+        this.answered = []; this.busy = ''; this.phase = 'results'; this.fbOpen = false;
         this.f = { rub: [], tema: [], fmt: [], data: '' }; this.aiF = []; this.sort = 'rel'; this.applyAi();
       },
       // Pakeitus tekstą viršuje prasideda nauja paieška; senoji nukeliauja į „Ankstesnes paieškas“

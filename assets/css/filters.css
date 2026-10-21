@@ -57,3 +57,23 @@
   .fb-pop.is-right { left: 0; }
   .fb-list { max-height: 50vh; }
 }
+
+/* ---------- Suskleisti filtrai (V2/V3): vienas mygtukas „Filtrai“ ---------- */
+.fb-pills { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.fb-toggle { display: inline-flex; align-items: center; gap: 7px; height: 30px; padding: 0 12px; border: 1px solid var(--ms-line); border-radius: 15px; background: #fff; color: var(--ms-sub); font-size: 13px; transition: border-color .15s, color .15s; }
+.fb-toggle:hover { border-color: var(--ms-sidebar); color: var(--ms-ink); }
+.fb-toggle b { display: grid; place-items: center; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: var(--ms-teal-dark); color: #fff; font-size: 11px; font-weight: 600; }
+.fb-close { display: grid; place-items: center; width: 28px; height: 28px; padding: 0; border: 0; border-radius: 50%; background: none; color: var(--ms-muted); font-size: 17px; line-height: 1; transition: background .15s, color .15s; }
+.fb-close:hover { background: var(--ms-pill); color: var(--ms-ink); }
+.fb-anim { transition: opacity .2s var(--ms-ease), transform .25s var(--ms-ease); }
+.fb-off { opacity: 0; transform: translateX(-8px); }
+@media (min-width: 861px) {
+  .fb { flex-wrap: nowrap; }
+  .fb-pills { flex: 0 1 auto; min-width: 0; }
+  .fb-end { flex: 0 0 auto; }
+}
+/* Išskleisti filtrai telpa vienoje eilutėje su × ir rikiavimu */
+.fb-pills { gap: 6px; }
+.fb-pills .fb-pill { gap: 5px; padding: 0 8px 0 11px; }
+.fb-pills .fb-pill.is-set { padding-right: 3px; }
+.fb-pills + .fb-end { margin-left: auto; }

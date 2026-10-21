@@ -1,0 +1,65 @@
+/* ==========================================================
+   Įkėlimo animacija: taškai, kurie susidėlioja į S (Sufleris).
+   Sugeneruota scripto (11 taškų palei S kreivę), keisk kartu.
+   ========================================================== */
+.ld { display: inline-grid; place-items: center; flex: 0 0 auto; color: var(--ai-accent, #3e9aa2); }
+.ld svg { display: block; overflow: visible; }
+.ld circle { fill: currentColor; }
+
+/* 1. S susidėlioja: taškų žiedas sukasi -> išsivynioja į S -> atgal */
+.ld-morph g { animation: ld-spin 2.6s cubic-bezier(.65,0,.35,1) infinite; transform-origin: 10px 10px; }
+@keyframes ld-spin { 0% { transform: rotate(0deg); } 36% { transform: rotate(360deg); } 100% { transform: rotate(360deg); } }
+.ld-morph circle:nth-child(1) { animation: ld-m0 2.6s cubic-bezier(.65,0,.35,1) infinite; }
+@keyframes ld-m0 { 0%, 34% { transform: translate(15.54px, 6.80px); } 52%, 84% { transform: translate(13.76px, 4.63px); } 100% { transform: translate(15.54px, 6.80px); } }
+.ld-morph circle:nth-child(2) { animation: ld-m1 2.6s cubic-bezier(.65,0,.35,1) infinite; }
+@keyframes ld-m1 { 0%, 35% { transform: translate(12.93px, 4.31px); } 53%, 84% { transform: translate(11.37px, 2.24px); } 100% { transform: translate(12.93px, 4.31px); } }
+.ld-morph circle:nth-child(3) { animation: ld-m2 2.6s cubic-bezier(.65,0,.35,1) infinite; }
+@keyframes ld-m2 { 0%, 36% { transform: translate(9.39px, 3.63px); } 54%, 84% { transform: translate(8.00px, 2.54px); } 100% { transform: translate(9.39px, 3.63px); } }
+.ld-morph circle:nth-child(4) { animation: ld-m3 2.6s cubic-bezier(.65,0,.35,1) infinite; }
+@keyframes ld-m3 { 0%, 38% { transform: translate(6.04px, 4.97px); } 56%, 84% { transform: translate(6.06px, 5.31px); } 100% { transform: translate(6.04px, 4.97px); } }
+.ld-morph circle:nth-child(5) { animation: ld-m4 2.6s cubic-bezier(.65,0,.35,1) infinite; }
+@keyframes ld-m4 { 0%, 39% { transform: translate(3.95px, 7.91px); } 57%, 84% { transform: translate(6.94px, 8.57px); } 100% { transform: translate(3.95px, 7.91px); } }
+.ld-morph circle:nth-child(6) { animation: ld-m5 2.6s cubic-bezier(.65,0,.35,1) infinite; }
+@keyframes ld-m5 { 0%, 40% { transform: translate(3.78px, 11.51px); } 58%, 84% { transform: translate(10.00px, 10.00px); } 100% { transform: translate(3.78px, 11.51px); } }
+.ld-morph circle:nth-child(7) { animation: ld-m6 2.6s cubic-bezier(.65,0,.35,1) infinite; }
+@keyframes ld-m6 { 0%, 41% { transform: translate(5.58px, 14.63px); } 59%, 84% { transform: translate(13.06px, 11.43px); } 100% { transform: translate(5.58px, 14.63px); } }
+.ld-morph circle:nth-child(8) { animation: ld-m7 2.6s cubic-bezier(.65,0,.35,1) infinite; }
+@keyframes ld-m7 { 0%, 42% { transform: translate(8.79px, 16.28px); } 60%, 84% { transform: translate(13.94px, 14.69px); } 100% { transform: translate(8.79px, 16.28px); } }
+.ld-morph circle:nth-child(9) { animation: ld-m8 2.6s cubic-bezier(.65,0,.35,1) infinite; }
+@keyframes ld-m8 { 0%, 44% { transform: translate(12.38px, 15.94px); } 62%, 84% { transform: translate(12.00px, 17.46px); } 100% { transform: translate(12.38px, 15.94px); } }
+.ld-morph circle:nth-child(10) { animation: ld-m9 2.6s cubic-bezier(.65,0,.35,1) infinite; }
+@keyframes ld-m9 { 0%, 45% { transform: translate(15.21px, 13.71px); } 63%, 84% { transform: translate(8.63px, 17.76px); } 100% { transform: translate(15.21px, 13.71px); } }
+.ld-morph circle:nth-child(11) { animation: ld-m10 2.6s cubic-bezier(.65,0,.35,1) infinite; }
+@keyframes ld-m10 { 0%, 46% { transform: translate(16.39px, 10.30px); } 64%, 84% { transform: translate(6.24px, 15.37px); } 100% { transform: translate(16.39px, 10.30px); } }
+
+/* 2. S banga: taškai stovi S forma, per juos bėga ryškumas nuo viršaus į apačią */
+.ld-wave circle:nth-child(1) { transform: translate(13.76px, 4.63px); animation: ld-w 1.5s ease-in-out 0.00s infinite; }
+.ld-wave circle:nth-child(2) { transform: translate(11.37px, 2.24px); animation: ld-w 1.5s ease-in-out 0.09s infinite; }
+.ld-wave circle:nth-child(3) { transform: translate(8.00px, 2.54px); animation: ld-w 1.5s ease-in-out 0.18s infinite; }
+.ld-wave circle:nth-child(4) { transform: translate(6.06px, 5.31px); animation: ld-w 1.5s ease-in-out 0.27s infinite; }
+.ld-wave circle:nth-child(5) { transform: translate(6.94px, 8.57px); animation: ld-w 1.5s ease-in-out 0.36s infinite; }
+.ld-wave circle:nth-child(6) { transform: translate(10.00px, 10.00px); animation: ld-w 1.5s ease-in-out 0.45s infinite; }
+.ld-wave circle:nth-child(7) { transform: translate(13.06px, 11.43px); animation: ld-w 1.5s ease-in-out 0.54s infinite; }
+.ld-wave circle:nth-child(8) { transform: translate(13.94px, 14.69px); animation: ld-w 1.5s ease-in-out 0.63s infinite; }
+.ld-wave circle:nth-child(9) { transform: translate(12.00px, 17.46px); animation: ld-w 1.5s ease-in-out 0.72s infinite; }
+.ld-wave circle:nth-child(10) { transform: translate(8.63px, 17.76px); animation: ld-w 1.5s ease-in-out 0.81s infinite; }
+.ld-wave circle:nth-child(11) { transform: translate(6.24px, 15.37px); animation: ld-w 1.5s ease-in-out 0.90s infinite; }
+@keyframes ld-w { 0%, 100% { opacity: .22; } 30% { opacity: 1; } 60% { opacity: .22; } }
+
+/* 3. Žvaigždutė (kaip buvo) */
+.ld-spark svg { animation: sk-spin 1.6s linear infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ld * { animation: none !important; opacity: 1 !important; }
+  .ld-morph circle:nth-child(1) { transform: translate(13.76px, 4.63px); }
+  .ld-morph circle:nth-child(2) { transform: translate(11.37px, 2.24px); }
+  .ld-morph circle:nth-child(3) { transform: translate(8.00px, 2.54px); }
+  .ld-morph circle:nth-child(4) { transform: translate(6.06px, 5.31px); }
+  .ld-morph circle:nth-child(5) { transform: translate(6.94px, 8.57px); }
+  .ld-morph circle:nth-child(6) { transform: translate(10.00px, 10.00px); }
+  .ld-morph circle:nth-child(7) { transform: translate(13.06px, 11.43px); }
+  .ld-morph circle:nth-child(8) { transform: translate(13.94px, 14.69px); }
+  .ld-morph circle:nth-child(9) { transform: translate(12.00px, 17.46px); }
+  .ld-morph circle:nth-child(10) { transform: translate(8.63px, 17.76px); }
+  .ld-morph circle:nth-child(11) { transform: translate(6.24px, 15.37px); }
+}

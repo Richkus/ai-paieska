@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="lt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>AI paieška: įkėlimo animacija</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/loader.css">
+<style>
+  :root { --ink: #2f4347; --sub: #5f7a7e; --line: #e3ecec; --ai-accent: #3e9aa2; }
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 48px 16px; font-family: 'Open Sans', system-ui, sans-serif; color: var(--ink); background: #fff; }
+  main { max-width: 760px; margin: 0 auto; }
+  h1 { margin: 0 0 6px; font-size: 22px; }
+  p.lead { margin: 0 0 28px; color: var(--sub); line-height: 1.6; }
+  .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+  .card { display: grid; gap: 18px; justify-items: center; padding: 28px 16px 20px; border: 1px solid var(--line); border-radius: 14px; }
+  .card h2 { margin: 0; font-size: 14px; font-weight: 600; }
+  .card small { color: var(--sub); font-size: 12.5px; text-align: center; line-height: 1.5; }
+  .inline { display: flex; align-items: center; gap: 8px; color: var(--ai-accent); font-size: 14px; font-weight: 600; }
+  @media (max-width: 640px) { .grid { grid-template-columns: minmax(0, 1fr); } }
+</style>
+</head>
+<body>
+<main>
+  <h1>Įkėlimo animacija</h1>
+  <p class="lead">Variantai, kai AI ieško ar tikslina. Viršuje padidinta, apačioje tikru dydžiu, kaip prototipe. Prototipe perjungiama per Admin → Įkėlimo animacija.</p>
+  <div class="grid" id="grid"></div>
+</main>
+<script src="assets/js/loader.js"></script>
+<script>
+  const variants = [
+    ['morph', 'S susidėlioja', 'Taškai sukasi ratu, susidėlioja į S ir vėl išsiskleidžia'],
+    ['wave', 'S banga', 'Taškai stovi S forma, per juos bėga banga lyg S būtų rašoma'],
+    ['spark', 'Žvaigždutė', 'Kaip buvo iki šiol'],
+  ];
+  document.getElementById('grid').innerHTML = variants.map(([k, t, d]) => `
+    <div class="card">
+      ${LOADER(k, 72)}
+      <h2>${t}</h2>
+      <div class="inline">${LOADER(k, 18)} Ieškom SUFLERIO medžiagoje…</div>
+      <small>${d}</small>
+    </div>`).join('');
+</script>
+</body>
+</html>

@@ -32,7 +32,7 @@ assets/
   css/search-v2.css V2: AI blokas be dėžučių, dešinė kolona, PRO paywall
   css/filters.css  filtrų juosta (pill filtrai, popover'iai, mobile bottom sheet)
   css/admin.css    prototipo admin skydelis (neutralus, ne brando)
-  css/loader.css   įkėlimo animacija: taškai susidėlioja į S (sugeneruota)
+  css/loader.css   įkėlimo animacija: 7 taškai susidėlioja į S (generuoja scripts/loader-gen.py)
   js/loader.js     įkėlimo animacijos markup'as
   js/shell.js      įdeda karkasą į [data-shell] elementus
   js/data.js       pavyzdiniai scenarijai, rezultatai, filtrai

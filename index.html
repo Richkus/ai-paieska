@@ -25,7 +25,7 @@
    2. Markup'e pridėk bloką su ver === 'vN'.
    3. params: version-specifiniai admin nustatymai, pasiekiami per p.<key>.
 -->
-<div class="ms-app" x-data="search()" @keydown.escape.window="closePanel(); pvClose()" @scroll.window.passive="pv.id && pvClose()">
+<div class="ms-app" x-data="search()" @popstate.window="onPop($event)" @keydown.escape.window="closePanel(); pvClose()" @scroll.window.passive="pv.id && pvClose()">
   <aside class="ms-sidebar" data-shell="sidebar"></aside>
 
   <div class="ms-main" :class="{ 'is-sh': ver === 'v3' && phase !== 'start' }">
@@ -67,8 +67,18 @@
       <div x-show="phase !== 'start'" :class="{ 'v2': ver !== 'v1', 'sr': ver === 'v1', 'is-classic': mode === 'classic', 'is-loading': phase === 'loading', 'is-busy': !!busy }">
       <div class="v2-main">
 
+        <!-- V4: trys tab'ai kaip Google (AI režimas · Visi · Nuorodos) -->
+        <div class="sr-modes" x-show="ver === 'v4'" role="tablist" aria-label="Paieškos režimas">
+          <button type="button" role="tab" :class="{ 'is-on': mode === 'ai' && aiOnly }" :aria-selected="mode === 'ai' && aiOnly" @click="setMode('ai', true)">
+            <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5c.4 3.3 3.2 6.1 6.5 6.5-3.3.4-6.1 3.2-6.5 6.5-.4-3.3-3.2-6.1-6.5-6.5 3.3-.4 6.1-3.2 6.5-6.5Z" fill="currentColor"/></svg>
+            Su AI
+          </button>
+          <button type="button" role="tab" :class="{ 'is-on': mode === 'ai' && !aiOnly }" :aria-selected="mode === 'ai' && !aiOnly" @click="setMode('ai')">Visi rezultatai</button>
+          <button type="button" role="tab" :class="{ 'is-on': mode === 'classic' }" :aria-selected="mode === 'classic'" @click="setMode('classic')">Nuorodos</button>
+        </div>
+
         <!-- Režimai (V3 juos turi paieškos antraštėje) -->
-        <div class="sr-modes" x-show="ver !== 'v3'" role="tablist" aria-label="Paieškos režimas">
+        <div class="sr-modes" x-show="ver !== 'v3' && ver !== 'v4'" role="tablist" aria-label="Paieškos režimas">
           <button type="button" role="tab" :class="{ 'is-on': mode === 'ai' }" :aria-selected="mode === 'ai'" @click="setMode('ai')">
             <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5c.4 3.3 3.2 6.1 6.5 6.5-3.3.4-6.1 3.2-6.5 6.5-.4-3.3-3.2-6.1-6.5-6.5 3.3-.4 6.1-3.2 6.5-6.5Z" fill="currentColor"/></svg>
             Atsakymas su AI
@@ -183,9 +193,10 @@
             </div>
 
             <div x-show="!busy" x-effect="sc.id; step; $el.classList.remove('ai-swap'); void $el.offsetWidth; $el.classList.add('ai-swap')">
-            <div class="a2-head">
+            <div class="a2-head" :class="{ 'is-label': ver === 'v4' }">
               <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5c.4 3.3 3.2 6.1 6.5 6.5-3.3.4-6.1 3.2-6.5 6.5-.4-3.3-3.2-6.1-6.5-6.5 3.3-.4 6.1-3.2 6.5-6.5Z" fill="currentColor"/></svg>
-              <h2 x-text="ai.heading"></h2>
+              <h2 x-show="ver !== 'v4'" x-text="ai.heading"></h2>
+              <span class="a2-label" x-show="ver === 'v4'" x-text="ai.kind === 'quotes' ? 'Iš SUFLERIO medžiagos' : ai.heading"></span>
               <button type="button" class="a2-info" @mouseenter="tip = true" @mouseleave="tip = false" @focus="tip = true" @blur="tip = false" aria-label="Kaip tai veikia">
                 <svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.3" fill="none"/><path d="M8 7.2v4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><circle cx="8" cy="5" r=".9" fill="currentColor"/></svg>
                 <span class="a2-tip" x-show="tip" x-cloak x-transition.opacity.duration.120ms>Rodom tik ištraukas iš SUFLERIO medžiagos. Išvadų nedarom, sprendimą priimat jūs.</span>
@@ -207,7 +218,17 @@
             </template>
 
             <div class="a2-foot">
-              <div>
+              <div x-show="ver === 'v4'">
+                <div x-show="related.length">
+                  <p class="a2-rel-h" x-text="ai.kind === 'quotes' ? 'Susijusios paieškos' : 'Ieškokit konkrečiau'"></p>
+                  <ul class="a2-list">
+                    <template x-for="r in related" :key="r">
+                      <li><button type="button" class="a2-row" @click="follow(r)"><i aria-hidden="true">↳</i><span x-text="r"></span></button></li>
+                    </template>
+                  </ul>
+                </div>
+              </div>
+              <div x-show="ver !== 'v4'">
                 <div x-show="answers.length">
                     <p class="a2-ask" x-show="askText" x-text="askText"></p>
                     <ul class="a2-list" x-show="!other && p.answers === 'list'">
@@ -248,7 +269,7 @@
         </template>
 
         <!-- Filtrų juosta: veikia abiem režimais. Su AI dalį filtrų pritaiko pati (✦) -->
-        <div class="fb" x-show="baseList.length || anyFilter" @keydown.escape.stop="pop = ''">
+        <div class="fb" x-show="!hideLinks && (baseList.length || anyFilter)" @keydown.escape.stop="pop = ''">
           <span class="fb-count" :class="{ 'is-flash': flash }" x-html="busy ? 'Atnaujinam…' : countHtml"></span>
           <!-- V2/V3: filtrai suskleisti po vienu mygtuku (admin parametras) -->
           <button type="button" class="fb-toggle" x-show="fbCollapsible && !fbOpen" @click="fbOpen = true" :aria-expanded="fbOpen">
@@ -310,7 +331,7 @@
           </div>
         </div>
 
-        <ul class="sr-list">
+        <ul class="sr-list" x-show="!hideLinks">
           <template x-for="id in list" :key="id">
             <li class="sr-item">
               <button type="button" @click="openPanel(id)">
@@ -324,7 +345,7 @@
             </li>
           </template>
         </ul>
-        <div class="sr-empty" x-show="!list.length" x-cloak>
+        <div class="sr-empty" x-show="!hideLinks && !list.length" x-cloak>
           <p x-text="anyFilter ? 'Pagal pasirinktus filtrus nieko nėra.' : 'Rezultatų nėra.'"></p>
           <button type="button" class="a2-chip" x-show="anyFilter" @click="clearAll()">Išvalyti filtrus</button>
         </div>
@@ -337,7 +358,7 @@
           <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><path d="M2 3.5l3 3 3-3" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
 
-        <section class="sc" x-show="mode === 'ai'">
+        <section class="sc" x-show="mode === 'ai' && ver !== 'v4'">
           <h3>Jūsų paieška <span x-text="'iš ' + sc.classicCount"></span></h3>
           <ol class="st">
             <template x-for="(s, i) in steps" :key="i">
@@ -559,11 +580,12 @@
         { id: 'v1', label: 'V1 · Inline patikslinimas', desc: 'Žingsnių juosta virš AI bloko, laisvas tekstas atskirame lauke', params: [LOADER_PARAM, DOTS_PARAM] },
         { id: 'v2', label: 'V2 · Dešinė kolona', desc: 'Vienas laukas, „Kita…“ atsakymas, dešinėje eiga, šaltiniai, istorija', params: [ANSWERS_PARAM, FILTERS_PARAM, LOADER_PARAM, DOTS_PARAM] },
         { id: 'v3', label: 'V3 · Paieškos antraštė', desc: 'Juosta paieškos puslapyje apima tab\'us, atsakymas perrašo klausimą paieškos lauke', params: [ANSWERS_PARAM, FILTERS_PARAM, LOADER_PARAM, DOTS_PARAM] },
+        { id: 'v4', label: 'V4 · Kaip Google', desc: 'Susijusios paieškos tampa nauja paieška, grįžtama naršyklės Atgal. Tab\'ai: Su AI · Visi rezultatai · Nuorodos', params: [FILTERS_PARAM, LOADER_PARAM, DOTS_PARAM] },
       ],
       ver: (() => {
         const q = new URLSearchParams(location.search).get('v');
         const v = q ? 'v' + q.replace(/^v/, '') : store.get('ai-paieska-ver');
-        return ['v1', 'v2', 'v3'].includes(v) ? v : 'v2';
+        return ['v1', 'v2', 'v3', 'v4'].includes(v) ? v : 'v4';
       })(),
       p: {},             // aktyvios versijos admin parametrai
       fbOpen: false,
@@ -574,11 +596,14 @@
         this.ver = v; store.set('ai-paieska-ver', v);
         const u = new URL(location.href); u.searchParams.set('v', v.slice(1)); history.replaceState(null, '', u);
         this.initParams(); this.other = false; this.closePanel();
-        if (this.phase === 'results') { if (v === 'v3') this.showRewrite(); else this.query = this.activeQuery = this.origQuery; }
+        if (v !== 'v4') this.aiOnly = false;
+        if (this.phase === 'results') { if (v === 'v3') this.showRewrite(); else if (v === 'v4') this.query = this.activeQuery = this.queryFor(this.step); else this.query = this.activeQuery = this.origQuery; }
       },
       initParams() { this.p = Object.fromEntries(this.verParams.map(g => [g.key, g.default])); },
 
       mode: store.get('ai-paieska-mode') === 'classic' ? 'classic' : 'ai',
+      aiOnly: false,     // V4 tab'as „Su AI“: tik AI atsakymas, be nuorodų
+      get hideLinks() { return this.ver === 'v4' && this.mode === 'ai' && this.aiOnly; },
       panelOpen: false,
       adminOpen: false,
       pId: null,
@@ -590,6 +615,7 @@
         // Pavyzdinės ankstesnės paieškos
         this.history = [1, 2].map(i => ({ scIdx: i, query: this.S[i].query, step: 0, trail: [] }));
         this.deepLink();
+        history.replaceState(this.snap(), '');
       },
       // ?s=<scenarijus>&step=<n>: atidaro rezultatus konkrečiame žingsnyje (ekranams ir nuorodoms)
       deepLink() {
@@ -606,6 +632,7 @@
           this.trail.push(label); this.step++;
         }
         this.applyAi(); this.showRewrite();
+        if (this.ver === 'v4' && n) this.query = this.activeQuery = this.origQuery = this.queryFor(n);
       },
 
       get sc() { return this.S[this.scIdx]; },
@@ -615,6 +642,7 @@
         if (this.ai.kind === 'directions') return this.ai.directions;
         return (this.ai.chips || []).map(label => ({ label }));
       },
+      get related() { return this.ai.kind === 'empty' ? (this.ai.chips || []) : (this.sc.steps[this.step].related || []); },
       get suggestions() { return this.S.filter(s => s.id !== 'nera').map(s => s.query); },
       get showSuggest() { return this.phase === 'start' || !this.query.trim(); },
       get lastAnswer() {
@@ -637,10 +665,10 @@
       },
       get sources() { return this.ai.kind === 'quotes' ? this.ai.quotes.map(q => q.id) : []; },
       get pastSearches() { return this.history.filter(h => h.scIdx !== this.scIdx).slice(0, 5); },
-      get sideSummary() { return this.mode === 'ai' ? `Paieškos eiga · ${this.steps.length} žingsn. · ${this.sources.length} šaltiniai` : 'Ankstesnės paieškos'; },
+      get sideSummary() { if (this.ver === 'v4') return this.mode === 'ai' && this.sources.length ? `${this.sources.length} šaltiniai · Ankstesnės paieškos` : 'Ankstesnės paieškos'; return this.mode === 'ai' ? `Paieškos eiga · ${this.steps.length} žingsn. · ${this.sources.length} šaltiniai` : 'Ankstesnės paieškos'; },
       get countHtml() {
         const n = this.listCount;
-        const from = this.mode === 'ai' && n !== this.sc.classicCount ? `<small>iš ${this.sc.classicCount}</small>` : '';
+        const from = this.mode === 'ai' && this.ver !== 'v4' && n !== this.sc.classicCount ? `<small>iš ${this.sc.classicCount}</small>` : '';
         const r = this.rezultatai(n), adj = { 'rezultatas': 'plikas', 'rezultatai': 'pliki', 'rezultatų': 'plikų' }[r];
         return `${n} ${adj} paieškos ${r}${from}`;
       },
@@ -723,8 +751,8 @@
         return uniq.map((v, i) => i === uniq.length - 1 ? `<b>${v}</b>` : v).join(' → ') + ' rezultatų';
       },
 
-      resetDemo() { this.setMode('ai'); this.initParams(); this.loadScenario(0); this.phase = 'start'; this.query = this.activeQuery = this.origQuery = ''; this.adminOpen = false; window.scrollTo({ top: 0, behavior: 'smooth' }); },
-      setMode(m) { this.mode = m; store.set('ai-paieska-mode', m); this.applyAi(); },
+      resetDemo() { this.setMode('ai'); history.replaceState({ ph: 'start' }, ''); this.initParams(); this.loadScenario(0); this.phase = 'start'; this.query = this.activeQuery = this.origQuery = ''; this.adminOpen = false; window.scrollTo({ top: 0, behavior: 'smooth' }); },
+      setMode(m, aiOnly = false) { this.mode = m; this.aiOnly = aiOnly; store.set('ai-paieska-mode', m); this.applyAi(); },
       loadScenario(i) {
         this.scIdx = i; this.step = 0; this.trail = []; this.vote = 0; this.own = '';
         this.query = this.activeQuery = this.origQuery = this.sc.query; this.closePanel(); this.other = false;
@@ -745,6 +773,30 @@
         this.query = this.activeQuery = this.origQuery = typed;
         this.phase = 'loading'; window.scrollTo({ top: 0 });
         clearTimeout(this._t); this._t = setTimeout(() => { this.phase = 'results'; }, 1800);
+        this.push();
+      },
+      // ---------- V4: kaip Google. Susijusi paieška = nauja paieška, Atgal per naršyklę ----------
+      snap() { return this.phase === 'start' ? { ph: 'start' } : { sc: this.scIdx, step: this.step, q: this.activeQuery }; },
+      push() { if (this.ver === 'v4') history.pushState(this.snap(), ''); },
+      follow(q) {
+        if (this.ai.kind === 'empty') { this.query = q; this.submitSearch(); return; }
+        if (this.step >= this.sc.steps.length - 1) return;
+        this.closePanel(); this.pvClose();
+        this.step++; this.trail = [...this.trail.slice(0, this.step - 1), q]; this.vote = 0; this.applyAi();
+        this.query = this.activeQuery = this.origQuery = q;
+        this.phase = 'loading'; window.scrollTo({ top: 0 });
+        clearTimeout(this._t); this._t = setTimeout(() => { this.phase = 'results'; }, 1800);
+        this.push();
+      },
+      onPop(e) {
+        const s = e.state;
+        if (this.ver !== 'v4' || !s) return;
+        clearTimeout(this._t); this.closePanel(); this.pvClose();
+        if (s.ph === 'start') { this.loadScenario(0); this.phase = 'start'; this.query = this.activeQuery = this.origQuery = ''; return; }
+        this.loadScenario(s.sc);
+        this.step = s.step; this.trail = this.trail.slice(0, s.step); this.applyAi();
+        this.query = this.activeQuery = this.origQuery = s.q;
+        window.scrollTo({ top: 0 });
       },
       remember() {
         const h = { scIdx: this.scIdx, query: this.origQuery, step: this.step, trail: [...this.trail], answered: [...this.answered] };
@@ -753,7 +805,7 @@
       restore(h) {
         this.remember();
         this.loadScenario(h.scIdx);
-        this.query = this.activeQuery = this.origQuery = h.query; this.step = h.step; this.trail = [...h.trail]; this.answered = (h.answered || []).slice(); this.showRewrite(); this.applyAi();
+        this.query = this.activeQuery = this.origQuery = h.query; this.step = h.step; this.trail = [...h.trail]; this.answered = (h.answered || []).slice(); this.showRewrite(); this.applyAi(); this.push();
       },
       openOther() { this.other = true; setTimeout(() => this.$refs.other && this.$refs.other.focus(), 60); },
       refine(label) {

@@ -194,3 +194,10 @@
 .a2-row:hover { color: var(--ms-teal-dark); background: var(--ms-surface-soft); }
 .a2-row:hover i { color: var(--ai-accent); transform: translateX(2px); }
 .a2-row.is-other { color: var(--ms-sub); }
+
+/* V4: be AI antraštės, tik žymė; susijusios paieškos */
+.a2-head.is-label { align-items: center; gap: 8px; margin-bottom: 12px; }
+.a2-head.is-label > svg { margin-top: 0; }
+.a2-head.is-label .a2-info { margin-top: 0; }
+.a2-label { color: var(--ms-sub); font-size: 14px; font-weight: 600; }
+.a2-rel-h { margin: 4px 0 8px; color: var(--ms-ink); font-size: 15px; font-weight: 600; }

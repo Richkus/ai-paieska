@@ -267,3 +267,23 @@ window.FILTERS = {
   };
   Object.entries(rq).forEach(([id, list]) => list.forEach((q, i) => { S[id].steps[i + 1].rq = q; }));
 })();
+
+/* V4: susijusios paieškos (kaip Google). Paspaudus tampa nauja paieška, prototipe veda į kitą žingsnį */
+(function related() {
+  const S = Object.fromEntries(window.SCENARIOS.map(s => [s.id, s]));
+  const rel = {
+    savaitgalis: [
+      ['Kaip suteikti laisvą dieną už darbą šeštadienį, kai jis nebuvo grafike?', 'Laisva diena už darbą šeštadienį taikant suminę darbo laiko apskaitą', 'Kaip patikrinti, ar šeštadienis buvo darbuotojo grafike?'],
+      ['Kaip žiniaraštyje pažymėti laisvą dieną už darbą poilsio dieną?', 'Per kiek laiko reikia suteikti laisvą dieną už darbą poilsio dieną?', 'Ar darbuotojas gali atsisakyti laisvos dienos ir gauti dvigubą apmokėjimą?'],
+    ],
+    komandiruote: [
+      ['Kokio dydžio dienpinigiai ir kada jie neapmokestinami?', 'Kokias kelionės ir nakvynės išlaidas galima kompensuoti?', 'Ką apmokėti, kai komandiruotė į užsienį?', 'Kaip įforminti komandiruotę ir avansinę apyskaitą?'],
+      ['Kaip skaičiuoti dienpinigius komandiruotėje užsienyje?', 'Dienpinigiai komandiruotėje Lietuvoje', 'Dienpinigiai, kai komandiruotė į kelias šalis'],
+    ],
+    pvm: [
+      ['Kada reikia registruotis PVM mokėtoju?', 'Kaip išrašyti PVM sąskaitą faktūrą?', 'Kaip ir kada deklaruoti PVM?', 'Kada galima atskaityti pirkimo PVM?'],
+      ['Ką daryti viršijus PVM mokėtojo registracijos ribą?', 'Kaip registruotis PVM mokėtoju savanoriškai?', 'Nuo kada skaičiuoti PVM po registracijos?'],
+    ],
+  };
+  Object.entries(rel).forEach(([id, list]) => list.forEach((r, i) => { S[id].steps[i].related = r; }));
+})();

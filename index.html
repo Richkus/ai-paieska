@@ -67,14 +67,14 @@
       <div x-show="phase !== 'start'" :class="{ 'v2': ver !== 'v1', 'sr': ver === 'v1', 'is-classic': mode === 'classic', 'is-loading': phase === 'loading', 'is-busy': !!busy }">
       <div class="v2-main">
 
-        <!-- V4: trys tab'ai kaip Google (AI režimas · Visi · Nuorodos) -->
+        <!-- V4: trys tab'ai kaip Google (DI režimas · Visi rezultatai · Rezultatų sąrašas) -->
         <div class="sr-modes" x-show="ver === 'v4'" role="tablist" aria-label="Paieškos režimas">
           <button type="button" role="tab" :class="{ 'is-on': mode === 'ai' && aiOnly }" :aria-selected="mode === 'ai' && aiOnly" @click="setMode('ai', true)">
             <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5c.4 3.3 3.2 6.1 6.5 6.5-3.3.4-6.1 3.2-6.5 6.5-.4-3.3-3.2-6.1-6.5-6.5 3.3-.4 6.1-3.2 6.5-6.5Z" fill="currentColor"/></svg>
             DI režimas
           </button>
           <button type="button" role="tab" :class="{ 'is-on': mode === 'ai' && !aiOnly }" :aria-selected="mode === 'ai' && !aiOnly" @click="setMode('ai')">Visi rezultatai</button>
-          <button type="button" role="tab" :class="{ 'is-on': mode === 'classic' }" :aria-selected="mode === 'classic'" @click="setMode('classic')">Paieškos rezultatai</button>
+          <button type="button" role="tab" :class="{ 'is-on': mode === 'classic' }" :aria-selected="mode === 'classic'" @click="setMode('classic')">Rezultatų sąrašas</button>
         </div>
 
         <!-- Režimai (V3 juos turi paieškos antraštėje) -->
@@ -585,7 +585,7 @@
         { id: 'v1', label: 'V1 · Inline patikslinimas', desc: 'Žingsnių juosta virš AI bloko, laisvas tekstas atskirame lauke', params: [LOADER_PARAM, DOTS_PARAM] },
         { id: 'v2', label: 'V2 · Dešinė kolona', desc: 'Vienas laukas, „Kita…“ atsakymas, dešinėje eiga, šaltiniai, istorija', params: [ANSWERS_PARAM, FILTERS_PARAM, LOADER_PARAM, DOTS_PARAM] },
         { id: 'v3', label: 'V3 · Paieškos antraštė', desc: 'Juosta paieškos puslapyje apima tab\'us, atsakymas perrašo klausimą paieškos lauke', params: [ANSWERS_PARAM, FILTERS_PARAM, LOADER_PARAM, DOTS_PARAM] },
-        { id: 'v4', label: 'V4 · Kaip Google', desc: 'Susijusios paieškos tampa nauja paieška, grįžtama naršyklės Atgal. Tab\'ai: DI režimas · Visi rezultatai · Paieškos rezultatai', params: [FILTERS_PARAM, LOADER_PARAM, DOTS_PARAM] },
+        { id: 'v4', label: 'V4 · Kaip Google', desc: 'Susijusios paieškos tampa nauja paieška, grįžtama naršyklės Atgal. Tab\'ai: DI režimas · Visi rezultatai · Rezultatų sąrašas', params: [FILTERS_PARAM, LOADER_PARAM, DOTS_PARAM] },
       ],
       ver: (() => {
         const q = new URLSearchParams(location.search).get('v');
@@ -595,7 +595,7 @@
       p: {},             // aktyvios versijos admin parametrai
       fbOpen: false,
       get fbCollapsible() { return this.p.filters === 'collapsed' && !this.fbStack; },
-      // V4 „Paieškos rezultatai“: filtrai visada išskleisti, po rezultatų skaičiumi
+      // V4 „Rezultatų sąrašas“: filtrai visada išskleisti, po rezultatų skaičiumi
       get fbStack() { return this.ver === 'v4' && this.mode === 'classic'; },
       get activeFilterCount() { return this.FKEYS.reduce((n, k) => n + this.vals(k).length, 0); },
       get verParams() { return (this.VERSIONS.find(v => v.id === this.ver) || {}).params || []; },

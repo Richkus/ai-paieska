@@ -78,6 +78,6 @@
 .fb-pills .fb-pill.is-set { padding-right: 3px; }
 .fb-pills + .fb-end { margin-left: auto; }
 
-/* V4 „Paieškos rezultatai“: skaičius atskiroje eilutėje, po juo filtrai */
+/* V4 „Rezultatų sąrašas“: skaičius atskiroje eilutėje, po juo filtrai */
 .fb.is-stack { flex-wrap: wrap; row-gap: 10px; }
 .fb.is-stack .fb-count { flex: 0 0 100%; margin: 0; font-size: 16px; }

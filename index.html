@@ -7,12 +7,12 @@
 <title>AI paieška: prototipas</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400..800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/shell.css?v=1022m">
-<link rel="stylesheet" href="assets/css/search.css?v=1022m">
-<link rel="stylesheet" href="assets/css/filters.css?v=1022m">
-<link rel="stylesheet" href="assets/css/search-v2.css?v=1022m">
-<link rel="stylesheet" href="assets/css/loader.css?v=1022m">
-<link rel="stylesheet" href="assets/css/admin.css?v=1022m">
+<link rel="stylesheet" href="assets/css/shell.css?v=1022n">
+<link rel="stylesheet" href="assets/css/search.css?v=1022n">
+<link rel="stylesheet" href="assets/css/filters.css?v=1022n">
+<link rel="stylesheet" href="assets/css/search-v2.css?v=1022n">
+<link rel="stylesheet" href="assets/css/loader.css?v=1022n">
+<link rel="stylesheet" href="assets/css/admin.css?v=1022n">
 <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.14.1/dist/cdn.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
 </head>
@@ -138,21 +138,7 @@
             <template x-if="ver === 'v4' && ai.kind === 'empty'">
               <div>
                 <p class="a2-rel-sub">Užduokit klausimą ekspertui, jis atsakys asmeniškai.</p>
-                <div class="ex" x-effect="if (!expertQ) expertQ = activeQuery">
-                <template x-if="!expertSent">
-                  <form @submit.prevent="expertQ.trim() && (expertSent = true)">
-                    <label class="ex-label" for="ex-q">Jūsų klausimas ekspertui</label>
-                    <textarea id="ex-q" rows="3" x-model="expertQ"></textarea>
-                    <div class="ex-foot">
-                                            <button type="submit" class="ex-btn" :disabled="!expertQ.trim()">Klausti eksperto</button>
-                    </div>
-                  </form>
-                </template>
-                <p class="ex-done" x-show="expertSent" x-cloak>
-                  <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3.2 3.2L13 4.8" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                  Klausimas perduotas ekspertams. Atsakymą gausit asmeniškai.
-                </p>
-              </div>
+                <button type="button" class="ex-btn" @click="openAsk()">Klausti eksperto</button>
               </div>
             </template>
 
@@ -197,6 +183,7 @@
                 <p class="a2-hint" x-show="!answers.length">Ne tai? Pakeiskit klausimą paieškos lauke viršuje.</p>
               </div>
               <div class="a2-votes">
+                <button type="button" class="a2-askex" x-show="ver === 'v4' && ai.kind === 'quotes'" @click="openAsk()">Neradot atsakymo? Klauskit eksperto</button>
                 <button type="button" class="a2-vote" :class="{ 'is-on': vote === 1 }" @click="vote = vote === 1 ? 0 : 1" aria-label="Padėjo" title="Padėjo">
                   <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 7v7H2V7h3Zm0 0 3-5.5c1 0 1.8.8 1.6 1.8L9.2 6H13a1.5 1.5 0 0 1 1.5 1.8l-1 5A1.5 1.5 0 0 1 12 14H5" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>
                 </button>
@@ -215,24 +202,7 @@
             <div class="lowc-row">
               <svg width="18" height="18" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.3" fill="none"/><path d="M8 7.2v4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><circle cx="8" cy="5" r=".9" fill="currentColor"/></svg>
               <p><b>Tiksliai panašių situacijų neradom.</b> <span x-text="aiOnly ? 'Kad nesuklaidintume, DI ištraukų nerodom. Peržiūrėkit rezultatų sąrašą arba klauskit eksperto.' : 'Kad nesuklaidintume, DI ištraukų nerodom. Žemiau visi paieškos rezultatai.'"></span></p>
-              <button type="button" class="lowc-btn" x-show="!expertOpen" @click="expertOpen = true">Klausti eksperto</button>
-            </div>
-            <div x-show="expertOpen" x-collapse.duration.250ms>
-              <div class="ex" x-effect="if (!expertQ) expertQ = activeQuery">
-                <template x-if="!expertSent">
-                  <form @submit.prevent="expertQ.trim() && (expertSent = true)">
-                    <label class="ex-label" for="ex-q">Jūsų klausimas ekspertui</label>
-                    <textarea id="ex-q" rows="3" x-model="expertQ"></textarea>
-                    <div class="ex-foot">
-                                            <button type="submit" class="ex-btn" :disabled="!expertQ.trim()">Klausti eksperto</button>
-                    </div>
-                  </form>
-                </template>
-                <p class="ex-done" x-show="expertSent" x-cloak>
-                  <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3.2 3.2L13 4.8" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                  Klausimas perduotas ekspertams. Atsakymą gausit asmeniškai.
-                </p>
-              </div>
+              <button type="button" class="lowc-btn" @click="openAsk()">Klausti eksperto</button>
             </div>
             <button type="button" class="lowc-link" x-show="aiOnly" @click="setMode('classic')">Rodyti rezultatų sąrašą →</button>
           </div>
@@ -378,7 +348,7 @@
   <div class="pn-backdrop" x-show="panelOpen" x-cloak x-transition.opacity.duration.250ms @click="closePanel()"></div>
   <aside class="pn" x-show="panelOpen" x-cloak role="dialog" aria-modal="true" aria-label="Medžiaga"
          x-transition:enter="transition-pn" x-transition:enter-start="pn-off" x-transition:leave="transition-pn" x-transition:leave-end="pn-off">
-    <template x-if="pId">
+    <template x-if="pMode === 'item' && pId">
       <div style="display:contents">
         <div class="pn-bar">
           <button type="button" class="pn-btn" @click="closePanel()" aria-label="Uždaryti">
@@ -425,6 +395,76 @@
               </div>
             </template>
           </article>
+        </div>
+      </div>
+    </template>
+
+    <!-- Klausimas ekspertui: esama „Užduokite klausimą“ forma, pritaikyta paieškai -->
+    <template x-if="pMode === 'ask'">
+      <div style="display:contents">
+        <div class="pn-bar">
+          <button type="button" class="pn-btn" @click="closePanel()" aria-label="Uždaryti">
+            <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          </button>
+          <span class="pn-title">Klausimas ekspertui</span>
+        </div>
+        <div class="pn-body">
+          <div class="ak" x-show="!ask.sent">
+            <h1>Užduokite klausimą</h1>
+            <p class="ak-lead">SUFLERIO ekspertai peržiūrės jūsų klausimą. Jei atsakymas bus naudingas kitiems, jis gali būti publikuotas kaip praktinė situacija, be jūsų ir įmonės duomenų.</p>
+
+            <!-- Gal jau yra? Tik kai radom kažką panašaus -->
+            <div class="ak-maybe" x-show="askSuggest.length">
+              <b>Prieš siunčiant: gal tinka viena iš šių?</b>
+              <template x-for="id in askSuggest" :key="id">
+                <button type="button" @click="openPanel(id)"><small x-text="R[id].type + ' · ' + R[id].date"></small><span x-text="R[id].title"></span></button>
+              </template>
+            </div>
+
+            <form @submit.prevent="ask.q.trim() && (ask.sent = true)">
+              <label class="ak-label" for="ak-q">Klausimas</label>
+              <p class="ak-hint">Aprašykit situaciją ir užduokit vieną klausimą. Ką verta nurodyti:</p>
+              <div class="ak-chips">
+                <template x-for="c in ['Kas (įmonė, MB, gyventojas)', 'Laikotarpis', 'Sumos', 'Ką jau darėte']" :key="c">
+                  <button type="button" @click="askAdd(c)" x-text="'+ ' + c"></button>
+                </template>
+              </div>
+              <textarea id="ak-q" x-ref="askQ" rows="7" x-model="ask.q" placeholder="Įrašykite klausimą"></textarea>
+              <p class="ak-warn" x-show="(ask.q.match(/\?/g) || []).length > 1" x-cloak>Atrodo, čia keli klausimai. Ekspertas atsakys į vieną, kitus geriau užduoti atskirai.</p>
+
+              <!-- Kontaktai iš paskyros: nereikia pildyti iš naujo -->
+              <div class="ak-me">
+                <div class="ak-me-row">
+                  <div>
+                    <small>Atsakysim jums</small>
+                    <span x-text="[ask.me.vardas + ' ' + ask.me.pavarde, ask.me.imone, ask.me.pareigos, ask.me.miestas, ask.me.tel].join(' · ')"></span>
+                  </div>
+                  <button type="button" @click="ask.edit = !ask.edit" x-text="ask.edit ? 'Baigti' : 'Keisti'"></button>
+                </div>
+                <div class="ak-grid" x-show="ask.edit" x-collapse.duration.250ms>
+                  <template x-for="f in [['vardas', 'Vardas'], ['pavarde', 'Pavardė'], ['imone', 'Įmonė'], ['pareigos', 'Pareigos'], ['miestas', 'Miestas'], ['tel', 'Telefono numeris']]" :key="f[0]">
+                    <label><span x-text="f[1] + '*'"></span><input type="text" x-model="ask.me[f[0]]"></label>
+                  </template>
+                </div>
+              </div>
+
+              <div class="ak-foot">
+                <span class="ak-privacy">
+                  <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6l7-3Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Jūsų ir įmonės duomenys neviešinami
+                </span>
+                <button type="submit" class="ex-btn" :disabled="!ask.q.trim()">Siųsti klausimą</button>
+              </div>
+            </form>
+          </div>
+
+          <div class="ak-done" x-show="ask.sent" x-cloak>
+            <i><svg width="28" height="28" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3.2 3.2L13 4.8" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></i>
+            <h1>Klausimas išsiųstas</h1>
+            <p>Ekspertai jį peržiūrės ir atsakys asmeniškai. Atsakymą rasit skiltyje <b>Mano SUFLERIS → Man atsakyti</b>.</p>
+            <blockquote x-text="ask.q"></blockquote>
+            <button type="button" class="lowc-btn" @click="closePanel()">Grįžti į paiešką</button>
+          </div>
         </div>
       </div>
     </template>
@@ -497,9 +537,9 @@
   .transition-pn { transition: transform .32s var(--ms-ease); }
   .pn-off { transform: translateX(100%); }
 </style>
-<script src="assets/js/shell.js?v=1022m"></script>
-<script src="assets/js/data.js?v=1022m"></script>
-<script src="assets/js/loader.js?v=1022m"></script>
+<script src="assets/js/shell.js?v=1022n"></script>
+<script src="assets/js/data.js?v=1022n"></script>
+<script src="assets/js/loader.js?v=1022n"></script>
 <script>
   // Admin parametras: filtrai po vienu mygtuku „Filtrai“ arba visada matomi
   const ANSWERS_PARAM = { key: 'answers', label: 'Atsakymai į patikslinimą', type: 'radio', default: 'list', options: [
@@ -550,9 +590,8 @@
       activeQuery: '',   // užklausa, su kuria padaryta dabartinė paieška
       vote: 0,
       rewriteFlash: false, // V4: klausimas lauke pasikeitė (trumpai paryškinam)
-      expertQ: '',       // V4: klausimas ekspertui (iš anksto įrašomas paieškos tekstas)
-      expertOpen: false,
-      expertSent: false,
+      pMode: 'item',     // panel'is: medžiaga (item) arba klausimas ekspertui (ask)
+      ask: { q: '', sent: false, edit: false, me: { vardas: 'Laurynas', pavarde: 'Petrauskas', imone: 'UAB Įmonita', pareigos: 'Vyr. buhalteris', miestas: 'Vilnius', tel: '+370 600 00000' } },
       // ---------- Versijos ----------
       VERSIONS: [
         { id: 'v2', label: 'V2 · Dešinė kolona', desc: 'Vienas laukas, „Kita…“ atsakymas, dešinėje eiga, šaltiniai, istorija', params: [ANSWERS_PARAM, FILTERS_PARAM, LOADER_PARAM, DOTS_PARAM] },
@@ -738,7 +777,7 @@
         this.scIdx = i; this.step = 0; this.trail = []; this.vote = 0; this.own = '';
         this.query = this.activeQuery = this.origQuery = this.sc.query; this.closePanel(); this.other = false;
         this.answered = []; this.busy = ''; this.phase = 'results'; this.fbOpen = false;
-        this.expertQ = ''; this.expertOpen = false; this.expertSent = false;
+
         this.f = { rub: [], tema: [], fmt: [], data: '' }; this.aiF = []; this.sort = 'rel'; this.applyAi();
       },
       // Pakeitus tekstą viršuje prasideda nauja paieška; senoji nukeliauja į „Ankstesnes paieškas“
@@ -817,7 +856,7 @@
       get pIndex() { return this.list.indexOf(this.pId); },
       get panelPos() { const i = this.pIndex; return i < 0 ? '' : `${i + 1} iš ${this.list.length}`; },
       openPanel(id, toCite = false) {
-        this.pId = id; this.panelOpen = true;
+        this.pMode = 'item'; this.pId = id; this.panelOpen = true;
         this.$nextTick(() => {
           const body = this.$refs.pnBody; if (!body) return;
           const cite = body.querySelector('.pn-cite');
@@ -831,6 +870,19 @@
       },
       panelStep(d) { const id = this.list[this.pIndex + d]; if (id) this.openPanel(id); },
       closePanel() { this.panelOpen = false; },
+      // Klausimas ekspertui: atidarom panel'į su jau įrašytu paieškos klausimu
+      openAsk() {
+        this.pvClose();
+        if (!this.ask.sent || this.ask.q !== this.activeQuery) this.ask = { ...this.ask, q: this.activeQuery, sent: false, edit: false };
+        this.pMode = 'ask'; this.panelOpen = true;
+        this.$nextTick(() => setTimeout(() => { const t = this.$refs.askQ; if (t) { t.focus(); t.setSelectionRange(t.value.length, t.value.length); } }, 320));
+      },
+      askAdd(label) {
+        const key = label.split(' (')[0];
+        this.ask.q = this.ask.q.replace(/\s+$/, '') + '\n' + key + ': ';
+        this.$nextTick(() => { const t = this.$refs.askQ; if (t) { t.focus(); t.setSelectionRange(t.value.length, t.value.length); } });
+      },
+      get askSuggest() { return this.ai.kind === 'low' ? this.sc.steps[this.step].results.slice(0, 2) : []; },
 
       // ---------- Greita peržiūra ----------
       pv: { id: null, x: 0, y: 0, place: 'below' },

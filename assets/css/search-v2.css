@@ -231,3 +231,45 @@
 .a2.is-plain { position: relative; margin-bottom: 40px; padding-bottom: 28px; border-bottom: 0; }
 .a2.is-plain::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 6px; border-radius: 3px; background: var(--ms-topbar); box-shadow: inset 0 0 0 1px var(--ms-line); }
 .a2.is-plain ~ .fb .fb-count { font-size: 16px; }
+
+/* Klausimas ekspertui (šoniniame panel'yje) */
+.pn-title { color: var(--ms-ink); font-size: 15px; font-weight: 600; }
+.a2-askex { margin-right: 6px; padding: 0; border: 0; background: none; color: var(--ms-link); font-size: 13px; white-space: nowrap; }
+.a2-askex:hover { text-decoration: underline; text-underline-offset: 3px; }
+.a2-votes { align-items: center; }
+.ak, .ak-done { max-width: 600px; }
+.ak h1, .ak-done h1 { margin: 0 0 10px; color: var(--ms-ink); font-size: 26px; font-weight: 700; line-height: 1.3; }
+.ak-lead { margin: 0 0 24px; color: var(--ms-sub); font-size: 15px; line-height: 1.6; }
+.ak-maybe { display: grid; gap: 4px; margin-bottom: 24px; padding: 14px 16px; border-radius: 12px; background: var(--ms-topbar); }
+.ak-maybe b { margin-bottom: 4px; color: var(--ms-ink); font-size: 14px; font-weight: 600; }
+.ak-maybe button { display: grid; gap: 1px; padding: 8px 10px; border: 0; border-radius: 8px; background: #fff; text-align: left; transition: box-shadow .15s; }
+.ak-maybe button:hover { box-shadow: 0 0 0 1px var(--ai-accent); }
+.ak-maybe small { color: var(--ms-muted); font-size: 12px; }
+.ak-maybe span { color: var(--ms-ink); font-size: 14px; font-weight: 600; }
+.ak form { display: grid; gap: 10px; }
+.ak-label { color: var(--ms-ink); font-size: 16px; font-weight: 600; }
+.ak-hint { margin: -6px 0 0; color: var(--ms-sub); font-size: 14px; }
+.ak-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.ak-chips button { height: 28px; padding: 0 11px; border: 1px dashed var(--ms-sidebar); border-radius: 14px; background: #fff; color: var(--ms-teal-dark); font-size: 13px; transition: background .15s, border-color .15s; }
+.ak-chips button:hover { border-style: solid; background: var(--ms-topbar); }
+.ak textarea { width: 100%; min-height: 160px; padding: 12px 14px; border: 1px solid var(--ms-line-strong); border-radius: 10px; background: #fff; font: inherit; font-size: 15px; line-height: 1.55; color: var(--ms-ink); resize: vertical; outline: none; transition: border-color .15s, box-shadow .15s; }
+.ak textarea:focus { border-color: var(--ms-field-text); box-shadow: 0 0 0 3px rgba(83, 169, 177, .2); }
+.ak-warn { margin: 0; padding: 8px 12px; border-radius: 8px; background: #fbf1de; color: #7a5a1c; font-size: 13.5px; }
+.ak-me { margin-top: 6px; padding: 12px 14px; border: 1px solid var(--ms-line); border-radius: 10px; }
+.ak-me-row { display: flex; align-items: center; gap: 12px; }
+.ak-me-row > div { flex: 1; min-width: 0; display: grid; gap: 2px; }
+.ak-me-row small { color: var(--ms-muted); font-size: 12px; }
+.ak-me-row span { color: var(--ms-ink); font-size: 14px; }
+.ak-me-row button { flex: 0 0 auto; padding: 4px 8px; border: 0; border-radius: 6px; background: none; color: var(--ms-link); font-size: 13.5px; }
+.ak-me-row button:hover { background: var(--ms-surface-soft); }
+.ak-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 16px; padding-top: 14px; }
+.ak-grid label { display: grid; gap: 4px; color: var(--ms-ink); font-size: 13.5px; font-weight: 600; }
+.ak-grid input { height: 38px; padding: 0 12px; border: 1px solid var(--ms-line-strong); border-radius: 8px; background: #fff; font: inherit; font-size: 14px; font-weight: 400; color: var(--ms-ink); outline: none; }
+.ak-grid input:focus { border-color: var(--ms-field-text); box-shadow: 0 0 0 3px rgba(83, 169, 177, .2); }
+.ak-foot { display: flex; align-items: center; gap: 16px; margin-top: 10px; }
+.ak-privacy { flex: 1; display: inline-flex; align-items: center; gap: 6px; color: var(--ms-muted); font-size: 13px; }
+.ak-done > i { display: grid; place-items: center; width: 52px; height: 52px; margin-bottom: 16px; border-radius: 50%; background: var(--ms-topbar); color: var(--ms-teal-dark); }
+.ak-done p { margin: 0 0 16px; color: var(--ms-sub); font-size: 15px; line-height: 1.6; }
+.ak-done p b { color: var(--ms-ink); font-weight: 600; }
+.ak-done blockquote { margin: 0 0 24px; padding: 12px 14px; border-left: 2px solid var(--ai-line); background: var(--ms-surface-soft); color: var(--ms-ink-soft); font-size: 14px; line-height: 1.6; white-space: pre-wrap; }
+@media (max-width: 640px) { .ak-grid { grid-template-columns: 1fr; } .ak-foot { flex-direction: column; align-items: stretch; } }

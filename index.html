@@ -7,12 +7,12 @@
 <title>AI paieška: prototipas</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400..800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/shell.css?v=1022t">
-<link rel="stylesheet" href="assets/css/search.css?v=1022t">
-<link rel="stylesheet" href="assets/css/filters.css?v=1022t">
-<link rel="stylesheet" href="assets/css/search-v2.css?v=1022t">
-<link rel="stylesheet" href="assets/css/loader.css?v=1022t">
-<link rel="stylesheet" href="assets/css/admin.css?v=1022t">
+<link rel="stylesheet" href="assets/css/shell.css?v=1022u">
+<link rel="stylesheet" href="assets/css/search.css?v=1022u">
+<link rel="stylesheet" href="assets/css/filters.css?v=1022u">
+<link rel="stylesheet" href="assets/css/search-v2.css?v=1022u">
+<link rel="stylesheet" href="assets/css/loader.css?v=1022u">
+<link rel="stylesheet" href="assets/css/admin.css?v=1022u">
 <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.14.1/dist/cdn.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
 </head>
@@ -26,10 +26,10 @@
    2. Markup'e pridėk bloką su ver === 'vN'.
    3. params: version-specifiniai admin nustatymai, pasiekiami per p.<key>.
 -->
-<div class="ms-app" x-data="search()" @popstate.window="onPop($event)" @keydown.escape.window="closePanel(); pvClose()" @scroll.window.passive="pv.id && pvClose()">
+<div class="ms-app" x-data="search()" @popstate.window="onPop($event)" @keydown.escape.window="closePanel(); pvClose()" @scroll.window.passive="pv.id && pvClose(); scrolled = scrollY > 4">
   <aside class="ms-sidebar" data-shell="sidebar"></aside>
 
-  <div class="ms-main">
+  <div class="ms-main" :class="{ 'is-topwhite': ver === 'v4' && p.top === 'white', 'is-scrolled': scrolled }">
     <header class="ms-topbar" data-shell="topbar"></header>
 
     <main class="ms-content">
@@ -632,14 +632,19 @@
   .transition-pn { transition: transform .32s var(--ms-ease); }
   .pn-off { transform: translateX(100%); }
 </style>
-<script src="assets/js/shell.js?v=1022t"></script>
-<script src="assets/js/data.js?v=1022t"></script>
-<script src="assets/js/loader.js?v=1022t"></script>
+<script src="assets/js/shell.js?v=1022u"></script>
+<script src="assets/js/data.js?v=1022u"></script>
+<script src="assets/js/loader.js?v=1022u"></script>
 <script>
   // Admin parametras: filtrai po vienu mygtuku „Filtrai“ arba visada matomi
   const ANSWERS_PARAM = { key: 'answers', label: 'Atsakymai į patikslinimą', type: 'radio', default: 'list', options: [
     { id: 'list', label: 'Sąrašas ↳ (kaip Perplexity)' },
     { id: 'chips', label: 'Chip\'ai' },
+  ] };
+  // Admin parametras (V4): viršutinė juosta atskira (žalsva) ar bendra su rezultatais (balta, kaip Google)
+  const TOP_PARAM = { key: 'top', label: 'Viršutinė juosta', type: 'radio', default: 'tint', options: [
+    { id: 'tint', label: 'Žalsva, atskira (kaip dabar)' },
+    { id: 'white', label: 'Balta, viena su rezultatais (kaip Google)' },
   ] };
   // Admin parametras (V4): kaip atskirti DI dalį nuo paieškos rezultatų
   const AI_STYLE_PARAM = { key: 'aiStyle', label: 'DI dalies išskyrimas', type: 'radio', default: 'card', options: [
@@ -686,6 +691,7 @@
       vote: 0,
       rewriteFlash: false, // V4: klausimas lauke pasikeitė (trumpai paryškinam)
       chat: { key: '', msgs: [], step: 0, typing: false, draft: '' },   // V4 · DI chatas
+      scrolled: false,   // puslapis paslinktas (baltai viršutinei juostai rodom šešėlį)
       chatFull: false,   // V4 · DI pokalbis pilname ekrane
       pMode: 'item',
       pBack: false,      // medžiaga atidaryta iš klausimo ekspertui formos     // panel'is: medžiaga (item) arba klausimas ekspertui (ask)
@@ -693,7 +699,7 @@
       // ---------- Versijos ----------
       VERSIONS: [
         { id: 'v2', label: 'V2 · Dešinė kolona', desc: 'Vienas laukas, „Kita…“ atsakymas, dešinėje eiga, šaltiniai, istorija', params: [ANSWERS_PARAM, FILTERS_PARAM, LOADER_PARAM, DOTS_PARAM] },
-        { id: 'v4', label: 'V4 · Kaip Google', desc: 'Susijusios paieškos tampa nauja paieška, grįžtama naršyklės Atgal. Tab\'ai: DI režimas · Viskas · Rezultatų sąrašas', params: [AI_STYLE_PARAM, FILTERS_PARAM, LOADER_PARAM, DOTS_PARAM] },
+        { id: 'v4', label: 'V4 · Kaip Google', desc: 'Susijusios paieškos tampa nauja paieška, grįžtama naršyklės Atgal. Tab\'ai: DI režimas · Viskas · Rezultatų sąrašas', params: [TOP_PARAM, AI_STYLE_PARAM, FILTERS_PARAM, LOADER_PARAM, DOTS_PARAM] },
       ],
       ver: (() => {
         const q = new URLSearchParams(location.search).get('v');

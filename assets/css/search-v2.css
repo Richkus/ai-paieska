@@ -356,3 +356,20 @@ body.is-chatfull { overflow: hidden; }
 .chf-snip { display: -webkit-box; overflow: hidden; color: var(--ms-sub); font-size: 12.5px; line-height: 1.5; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
 @media (max-width: 1100px) { .ch.is-full .chf-wrap { grid-template-columns: minmax(0, 720px); } .chf-src { display: none !important; } }
 @media (max-width: 640px) { .chf-q, .chf-new { display: none; } .chf-bar { padding: 0 16px; } }
+
+/* ==========================================================
+   V4, admin „Viršutinė juosta: balta“. Paieška ir rezultatai
+   vienoje baltoje plokštumoje (kaip Google), laukas didesnis
+   su šešėliu, juosta atsiskiria tik paslinkus.
+   ========================================================== */
+.ms-main.is-topwhite { --ms-topbar-h: 72px; }
+.ms-main.is-topwhite .ms-topbar { background: #fff; border-bottom-color: transparent; transition: border-color .2s, box-shadow .2s; }
+.ms-main.is-topwhite.is-scrolled .ms-topbar { border-bottom-color: var(--ms-line); box-shadow: 0 4px 16px rgba(15, 40, 42, .06); }
+.ms-main.is-topwhite .ms-search { flex-basis: 640px; min-height: 44px; margin-top: 13px; padding: 0 14px 0 20px; border-color: var(--ms-line); border-radius: 22px; box-shadow: 0 1px 6px rgba(15, 40, 42, .12); }
+.ms-main.is-topwhite .ms-search:hover { box-shadow: 0 2px 10px rgba(15, 40, 42, .16); }
+.ms-main.is-topwhite .ms-search:focus-within { border-color: var(--ms-line); box-shadow: 0 2px 12px rgba(15, 40, 42, .18); }
+.ms-main.is-topwhite .ms-search textarea { height: 42px; max-height: 162px; padding: 11px 0; font-size: 16px; }
+.ms-main.is-topwhite .ms-search-clear, .ms-main.is-topwhite .ms-search-go { margin-top: 9px; }
+.ms-main.is-topwhite .ms-search .ms-suggest { top: calc(100% + 8px); }
+.ms-main.is-topwhite .ms-content .v2 { padding-top: 4px; }
+.ms-main.is-topwhite .ms-search { margin-left: 16.5px; } /* laukas lygiuojasi su tab'ais, kaip Google */

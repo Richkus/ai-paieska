@@ -193,7 +193,7 @@
             </div>
 
             <div x-show="!busy" x-effect="sc.id; step; $el.classList.remove('ai-swap'); void $el.offsetWidth; $el.classList.add('ai-swap')">
-            <div class="a2-head" :class="{ 'is-label': ver === 'v4' }">
+            <div class="a2-head" :class="{ 'is-label': ver === 'v4', 'is-ask': ver === 'v4' && ai.kind !== 'quotes' }">
               <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5c.4 3.3 3.2 6.1 6.5 6.5-3.3.4-6.1 3.2-6.5 6.5-.4-3.3-3.2-6.1-6.5-6.5 3.3-.4 6.1-3.2 6.5-6.5Z" fill="currentColor"/></svg>
               <h2 x-show="ver !== 'v4'" x-text="ai.heading"></h2>
               <span class="a2-label" x-show="ver === 'v4'" x-text="ai.kind === 'quotes' ? 'AI atrinktos ištraukos' : ai.heading"></span>
@@ -224,7 +224,8 @@
             <div class="a2-foot">
               <div x-show="ver === 'v4'">
                 <div x-show="related.length">
-                  <p class="a2-rel-h" x-text="ai.kind === 'quotes' ? 'Tęskit temą' : 'Ieškokit konkrečiau'"></p>
+                  <p class="a2-rel-h" x-show="ai.kind === 'quotes'">Tęskit temą</p>
+                  <p class="a2-rel-sub" x-show="ai.kind === 'directions'">Pasirinkit kryptį, ieškosim konkrečiau</p>
                   <ul class="a2-list">
                     <template x-for="r in related" :key="r">
                       <li><button type="button" class="a2-row" @click="follow(r)"><i aria-hidden="true">↳</i><span x-text="r"></span></button></li>

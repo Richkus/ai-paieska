@@ -206,3 +206,9 @@
 .a2-cite { display: inline-flex; align-items: center; height: 20px; margin-left: 4px; padding: 0 8px; border: 0; border-radius: 10px; background: var(--ms-surface-soft); color: var(--ms-muted); font-size: 11.5px; line-height: 1; vertical-align: 2px; white-space: nowrap; transition: background .15s, color .15s; }
 .a2-cite:hover, .a2-cite:focus-visible { background: var(--ms-pill); color: var(--ms-ink); outline: none; }
 .a2-head.is-label > svg { display: none; }
+
+/* V4, plati tema: AI klausimas yra vienintelė antraštė, po ja paaiškinimas ir kryptys (artumas = viena grupė) */
+.a2-head.is-ask { margin-bottom: 2px; }
+.a2-head.is-ask .a2-label { font-size: 18px; line-height: 1.35; }
+.a2-rel-sub { margin: 0 0 12px; color: var(--ms-sub); font-size: 14px; }
+.a2-rel-sub + .a2-list { border-top: 0; padding-top: 0; }

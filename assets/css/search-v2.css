@@ -194,7 +194,7 @@
 .ex-label { color: var(--ms-ink); font-size: 14px; font-weight: 600; }
 .ex textarea { width: 100%; min-height: 76px; padding: 10px 12px; border: 1px solid var(--ms-line-strong); border-radius: 10px; background: #fff; font: inherit; font-size: 15px; line-height: 1.5; color: var(--ms-ink); resize: vertical; outline: none; transition: border-color .15s, box-shadow .15s; }
 .ex textarea:focus { border-color: var(--ms-field-text); box-shadow: 0 0 0 3px rgba(83, 169, 177, .2); }
-.ex-foot { display: flex; align-items: center; gap: 16px; }
+.ex-foot { display: flex; justify-content: flex-end; }
 .ex-foot small { flex: 1; color: var(--ms-muted); font-size: 12.5px; }
 .ex-btn { flex: 0 0 auto; height: 36px; padding: 0 18px; border: 0; border-radius: 18px; background: var(--ms-teal-dark); color: #fff; font-size: 14px; font-weight: 600; transition: opacity .15s, background .15s; }
 .ex-btn:hover { background: var(--ms-teal); }

@@ -273,7 +273,7 @@
         </template>
 
         <!-- Filtrų juosta: veikia abiem režimais. Su AI dalį filtrų pritaiko pati (✦) -->
-        <div class="fb" x-show="!hideLinks && (baseList.length || anyFilter)" @keydown.escape.stop="pop = ''">
+        <div class="fb" :class="{ 'is-stack': fbStack }" x-show="!hideLinks && (baseList.length || anyFilter)" @keydown.escape.stop="pop = ''">
           <span class="fb-count" :class="{ 'is-flash': flash }" x-html="busy ? 'Atnaujinam…' : countHtml"></span>
           <!-- V2/V3: filtrai suskleisti po vienu mygtuku (admin parametras) -->
           <button type="button" class="fb-toggle" x-show="fbCollapsible && !fbOpen" @click="fbOpen = true" :aria-expanded="fbOpen">
@@ -593,7 +593,9 @@
       })(),
       p: {},             // aktyvios versijos admin parametrai
       fbOpen: false,
-      get fbCollapsible() { return this.p.filters === 'collapsed'; },
+      get fbCollapsible() { return this.p.filters === 'collapsed' && !this.fbStack; },
+      // V4 „Paieškos rezultatai“: filtrai visada išskleisti, po rezultatų skaičiumi
+      get fbStack() { return this.ver === 'v4' && this.mode === 'classic'; },
       get activeFilterCount() { return this.FKEYS.reduce((n, k) => n + this.vals(k).length, 0); },
       get verParams() { return (this.VERSIONS.find(v => v.id === this.ver) || {}).params || []; },
       setVer(v) {

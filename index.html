@@ -210,7 +210,7 @@
                     <p x-show="ver !== 'v4'" x-text="'„' + R[qt.id].quote + '“'"></p>
                     <!-- V4: šaltinis mažu žetonu teksto gale (kaip Perplexity / Google); pilnas pavadinimas užvedus pelę -->
                     <p x-show="ver === 'v4'"><span x-text="'„' + R[qt.id].quote + '“'"></span>
-                      <button type="button" class="a2-cite" :class="{ 'is-pro': R[qt.id].pro }" @click="pvClose(); openPanel(qt.id, true)" @mouseenter="pvEnter(qt.id, $el)" @mouseleave="pvLeave()" @focus="pvEnter(qt.id, $el)" @blur="pvLeave()" :aria-label="R[qt.id].type + ': ' + R[qt.id].title"><i aria-hidden="true"></i><span x-text="R[qt.id].type"></span></button>
+                      <button type="button" class="a2-cite" :class="{ 'is-pro': R[qt.id].pro }" @click="pvClose(); openPanel(qt.id, true)" @mouseenter="pvEnter(qt.id, $el)" @mouseleave="pvLeave()" @focus="pvEnter(qt.id, $el)" @blur="pvLeave()" :aria-label="R[qt.id].type + ': ' + R[qt.id].title"><span x-text="R[qt.id].type"></span></button>
                     </p>
                     <button type="button" class="a2-src" x-show="ver !== 'v4'" @click="pvClose(); openPanel(qt.id, true)" @mouseenter="pvEnter(qt.id, $el)" @mouseleave="pvLeave()" @focus="pvEnter(qt.id, $el)" @blur="pvLeave()">
                       <i class="a2-pro" x-show="R[qt.id].pro">PRO</i>

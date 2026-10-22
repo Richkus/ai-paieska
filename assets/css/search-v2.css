@@ -165,7 +165,7 @@
 .a2-head.is-label { align-items: center; gap: 8px; margin-bottom: 12px; }
 .a2-head.is-label > svg { margin-top: 0; }
 .a2-head.is-label .a2-info { margin-top: 0; }
-.a2-label { color: var(--ms-ink); font-size: 15px; font-weight: 600; }
+.a2-label { color: var(--ms-ink); font-size: 18px; font-weight: 600; line-height: 1.35; }
 .a2-rel-h { margin: 4px 0 8px; color: var(--ms-ink); font-size: 15px; font-weight: 600; }
 
 /* V4: šaltinis citatos gale, mažas žetonas */

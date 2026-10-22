@@ -15,7 +15,7 @@
 /* ---------- Režimų tab'ai (kaip Google: DI režimas / Viskas / Žiniatinklis) ---------- */
 .sr-modes { display: flex; gap: 28px; margin-bottom: 24px; border-bottom: 1px solid var(--ms-line); }
 .sr-modes button { position: relative; display: flex; align-items: center; gap: 6px; padding: 10px 0 12px; border: 0; background: none; color: var(--ms-sub); font-size: 15px; transition: color .15s var(--ms-ease); }
-.sr-modes button::after { content: ''; position: absolute; left: 0; right: 0; bottom: -1px; height: 3px; border-radius: 3px 3px 0 0; background: var(--ms-teal-dark); transform: scaleX(0); transition: transform .25s var(--ms-ease); }
+.sr-modes button::after { content: ''; position: absolute; left: 0; right: 0; bottom: -1px; height: 3px; border-radius: 3px 3px 0 0; background: var(--ms-tab-accent); transform: scaleX(0); transition: transform .25s var(--ms-ease); }
 .sr-modes button:hover { color: var(--ms-ink); }
 .sr-modes button.is-on { color: var(--ms-ink); font-weight: 600; }
 .sr-modes button.is-on::after { transform: scaleX(1); }

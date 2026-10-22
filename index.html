@@ -7,12 +7,12 @@
 <title>AI paieška: prototipas</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400..800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/shell.css?v=1022j">
-<link rel="stylesheet" href="assets/css/search.css?v=1022j">
-<link rel="stylesheet" href="assets/css/filters.css?v=1022j">
-<link rel="stylesheet" href="assets/css/search-v2.css?v=1022j">
-<link rel="stylesheet" href="assets/css/loader.css?v=1022j">
-<link rel="stylesheet" href="assets/css/admin.css?v=1022j">
+<link rel="stylesheet" href="assets/css/shell.css?v=1022k">
+<link rel="stylesheet" href="assets/css/search.css?v=1022k">
+<link rel="stylesheet" href="assets/css/filters.css?v=1022k">
+<link rel="stylesheet" href="assets/css/search-v2.css?v=1022k">
+<link rel="stylesheet" href="assets/css/loader.css?v=1022k">
+<link rel="stylesheet" href="assets/css/admin.css?v=1022k">
 <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.14.1/dist/cdn.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
 </head>
@@ -349,7 +349,7 @@
           <h3>Šaltiniai <span x-text="sources.length"></span></h3>
           <ul class="sl">
             <template x-for="id in sources" :key="id">
-              <li><button type="button" @click="pvClose(); openPanel(id, true)" @mouseenter="pvEnter(id, $el)" @mouseleave="pvLeave()" @focus="pvEnter(id, $el)" @blur="pvLeave()">
+              <li><button type="button" @click="openPanel(id, true)">
                 <small><i class="a2-pro" x-show="R[id].pro">PRO</i><span style="display:inline" x-text="R[id].type + ' · ' + R[id].date"></span></small>
                 <span x-text="R[id].title"></span>
               </button></li>
@@ -499,9 +499,9 @@
   .transition-pn { transition: transform .32s var(--ms-ease); }
   .pn-off { transform: translateX(100%); }
 </style>
-<script src="assets/js/shell.js?v=1022j"></script>
-<script src="assets/js/data.js?v=1022j"></script>
-<script src="assets/js/loader.js?v=1022j"></script>
+<script src="assets/js/shell.js?v=1022k"></script>
+<script src="assets/js/data.js?v=1022k"></script>
+<script src="assets/js/loader.js?v=1022k"></script>
 <script>
   // Admin parametras: filtrai po vienu mygtuku „Filtrai“ arba visada matomi
   const ANSWERS_PARAM = { key: 'answers', label: 'Atsakymai į patikslinimą', type: 'radio', default: 'list', options: [

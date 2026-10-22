@@ -214,3 +214,11 @@
 .a2-rel-sub { margin: 0 0 12px; color: var(--ms-sub); font-size: 14px; }
 .a2-rel-sub + .a2-list { border-top: 0; padding-top: 0; }
 .a2-head.is-label .a2-info { margin-left: -5px; }
+
+/* V4: DI dalis atskira kortele, kad aiškiai skirtųsi nuo paieškos rezultatų */
+.a2.is-card { margin-bottom: 36px; padding: 24px 28px 20px; border: 1px solid var(--ms-line); border-bottom: 1px solid var(--ms-line); border-radius: 16px; background: var(--ms-topbar); }
+.a2.is-card .a2-row:hover { background: #fff; }
+.a2.is-card .a2-cite { background: #fff; }
+.a2.is-card .a2-cite:hover { background: var(--ms-pill); }
+.a2.is-card .a2-list { border-top-color: var(--ms-line-strong); }
+.a2.is-card + .fb .fb-count, .a2.is-card ~ .fb .fb-count { font-size: 16px; }

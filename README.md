@@ -10,18 +10,16 @@ Visos versijos yra viename puslapyje. Perjungiama apačioje kairėje per **Admin
 
 | Nuoroda | Kas tai |
 |---|---|
-| [`?v=1`](https://richkus.github.io/ai-paieska/?v=1) | **V1 · Inline patikslinimas.** Žingsnių juosta virš AI bloko, AI blokas dėžutėje, laisvas tekstas atskirame lauke. |
 | [`?v=2`](https://richkus.github.io/ai-paieska/?v=2) | **V2 · Dešinė kolona.** Vienas įvesties laukas viršuje, pakeitus tekstą prasideda nauja paieška. AI blokas be dėžučių: citatos + klausimas, į kurį atsakoma chip'ais arba „Kita…“. Dešinėje būsena: paieškos eiga, šaltiniai, ankstesnės paieškos. |
-| [`?v=3`](https://richkus.github.io/ai-paieska/?v=3) | **V3 · Paieškos antraštė.** Paieškos puslapyje viršutinė juosta paaukštėja ir apima tab'us. Atsakius į AI klausimą, klausimas perrašomas paieškos lauke, po juo „Patikslinom jūsų klausimą · Ieškoti pagal pradinį“. Dešinė kolona kaip V2. |
 | [`?v=4`](https://richkus.github.io/ai-paieska/?v=4) | **V4 · Kaip Google** (numatytoji). AI bloke nėra antraštės ir patikslinimo pill'o, tik žymė „DI atrinktos ištraukos iš panašių situacijų SUFLERYJE“, šaltiniai mažais pill'ais citatos gale. Po citatomis „Tęskit temą“ (↳): paspaudus klausimas įsirašo į paieškos lauką ir prasideda nauja paieška, grįžtama naršyklės Atgal. Tab'ai: **DI režimas** (tik AI atsakymas), **Viskas** (AI + rezultatai), **Rezultatų sąrašas** (paprasta paieška). |
 
-Prototipas prasideda nuo tuščios būsenos: paspaudus paieškos lauką rodomi pavyzdiniai klausimai, po Enter matosi įkėlimas ir tada rezultatai. Klausimas lieka paieškos lauke.
+Prototipas prasideda nuo tuščios būsenos: paspaudus paieškos lauką rodomi pavyzdiniai klausimai, po Enter matosi įkėlimas ir tada rezultatai. Paspaudus logotipą grįžtama į pradžią.
 
-Admin'e taip pat yra scenarijai (konkreti situacija, platus klausimas, trumpa frazė, mažas panašumas, nėra rezultatų) ir aktyvios versijos parametrai, jei jų yra. Senos nuorodos `v1/` ir `v2/` nukreipia į tą patį puslapį.
+Admin'e taip pat yra scenarijai (konkreti situacija, platus klausimas, trumpa frazė, mažas panašumas, nėra rezultatų) ir aktyvios versijos parametrai, jei jų yra. Sena nuoroda `v2/` nukreipia į tą patį puslapį. V1 ir V3 išimtos (liko git istorijoje).
 
 Įkėlimo animacijos (taškai susidėlioja į S, S banga, žvaigždutė) peržiūrimos [`loaderis.html`](https://richkus.github.io/ai-paieska/loaderis.html), prototipe perjungiamos per Admin → Įkėlimo animacija ir Taškų skaičius S raidėje (5–8).
 
-Konkrečią būseną galima atidaryti nuoroda: `?v=3&s=savaitgalis&step=1` (scenarijai: `savaitgalis`, `komandiruote`, `pvm`, `mazai`, `nera`). Pridėjus `&shot=1` paslepiamas Admin mygtukas, patogu ekranams.
+Konkrečią būseną galima atidaryti nuoroda: `?v=4&s=savaitgalis&step=1` (scenarijai: `savaitgalis`, `komandiruote`, `pvm`, `mazai`, `nera`). Pridėjus `&shot=1` paslepiamas Admin mygtukas, patogu ekranams.
 
 ## Struktūra
 
@@ -29,7 +27,7 @@ Konkrečią būseną galima atidaryti nuoroda: `?v=3&s=savaitgalis&step=1` (scen
 index.html         prototipas: visos versijos, Alpine.js
 assets/
   css/shell.css    karkasas: side meniu, viršutinė juosta, footeris (Figma 1:1)
-  css/search.css   paieškos puslapis, V1 AI blokas, panel'is
+  css/search.css   paieškos puslapis, rezultatai, panel'is
   css/search-v2.css V2: AI blokas be dėžučių, dešinė kolona, PRO paywall
   css/filters.css  filtrų juosta (pill filtrai, popover'iai, mobile bottom sheet)
   css/admin.css    prototipo admin skydelis (neutralus, ne brando)
@@ -38,7 +36,7 @@ assets/
   js/shell.js      įdeda karkasą į [data-shell] elementus
   js/data.js       pavyzdiniai scenarijai, rezultatai, filtrai
   img/             ikonos ir logotipas iš Figmos
-v1/, v2/           nukreipimai į ?v=1 / ?v=2
+v2/                nukreipimas į ?v=2
 ```
 
 ## Nauja versija

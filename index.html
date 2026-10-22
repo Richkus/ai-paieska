@@ -7,19 +7,19 @@
 <title>AI paieška: prototipas</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400..800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/shell.css?v=1022f">
-<link rel="stylesheet" href="assets/css/search.css?v=1022f">
-<link rel="stylesheet" href="assets/css/filters.css?v=1022f">
-<link rel="stylesheet" href="assets/css/search-v2.css?v=1022f">
-<link rel="stylesheet" href="assets/css/loader.css?v=1022f">
-<link rel="stylesheet" href="assets/css/admin.css?v=1022f">
+<link rel="stylesheet" href="assets/css/shell.css?v=1022g">
+<link rel="stylesheet" href="assets/css/search.css?v=1022g">
+<link rel="stylesheet" href="assets/css/filters.css?v=1022g">
+<link rel="stylesheet" href="assets/css/search-v2.css?v=1022g">
+<link rel="stylesheet" href="assets/css/loader.css?v=1022g">
+<link rel="stylesheet" href="assets/css/admin.css?v=1022g">
 <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.14.1/dist/cdn.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
 </head>
 <body>
 <!--
   AI paieškos prototipas. Visos versijos viename puslapyje,
-  perjungiama per Admin (apačioje kairėje) arba ?v=1 / ?v=2.
+  perjungiama per Admin (apačioje kairėje) arba ?v=2 / ?v=4.
 
   Nauja versija:
    1. VERSIONS sąraše (apačioje, JS) pridėk { id, label, desc, params }.
@@ -29,24 +29,8 @@
 <div class="ms-app" x-data="search()" @popstate.window="onPop($event)" @keydown.escape.window="closePanel(); pvClose()" @scroll.window.passive="pv.id && pvClose()">
   <aside class="ms-sidebar" data-shell="sidebar"></aside>
 
-  <div class="ms-main" :class="{ 'is-sh': ver === 'v3' && phase !== 'start' }">
+  <div class="ms-main">
     <header class="ms-topbar" data-shell="topbar"></header>
-
-    <!-- ===== V3 · Paieškos antraštė: juosta paieškos puslapyje paaukštėja ir apima tab'us ===== -->
-    <div class="sh" x-show="ver === 'v3' && phase !== 'start'" x-cloak>
-      <p class="sh-rewrite" x-show="step > 0 && mode === 'ai'" x-cloak>
-        <svg width="13" height="13" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5c.4 3.3 3.2 6.1 6.5 6.5-3.3.4-6.1 3.2-6.5 6.5-.4-3.3-3.2-6.1-6.5-6.5 3.3-.4 6.1-3.2 6.5-6.5Z" fill="currentColor"/></svg>
-        <span>Patikslinom jūsų klausimą.</span>
-        <span>Ieškoti pagal pradinį: <button type="button" @click="goStep(0)" x-text="'„' + origQuery + '“'"></button></span>
-      </p>
-      <div class="sr-modes sh-modes" role="tablist" aria-label="Paieškos režimas">
-        <button type="button" role="tab" :class="{ 'is-on': mode === 'ai' }" :aria-selected="mode === 'ai'" @click="setMode('ai')">
-          <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5c.4 3.3 3.2 6.1 6.5 6.5-3.3.4-6.1 3.2-6.5 6.5-.4-3.3-3.2-6.1-6.5-6.5 3.3-.4 6.1-3.2 6.5-6.5Z" fill="currentColor"/></svg>
-          Atsakymas su AI
-        </button>
-        <button type="button" role="tab" :class="{ 'is-on': mode === 'classic' }" :aria-selected="mode === 'classic'" @click="setMode('classic')">Tik rezultatai</button>
-      </div>
-    </div>
 
     <main class="ms-content">
       <!-- Pradinė būsena: žmogus dar nieko neieškojo (low-fi „Naujausi“) -->
@@ -65,7 +49,7 @@
         </div>
       </div>
 
-      <div x-show="phase !== 'start'" :class="{ 'v2': ver !== 'v1', 'sr': ver === 'v1', 'is-classic': mode === 'classic', 'is-loading': phase === 'loading', 'is-busy': !!busy }">
+      <div x-show="phase !== 'start'" :class="{ 'v2': true, 'is-classic': mode === 'classic', 'is-loading': phase === 'loading', 'is-busy': !!busy }">
       <div class="v2-main">
 
         <!-- V4: trys tab'ai kaip Google (DI režimas · Viskas · Rezultatų sąrašas) -->
@@ -78,8 +62,8 @@
           <button type="button" role="tab" :class="{ 'is-on': mode === 'classic' }" :aria-selected="mode === 'classic'" @click="setMode('classic')">Rezultatų sąrašas</button>
         </div>
 
-        <!-- Režimai (V3 juos turi paieškos antraštėje) -->
-        <div class="sr-modes" x-show="ver !== 'v3' && ver !== 'v4'" role="tablist" aria-label="Paieškos režimas">
+        <!-- Režimai (V2) -->
+        <div class="sr-modes" x-show="ver === 'v2'" role="tablist" aria-label="Paieškos režimas">
           <button type="button" role="tab" :class="{ 'is-on': mode === 'ai' }" :aria-selected="mode === 'ai'" @click="setMode('ai')">
             <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5c.4 3.3 3.2 6.1 6.5 6.5-3.3.4-6.1 3.2-6.5 6.5-.4-3.3-3.2-6.1-6.5-6.5 3.3-.4 6.1-3.2 6.5-6.5Z" fill="currentColor"/></svg>
             Atsakymas su AI
@@ -93,90 +77,8 @@
           <i style="width:55%;height:20px"></i><i style="width:92%"></i><i style="width:80%"></i><i style="width:88%"></i><i style="width:40%"></i>
         </div>
 
-        <!-- ===== V1 · Inline patikslinimas ===== -->
-        <template x-if="mode === 'ai' && ver === 'v1'">
-          <div>
-            <!-- Žingsnių juosta -->
-            <div class="sr-trail">
-              <span class="sr-trail-label">Jūsų paieška:</span>
-              <button type="button" class="sr-step is-root" @click="goStep(0)" :title="sc.query"><span x-text="shortQuery"></span></button>
-              <template x-for="(t, i) in trail" :key="i">
-                <span style="display:contents">
-                  <span class="sr-arrow" aria-hidden="true">→</span>
-                  <button type="button" class="sr-step" :class="{ 'is-current': i === trail.length - 1 }" @click="goStep(i + 1)">
-                    <span x-text="t"></span>
-                    <i x-show="i === trail.length - 1" @click.stop="goStep(i)" aria-label="Nuimti patikslinimą">×</i>
-                  </button>
-                </span>
-              </template>
-              <span class="sr-counts" x-html="countChain"></span>
-            </div>
-
-            <!-- AI blokas -->
-            <section class="ai" aria-live="polite">
-              <div x-effect="sc.id; step; $el.classList.remove('ai-swap'); void $el.offsetWidth; $el.classList.add('ai-swap')">
-                <div class="ai-tag">
-                  <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5c.4 3.3 3.2 6.1 6.5 6.5-3.3.4-6.1 3.2-6.5 6.5-.4-3.3-3.2-6.1-6.5-6.5 3.3-.4 6.1-3.2 6.5-6.5Z" fill="currentColor"/></svg>
-                  <span x-text="ai.kind === 'quotes' ? 'Svarbiausia iš SUFLERIO medžiagos' : 'Padėsiu susiaurinti'"></span>
-                </div>
-                <h2 x-text="ai.heading"></h2>
-
-                <template x-if="ai.kind === 'quotes'">
-                  <ul class="ai-quotes">
-                    <template x-for="qt in ai.quotes" :key="qt.id">
-                      <li class="ai-quote">
-                        <p x-text="'„' + R[qt.id].quote + '“'"></p>
-                        <button type="button" class="ai-src" @click="pvClose(); openPanel(qt.id, true)" @mouseenter="pvEnter(qt.id, $el)" @mouseleave="pvLeave()" @focus="pvEnter(qt.id, $el)" @blur="pvLeave()">
-                          <b x-text="R[qt.id].type"></b><span x-text="R[qt.id].title"></span>
-                        </button>
-                      </li>
-                    </template>
-                  </ul>
-                </template>
-
-                <template x-if="ai.kind === 'directions'">
-                  <div class="ai-dirs">
-                    <template x-for="d in ai.directions" :key="d.label">
-                      <button type="button" class="ai-dir" @click="refine(d.label)">
-                        <strong><span x-text="d.label"></span><em x-text="d.count"></em></strong>
-                        <span x-text="d.hint"></span>
-                      </button>
-                    </template>
-                  </div>
-                </template>
-
-                <div class="ai-refine">
-                  <p class="ai-ask" x-show="ai.ask" x-text="ai.ask"></p>
-                  <div class="ai-chips" x-show="ai.chips && ai.chips.length">
-                    <template x-for="c in ai.chips || []" :key="c">
-                      <button type="button" class="ai-chip" @click="refine(c)" x-text="c"></button>
-                    </template>
-                  </div>
-                  <form class="ai-input" @submit.prevent="refine(own)">
-                    <input type="text" x-model="own" :placeholder="ai.kind === 'directions' ? 'Arba parašykit savais žodžiais, ko ieškot' : 'Arba patikslinkit savais žodžiais'" aria-label="Patikslinimas">
-                    <button type="submit" :disabled="!own.trim()" aria-label="Patikslinti">
-                      <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                    </button>
-                  </form>
-                </div>
-
-                <div class="ai-foot">
-                  <span>Rodom tik tai, kas parašyta SUFLERIO medžiagoje. Išvadų nedarom.</span>
-                  <span class="is-gap">Ar padėjo?</span>
-                  <button type="button" class="ai-thumb" :class="{ 'is-on': vote === 1 }" @click="vote = vote === 1 ? 0 : 1" aria-label="Padėjo">
-                    <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 7v7H2V7h3Zm0 0 3-5.5c1 0 1.8.8 1.6 1.8L9.2 6H13a1.5 1.5 0 0 1 1.5 1.8l-1 5A1.5 1.5 0 0 1 12 14H5" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>
-                  </button>
-                  <button type="button" class="ai-thumb" :class="{ 'is-on': vote === -1 }" @click="vote = vote === -1 ? 0 : -1" aria-label="Nepadėjo">
-                    <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true" style="transform:scaleY(-1)"><path d="M5 7v7H2V7h3Zm0 0 3-5.5c1 0 1.8.8 1.6 1.8L9.2 6H13a1.5 1.5 0 0 1 1.5 1.8l-1 5A1.5 1.5 0 0 1 12 14H5" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>
-                  </button>
-                </div>
-              </div>
-            </section>
-          </div>
-        </template>
-
         <!-- ===== V2 · AI blokas be dėžučių ===== -->
-        <template x-if="mode === 'ai' && ver !== 'v1' && !(ver === 'v4' && ai.kind === 'low')">
+        <template x-if="mode === 'ai' && !(ver === 'v4' && ai.kind === 'low')">
           <section class="a2" :class="{ 'is-card': ver === 'v4' }" aria-live="polite">
             <!-- Į ką ką tik atsakėt: lieka matoma, kad būtų aišku, kodėl pasikeitė -->
             <div class="a2-answered" x-show="lastAnswer && ver === 'v2'" x-cloak :title="lastAnswer && lastAnswer.q">
@@ -331,7 +233,7 @@
         <!-- Filtrų juosta: veikia abiem režimais. Su AI dalį filtrų pritaiko pati (✦) -->
         <div class="fb" :class="{ 'is-stack': fbStack }" x-show="!hideLinks && (baseList.length || anyFilter)" @keydown.escape.stop="pop = ''">
           <span class="fb-count" :class="{ 'is-flash': flash }" x-html="busy ? 'Atnaujinam…' : countHtml"></span>
-          <!-- V2/V3: filtrai suskleisti po vienu mygtuku (admin parametras) -->
+          <!-- V2/V4: filtrai suskleisti po vienu mygtuku (admin parametras) -->
           <button type="button" class="fb-toggle" x-show="fbCollapsible && !fbOpen" @click="fbOpen = true" :aria-expanded="fbOpen">
             <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 4h7M13 4h1M2 12h1M7 12h7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/><circle cx="11" cy="4" r="2" stroke="currentColor" stroke-width="1.5" fill="none"/><circle cx="5" cy="12" r="2" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
             Filtrai
@@ -412,7 +314,7 @@
       </div>
 
       <!-- Dešinė kolona: būsena, ne veiksmai -->
-      <aside class="v2-side" x-show="ver !== 'v1'" :class="{ 'is-open': sideOpen }" aria-label="Paieškos būsena">
+      <aside class="v2-side" :class="{ 'is-open': sideOpen }" aria-label="Paieškos būsena">
         <button type="button" class="v2-side-toggle" @click="sideOpen = !sideOpen" :aria-expanded="sideOpen">
           <span x-text="sideSummary"></span>
           <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><path d="M2 3.5l3 3 3-3" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -587,9 +489,9 @@
   .transition-pn { transition: transform .32s var(--ms-ease); }
   .pn-off { transform: translateX(100%); }
 </style>
-<script src="assets/js/shell.js?v=1022f"></script>
-<script src="assets/js/data.js?v=1022f"></script>
-<script src="assets/js/loader.js?v=1022f"></script>
+<script src="assets/js/shell.js?v=1022g"></script>
+<script src="assets/js/data.js?v=1022g"></script>
+<script src="assets/js/loader.js?v=1022g"></script>
 <script>
   // Admin parametras: filtrai po vienu mygtuku „Filtrai“ arba visada matomi
   const ANSWERS_PARAM = { key: 'answers', label: 'Atsakymai į patikslinimą', type: 'radio', default: 'list', options: [
@@ -630,8 +532,7 @@
       busy: '',          // atsakymas, pagal kurį dabar tikslinam
       answered: [],      // { q, a } kiekvienam patikslinimo žingsniui
       flash: false,
-      origQuery: '',     // ką žmogus įvedė pats (V3 lauke gali būti perrašytas klausimas)
-      rewriteFlash: false,
+      origQuery: '',     // ką žmogus įvedė pats
       suggestOpen: false,
       activeQuery: '',   // užklausa, su kuria padaryta dabartinė paieška
       vote: 0,
@@ -640,15 +541,13 @@
       expertSent: false,
       // ---------- Versijos ----------
       VERSIONS: [
-        { id: 'v1', label: 'V1 · Inline patikslinimas', desc: 'Žingsnių juosta virš AI bloko, laisvas tekstas atskirame lauke', params: [LOADER_PARAM, DOTS_PARAM] },
         { id: 'v2', label: 'V2 · Dešinė kolona', desc: 'Vienas laukas, „Kita…“ atsakymas, dešinėje eiga, šaltiniai, istorija', params: [ANSWERS_PARAM, FILTERS_PARAM, LOADER_PARAM, DOTS_PARAM] },
-        { id: 'v3', label: 'V3 · Paieškos antraštė', desc: 'Juosta paieškos puslapyje apima tab\'us, atsakymas perrašo klausimą paieškos lauke', params: [ANSWERS_PARAM, FILTERS_PARAM, LOADER_PARAM, DOTS_PARAM] },
         { id: 'v4', label: 'V4 · Kaip Google', desc: 'Susijusios paieškos tampa nauja paieška, grįžtama naršyklės Atgal. Tab\'ai: DI režimas · Viskas · Rezultatų sąrašas', params: [FILTERS_PARAM, LOADER_PARAM, DOTS_PARAM] },
       ],
       ver: (() => {
         const q = new URLSearchParams(location.search).get('v');
         const v = q ? 'v' + q.replace(/^v/, '') : store.get('ai-paieska-ver');
-        return ['v1', 'v2', 'v3', 'v4'].includes(v) ? v : 'v4';
+        return ['v2', 'v4'].includes(v) ? v : 'v4';
       })(),
       p: {},             // aktyvios versijos admin parametrai
       fbOpen: false,
@@ -662,7 +561,7 @@
         const u = new URL(location.href); u.searchParams.set('v', v.slice(1)); history.replaceState(null, '', u);
         this.initParams(); this.other = false; this.closePanel();
         if (v !== 'v4') this.aiOnly = false;
-        if (this.phase === 'results') { if (v === 'v3') this.showRewrite(); else if (v === 'v4') this.query = this.activeQuery = this.queryFor(this.step); else this.query = this.activeQuery = this.origQuery; }
+        if (this.phase === 'results') { if (v === 'v4') this.query = this.activeQuery = this.queryFor(this.step); else this.query = this.activeQuery = this.origQuery; }
       },
       initParams() { this.p = Object.fromEntries(this.verParams.map(g => [g.key, g.default])); },
 
@@ -696,7 +595,7 @@
           this.answered.push({ q: ai.kind === 'directions' ? ai.heading : ai.ask, a: label });
           this.trail.push(label); this.step++;
         }
-        this.applyAi(); this.showRewrite();
+        this.applyAi();
         if (this.ver === 'v4' && n) this.query = this.activeQuery = this.origQuery = this.queryFor(n);
       },
 
@@ -717,17 +616,11 @@
       },
       get askText() { return this.ai.kind === 'directions' ? '' : this.ai.ask; },
       get steps() {
-        const v3 = this.ver === 'v3';
         return [{ label: this.origQuery || this.sc.query, count: this.sc.steps[0].count },
-          ...this.trail.map((t, i) => ({ label: v3 ? (this.sc.steps[i + 1].rq || t) : t, ans: v3 ? t : '', count: this.sc.steps[i + 1].count }))];
+          ...this.trail.map((t, i) => ({ label: t, count: this.sc.steps[i + 1].count }))];
       },
-      // V3: lauke rodomas klausimas pagal žingsnį
+      // V4: lauke rodomas klausimas pagal žingsnį
       queryFor(n) { return n === 0 ? this.origQuery : (this.sc.steps[n].rq || this.origQuery); },
-      showRewrite() {
-        if (this.ver !== 'v3') return;
-        this.query = this.activeQuery = this.queryFor(this.step);
-        this.rewriteFlash = false; this.$nextTick(() => { this.rewriteFlash = true; clearTimeout(this._rw); this._rw = setTimeout(() => { this.rewriteFlash = false; }, 1500); });
-      },
       get sources() { return this.ai.kind === 'quotes' ? this.ai.quotes.map(q => q.id) : []; },
       get pastSearches() { return this.history.filter(h => h.scIdx !== this.scIdx).slice(0, 5); },
       get sideSummary() { if (this.ver === 'v4') return this.mode === 'ai' && this.sources.length ? `${this.sources.length} šaltiniai · Ankstesnės paieškos` : 'Ankstesnės paieškos'; return this.mode === 'ai' ? `Paieškos eiga · ${this.steps.length} žingsn. · ${this.sources.length} šaltiniai` : 'Ankstesnės paieškos'; },
@@ -880,7 +773,7 @@
       restore(h) {
         this.remember();
         this.loadScenario(h.scIdx);
-        this.query = this.activeQuery = this.origQuery = h.query; this.step = h.step; this.trail = [...h.trail]; this.answered = (h.answered || []).slice(); this.showRewrite(); this.applyAi(); this.push();
+        this.query = this.activeQuery = this.origQuery = h.query; this.step = h.step; this.trail = [...h.trail]; this.answered = (h.answered || []).slice(); this.applyAi(); this.push();
       },
       openOther() { this.other = true; setTimeout(() => this.$refs.other && this.$refs.other.focus(), 60); },
       refine(label) {
@@ -895,16 +788,15 @@
           this.trail = [...this.trail.slice(0, this.step), label];
           this.answered = [...this.answered.slice(0, this.step), answer];
           this.step++; this.own = ''; this.other = false; this.vote = 0; this.busy = ''; this.applyAi();
-          this.showRewrite();
+         
           this.flash = true; clearTimeout(this._f); this._f = setTimeout(() => { this.flash = false; }, 1600);
         };
-        if (this.ver === 'v1') { apply(); this.toTop(); return; }
         this.busy = label; this.other = false; this.toTop();
         clearTimeout(this._t); this._t = setTimeout(apply, 1700);
       },
-      goStep(n) { if (this.busy) return; this.other = false; this.step = n; this.trail = this.trail.slice(0, n); this.answered = this.answered.slice(0, n); this.vote = 0; this.applyAi(); this.showRewrite(); this.toTop(); },
+      goStep(n) { if (this.busy) return; this.other = false; this.step = n; this.trail = this.trail.slice(0, n); this.answered = this.answered.slice(0, n); this.vote = 0; this.applyAi(); this.toTop(); },
       // Jei naudotojas nuslinko žemiau, grąžinam prie žingsnių juostos
-      toTop() { this.$nextTick(() => { if (this.ver === 'v3') { if (scrollY > 0) window.scrollTo({ top: 0, behavior: 'smooth' }); return; } const el = document.querySelector('.sr-modes'); if (el && el.getBoundingClientRect().top < 0) el.scrollIntoView({ behavior: 'smooth' }); }); },
+      toTop() { this.$nextTick(() => { const el = document.querySelector('.sr-modes'); if (el && el.getBoundingClientRect().top < 0) el.scrollIntoView({ behavior: 'smooth' }); }); },
 
       // ---------- Panel ----------
       get pIndex() { return this.list.indexOf(this.pId); },

@@ -7,12 +7,12 @@
 <title>AI paieška: prototipas</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400..800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/shell.css?v=1022p">
-<link rel="stylesheet" href="assets/css/search.css?v=1022p">
-<link rel="stylesheet" href="assets/css/filters.css?v=1022p">
-<link rel="stylesheet" href="assets/css/search-v2.css?v=1022p">
-<link rel="stylesheet" href="assets/css/loader.css?v=1022p">
-<link rel="stylesheet" href="assets/css/admin.css?v=1022p">
+<link rel="stylesheet" href="assets/css/shell.css?v=1022q">
+<link rel="stylesheet" href="assets/css/search.css?v=1022q">
+<link rel="stylesheet" href="assets/css/filters.css?v=1022q">
+<link rel="stylesheet" href="assets/css/search-v2.css?v=1022q">
+<link rel="stylesheet" href="assets/css/loader.css?v=1022q">
+<link rel="stylesheet" href="assets/css/admin.css?v=1022q">
 <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.14.1/dist/cdn.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
 </head>
@@ -351,7 +351,12 @@
     <template x-if="pMode === 'item' && pId">
       <div style="display:contents">
         <div class="pn-bar">
-          <button type="button" class="pn-btn" @click="closePanel()" aria-label="Uždaryti">
+          <!-- Atidaryta iš klausimo ekspertui: grįžtam į formą, ne uždarom visą panel'į -->
+          <button type="button" class="pn-back" x-show="pBack" @click="backToAsk()">
+            <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3.5 5.5 8l4.5 4.5" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Atgal į klausimą
+          </button>
+          <button type="button" class="pn-btn" x-show="!pBack" @click="closePanel()" aria-label="Uždaryti">
             <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
           </button>
           <a class="pn-btn" href="#" aria-label="Atidaryti naujame lange" title="Atidaryti naujame lange">
@@ -417,7 +422,7 @@
             <div class="ak-maybe" x-show="askSuggest.length">
               <b>Prieš siunčiant: gal tinka viena iš šių?</b>
               <template x-for="id in askSuggest" :key="id">
-                <button type="button" @click="openPanel(id)"><small x-text="R[id].type + ' · ' + R[id].date"></small><span x-text="R[id].title"></span></button>
+                <button type="button" @click="openFromAsk(id)"><small x-text="R[id].type + ' · ' + R[id].date"></small><span x-text="R[id].title"></span></button>
               </template>
             </div>
 
@@ -521,9 +526,9 @@
   .transition-pn { transition: transform .32s var(--ms-ease); }
   .pn-off { transform: translateX(100%); }
 </style>
-<script src="assets/js/shell.js?v=1022p"></script>
-<script src="assets/js/data.js?v=1022p"></script>
-<script src="assets/js/loader.js?v=1022p"></script>
+<script src="assets/js/shell.js?v=1022q"></script>
+<script src="assets/js/data.js?v=1022q"></script>
+<script src="assets/js/loader.js?v=1022q"></script>
 <script>
   // Admin parametras: filtrai po vienu mygtuku „Filtrai“ arba visada matomi
   const ANSWERS_PARAM = { key: 'answers', label: 'Atsakymai į patikslinimą', type: 'radio', default: 'list', options: [
@@ -574,7 +579,8 @@
       activeQuery: '',   // užklausa, su kuria padaryta dabartinė paieška
       vote: 0,
       rewriteFlash: false, // V4: klausimas lauke pasikeitė (trumpai paryškinam)
-      pMode: 'item',     // panel'is: medžiaga (item) arba klausimas ekspertui (ask)
+      pMode: 'item',
+      pBack: false,      // medžiaga atidaryta iš klausimo ekspertui formos     // panel'is: medžiaga (item) arba klausimas ekspertui (ask)
       ask: { q: '', sent: false, edit: false, me: { vardas: 'Laurynas', pavarde: 'Petrauskas', imone: 'UAB Įmonita', pareigos: 'Vyr. buhalteris', miestas: 'Vilnius', tel: '+370 600 00000' } },
       // ---------- Versijos ----------
       VERSIONS: [
@@ -840,7 +846,7 @@
       get pIndex() { return this.list.indexOf(this.pId); },
       get panelPos() { const i = this.pIndex; return i < 0 ? '' : `${i + 1} iš ${this.list.length}`; },
       openPanel(id, toCite = false) {
-        this.pMode = 'item'; this.pId = id; this.panelOpen = true;
+        this.pMode = 'item'; this.pBack = false; this.pId = id; this.panelOpen = true;
         this.$nextTick(() => {
           const body = this.$refs.pnBody; if (!body) return;
           const cite = body.querySelector('.pn-cite');
@@ -861,6 +867,8 @@
         this.pMode = 'ask'; this.panelOpen = true;
         this.$nextTick(() => setTimeout(() => { const t = this.$refs.askQ; if (t) { t.focus(); t.setSelectionRange(t.value.length, t.value.length); } }, 320));
       },
+      openFromAsk(id) { this.openPanel(id); this.pBack = true; },
+      backToAsk() { this.pBack = false; this.pMode = 'ask'; },
       askAdd(label) {
         const key = label.split(' (')[0];
         this.ask.q = this.ask.q.replace(/\s+$/, '') + '\n' + key + ': ';

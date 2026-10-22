@@ -44,8 +44,13 @@
 
   const topbar = `
     <form class="ms-search" role="search" :class="{ 'is-rewrite': rewriteFlash }" @submit.prevent="submitSearch()">
-      <input type="search" x-model="query" x-ref="search" placeholder="Ieškokit frazės arba užduokit klausimą" aria-label="Paieška" autocomplete="off"
-             @focus="suggestOpen = true" @blur="suggestOpen = false" @keydown.escape="suggestOpen = false; $el.blur()">
+      <!-- Laukas auga žemyn, kai tekstas netelpa vienoje eilutėje; atitraukus fokusą vėl viena eilutė -->
+      <textarea rows="1" x-model="query" x-ref="search" placeholder="Ieškokit frazės arba užduokit klausimą" aria-label="Paieška" autocomplete="off" spellcheck="false"
+             x-effect="query; $nextTick(() => { if (document.activeElement === $el) { $el.style.height = 'auto'; $el.style.height = $el.scrollHeight + 'px'; } })"
+             @focus="suggestOpen = true; $el.style.height = 'auto'; $el.style.height = $el.scrollHeight + 'px'"
+             @blur="suggestOpen = false; $el.style.height = ''; $el.scrollTop = 0"
+             @keydown.enter="if (!$event.shiftKey) { $event.preventDefault(); suggestOpen = false; $el.blur(); $el.form.requestSubmit(); }"
+             @keydown.escape="suggestOpen = false; $el.blur()"></textarea>
       <button type="button" class="ms-search-clear" x-show="query" x-cloak @click="query = ''; $el.previousElementSibling.focus()" aria-label="Išvalyti">×</button>
       <button type="submit" class="ms-search-go" aria-label="Ieškoti">${img('ic-padidke.svg', 18, 18)}</button>
       <div class="ms-suggest" x-show="suggestOpen && showSuggest" x-cloak x-transition.opacity.duration.120ms @mousedown.prevent>

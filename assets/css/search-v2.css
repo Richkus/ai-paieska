@@ -156,8 +156,9 @@
    eilutė ir tab'ai yra vienas blokas, rezultatai po juo.
    ========================================================== */
 .ms-main.is-sh .ms-topbar { border-bottom: 0; }
-.ms-main.is-sh .ms-search { flex-basis: 720px; height: 38px; border-radius: 19px; }
-.ms-main.is-sh .ms-search input { font-size: 15.5px; }
+.ms-main.is-sh .ms-search { flex-basis: 720px; min-height: 38px; margin-top: 8px; border-radius: 19px; }
+.ms-main.is-sh .ms-search textarea { height: 36px; max-height: 156px; padding: 8px 0; font-size: 15.5px; }
+.ms-main.is-sh .ms-search-clear, .ms-main.is-sh .ms-search-go { margin-top: 6px; }
 .sh { padding: 0 40px 0 31.5px; background: var(--ms-topbar); border-bottom: 1px solid var(--ms-line-strong); }
 .sh-rewrite { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; margin: -4px 0 0; padding: 0 0 6px 17px; color: var(--ms-sub); font-size: 13px; }
 .sh-rewrite svg { color: var(--ai-accent); }
@@ -168,7 +169,7 @@
 
 /* AI perrašė klausimą: laukas trumpam paryškinamas */
 .ms-search.is-rewrite { animation: rw-flash 1.5s var(--ms-ease); }
-.ms-search.is-rewrite input { animation: rw-text 1.5s var(--ms-ease); }
+.ms-search.is-rewrite textarea { animation: rw-text 1.5s var(--ms-ease); }
 @keyframes rw-flash { 0%, 100% { box-shadow: none; } 15%, 60% { border-color: var(--ai-accent); box-shadow: 0 0 0 4px rgba(62, 154, 162, .18); } }
 @keyframes rw-text { 0% { color: var(--ai-accent); } 60% { color: var(--ai-accent); } 100% { color: var(--ms-ink); } }
 

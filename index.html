@@ -733,7 +733,7 @@
         this.loadScenario(idx);
         this.query = this.activeQuery = this.origQuery = typed;
         this.phase = 'loading'; window.scrollTo({ top: 0 });
-        clearTimeout(this._t); this._t = setTimeout(() => { this.phase = 'results'; }, 900);
+        clearTimeout(this._t); this._t = setTimeout(() => { this.phase = 'results'; }, 1800);
       },
       remember() {
         const h = { scIdx: this.scIdx, query: this.origQuery, step: this.step, trail: [...this.trail], answered: [...this.answered] };
@@ -762,7 +762,7 @@
         };
         if (this.ver === 'v1') { apply(); this.toTop(); return; }
         this.busy = label; this.other = false; this.toTop();
-        clearTimeout(this._t); this._t = setTimeout(apply, 850);
+        clearTimeout(this._t); this._t = setTimeout(apply, 1700);
       },
       goStep(n) { if (this.busy) return; this.other = false; this.step = n; this.trail = this.trail.slice(0, n); this.answered = this.answered.slice(0, n); this.vote = 0; this.applyAi(); this.showRewrite(); this.toTop(); },
       // Jei naudotojas nuslinko žemiau, grąžinam prie žingsnių juostos

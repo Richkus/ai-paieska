@@ -226,3 +226,8 @@
 .ms-search.is-rewrite textarea { animation: rw-text 1.5s var(--ms-ease); }
 @keyframes rw-flash { 0%, 100% { box-shadow: none; } 15%, 60% { border-color: var(--ai-accent); box-shadow: 0 0 0 4px rgba(83, 169, 177, .25); } }
 @keyframes rw-text { 0%, 60% { color: var(--ai-accent); } 100% { color: var(--ms-ink); } }
+
+/* V4, admin „Baltas fonas, ryškus skirtukas“: DI dalis be fono, nuo rezultatų atskirta storesne juosta */
+.a2.is-plain { position: relative; margin-bottom: 40px; padding-bottom: 28px; border-bottom: 0; }
+.a2.is-plain::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 6px; border-radius: 3px; background: var(--ms-topbar); box-shadow: inset 0 0 0 1px var(--ms-line); }
+.a2.is-plain ~ .fb .fb-count { font-size: 16px; }

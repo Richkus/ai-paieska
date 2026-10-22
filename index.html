@@ -7,12 +7,12 @@
 <title>AI paieška: prototipas</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400..800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/shell.css?v=1022i">
-<link rel="stylesheet" href="assets/css/search.css?v=1022i">
-<link rel="stylesheet" href="assets/css/filters.css?v=1022i">
-<link rel="stylesheet" href="assets/css/search-v2.css?v=1022i">
-<link rel="stylesheet" href="assets/css/loader.css?v=1022i">
-<link rel="stylesheet" href="assets/css/admin.css?v=1022i">
+<link rel="stylesheet" href="assets/css/shell.css?v=1022j">
+<link rel="stylesheet" href="assets/css/search.css?v=1022j">
+<link rel="stylesheet" href="assets/css/filters.css?v=1022j">
+<link rel="stylesheet" href="assets/css/search-v2.css?v=1022j">
+<link rel="stylesheet" href="assets/css/loader.css?v=1022j">
+<link rel="stylesheet" href="assets/css/admin.css?v=1022j">
 <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.14.1/dist/cdn.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
 </head>
@@ -89,7 +89,7 @@
 
         <!-- ===== V2 · AI blokas be dėžučių ===== -->
         <template x-if="mode === 'ai' && !(ver === 'v4' && ['low', 'directions'].includes(ai.kind))">
-          <section class="a2" :class="{ 'is-card': ver === 'v4' }" aria-live="polite">
+          <section class="a2" :class="{ 'is-card': ver === 'v4' && p.aiStyle !== 'plain', 'is-plain': ver === 'v4' && p.aiStyle === 'plain' }" aria-live="polite">
             <!-- Į ką ką tik atsakėt: lieka matoma, kad būtų aišku, kodėl pasikeitė -->
             <div class="a2-answered" x-show="lastAnswer && ver === 'v2'" x-cloak :title="lastAnswer && lastAnswer.q">
               <span x-text="busy ? 'Tikslinam pagal jūsų atsakymą' : 'Patikslinta pagal jūsų atsakymą'"></span>
@@ -499,14 +499,19 @@
   .transition-pn { transition: transform .32s var(--ms-ease); }
   .pn-off { transform: translateX(100%); }
 </style>
-<script src="assets/js/shell.js?v=1022i"></script>
-<script src="assets/js/data.js?v=1022i"></script>
-<script src="assets/js/loader.js?v=1022i"></script>
+<script src="assets/js/shell.js?v=1022j"></script>
+<script src="assets/js/data.js?v=1022j"></script>
+<script src="assets/js/loader.js?v=1022j"></script>
 <script>
   // Admin parametras: filtrai po vienu mygtuku „Filtrai“ arba visada matomi
   const ANSWERS_PARAM = { key: 'answers', label: 'Atsakymai į patikslinimą', type: 'radio', default: 'list', options: [
     { id: 'list', label: 'Sąrašas ↳ (kaip Perplexity)' },
     { id: 'chips', label: 'Chip\'ai' },
+  ] };
+  // Admin parametras (V4): kaip atskirti DI dalį nuo paieškos rezultatų
+  const AI_STYLE_PARAM = { key: 'aiStyle', label: 'DI dalies išskyrimas', type: 'radio', default: 'card', options: [
+    { id: 'card', label: 'Kortelė su fonu' },
+    { id: 'plain', label: 'Baltas fonas, ryškus skirtukas' },
   ] };
   const FILTERS_PARAM = { key: 'filters', label: 'Filtrai', type: 'radio', default: 'collapsed', options: [
     { id: 'collapsed', label: 'Suskleisti po mygtuku „Filtrai“' },
@@ -553,7 +558,7 @@
       // ---------- Versijos ----------
       VERSIONS: [
         { id: 'v2', label: 'V2 · Dešinė kolona', desc: 'Vienas laukas, „Kita…“ atsakymas, dešinėje eiga, šaltiniai, istorija', params: [ANSWERS_PARAM, FILTERS_PARAM, LOADER_PARAM, DOTS_PARAM] },
-        { id: 'v4', label: 'V4 · Kaip Google', desc: 'Susijusios paieškos tampa nauja paieška, grįžtama naršyklės Atgal. Tab\'ai: DI režimas · Viskas · Rezultatų sąrašas', params: [FILTERS_PARAM, LOADER_PARAM, DOTS_PARAM] },
+        { id: 'v4', label: 'V4 · Kaip Google', desc: 'Susijusios paieškos tampa nauja paieška, grįžtama naršyklės Atgal. Tab\'ai: DI režimas · Viskas · Rezultatų sąrašas', params: [AI_STYLE_PARAM, FILTERS_PARAM, LOADER_PARAM, DOTS_PARAM] },
       ],
       ver: (() => {
         const q = new URLSearchParams(location.search).get('v');

@@ -210,7 +210,13 @@
               <div>
                 <div x-show="answers.length">
                     <p class="a2-ask" x-show="askText" x-text="askText"></p>
-                    <div class="a2-answers" x-show="!other">
+                    <ul class="a2-list" x-show="!other && p.answers === 'list'">
+                      <template x-for="a in answers" :key="a.label">
+                        <li><button type="button" class="a2-row" @click="refine(a.label)" :title="a.hint || ''"><i aria-hidden="true">↳</i><span x-text="a.label"></span><em x-show="a.count" x-text="a.count"></em></button></li>
+                      </template>
+                      <li x-show="ai.kind !== 'empty'"><button type="button" class="a2-row is-other" @click="openOther()"><i aria-hidden="true">↳</i><span>Kita, parašysiu pats…</span></button></li>
+                    </ul>
+                    <div class="a2-answers" x-show="!other && p.answers !== 'list'">
                       <template x-for="a in answers" :key="a.label">
                         <button type="button" class="a2-chip" @click="refine(a.label)" :title="a.hint || ''"><span x-text="a.label"></span><em x-show="a.count" x-text="a.count"></em></button>
                       </template>
@@ -505,6 +511,10 @@
 <script src="assets/js/loader.js"></script>
 <script>
   // Admin parametras: filtrai po vienu mygtuku „Filtrai“ arba visada matomi
+  const ANSWERS_PARAM = { key: 'answers', label: 'Atsakymai į patikslinimą', type: 'radio', default: 'list', options: [
+    { id: 'list', label: 'Sąrašas ↳ (kaip Perplexity)' },
+    { id: 'chips', label: 'Chip\'ai' },
+  ] };
   const FILTERS_PARAM = { key: 'filters', label: 'Filtrai', type: 'radio', default: 'collapsed', options: [
     { id: 'collapsed', label: 'Suskleisti po mygtuku „Filtrai“' },
     { id: 'open', label: 'Visada matomi' },
@@ -547,8 +557,8 @@
       // ---------- Versijos ----------
       VERSIONS: [
         { id: 'v1', label: 'V1 · Inline patikslinimas', desc: 'Žingsnių juosta virš AI bloko, laisvas tekstas atskirame lauke', params: [LOADER_PARAM, DOTS_PARAM] },
-        { id: 'v2', label: 'V2 · Dešinė kolona', desc: 'Vienas laukas, „Kita…“ atsakymas, dešinėje eiga, šaltiniai, istorija', params: [FILTERS_PARAM, LOADER_PARAM, DOTS_PARAM] },
-        { id: 'v3', label: 'V3 · Paieškos antraštė', desc: 'Juosta paieškos puslapyje apima tab\'us, atsakymas perrašo klausimą paieškos lauke', params: [FILTERS_PARAM, LOADER_PARAM, DOTS_PARAM] },
+        { id: 'v2', label: 'V2 · Dešinė kolona', desc: 'Vienas laukas, „Kita…“ atsakymas, dešinėje eiga, šaltiniai, istorija', params: [ANSWERS_PARAM, FILTERS_PARAM, LOADER_PARAM, DOTS_PARAM] },
+        { id: 'v3', label: 'V3 · Paieškos antraštė', desc: 'Juosta paieškos puslapyje apima tab\'us, atsakymas perrašo klausimą paieškos lauke', params: [ANSWERS_PARAM, FILTERS_PARAM, LOADER_PARAM, DOTS_PARAM] },
       ],
       ver: (() => {
         const q = new URLSearchParams(location.search).get('v');

@@ -183,3 +183,14 @@
   .ms-main.is-sh .ms-topnav { display: none; }
   .sh-rewrite button { max-width: 100%; white-space: normal; }
 }
+
+/* Atsakymai sąrašu (Perplexity principu): eilutės su ↳ */
+.a2-list { margin: 0; padding: 6px 0 0; list-style: none; border-top: 1px solid var(--ms-line); }
+.a2-list li + li { margin-top: 2px; }
+.a2-row { display: flex; align-items: center; gap: 12px; width: 100%; padding: 10px 8px 10px 4px; border: 0; border-radius: 8px; background: none; color: var(--ms-ink); font-size: 15px; text-align: left; transition: color .15s, background .15s; }
+.a2-row i { flex: 0 0 auto; color: var(--ms-muted); font-style: normal; font-size: 15px; transition: color .15s, transform .2s var(--ms-ease); }
+.a2-row span { flex: 1; min-width: 0; }
+.a2-row em { flex: 0 0 auto; color: var(--ms-muted); font-style: normal; font-size: 12.5px; font-variant-numeric: tabular-nums; }
+.a2-row:hover { color: var(--ms-teal-dark); background: var(--ms-surface-soft); }
+.a2-row:hover i { color: var(--ai-accent); transform: translateX(2px); }
+.a2-row.is-other { color: var(--ms-sub); }

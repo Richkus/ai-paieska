@@ -7,12 +7,12 @@
 <title>AI paieška: prototipas</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400..800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/shell.css?v=1022s">
-<link rel="stylesheet" href="assets/css/search.css?v=1022s">
-<link rel="stylesheet" href="assets/css/filters.css?v=1022s">
-<link rel="stylesheet" href="assets/css/search-v2.css?v=1022s">
-<link rel="stylesheet" href="assets/css/loader.css?v=1022s">
-<link rel="stylesheet" href="assets/css/admin.css?v=1022s">
+<link rel="stylesheet" href="assets/css/shell.css?v=1022t">
+<link rel="stylesheet" href="assets/css/search.css?v=1022t">
+<link rel="stylesheet" href="assets/css/filters.css?v=1022t">
+<link rel="stylesheet" href="assets/css/search-v2.css?v=1022t">
+<link rel="stylesheet" href="assets/css/loader.css?v=1022t">
+<link rel="stylesheet" href="assets/css/admin.css?v=1022t">
 <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.14.1/dist/cdn.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
 </head>
@@ -64,6 +64,11 @@
             <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 4.5a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v4.5a2 2 0 0 1-2 2H7l-3 2.5V11h0a2 2 0 0 1-1.5-2Z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
             DI chatas
           </button>
+          <button type="button" role="tab" :class="{ 'is-on': chatFull }" :aria-selected="chatFull" @click="openChatFull()" title="Atsidaro pilname ekrane">
+            <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5c.4 3.3 3.2 6.1 6.5 6.5-3.3.4-6.1 3.2-6.5 6.5-.4-3.3-3.2-6.1-6.5-6.5 3.3-.4 6.1-3.2 6.5-6.5Z" fill="currentColor"/></svg>
+            DI pokalbis
+            <svg class="is-ext" width="12" height="12" viewBox="0 0 16 16" aria-hidden="true"><path d="M9 3h4v4M13 3 7.5 8.5M12 9.5V13H3V4h3.5" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
         </div>
 
         <!-- V4, plati tema: kryptys pirmos po tab'ais (kaip Google „Refine“), paspaudus perrašomas klausimas lauke -->
@@ -77,7 +82,20 @@
         </div>
 
         <!-- V4 · DI chatas: simuliatorius kolegoms. DI klausia ir veda prie citatų, išvadų nedaro -->
-        <section class="ch" x-show="ver === 'v4' && mode === 'chat'" x-cloak x-effect="if (ver === 'v4' && mode === 'chat' && phase === 'results') chatEnsure()">
+        <!-- Tas pats pokalbis: tab'e „DI chatas“ puslapio viduje, „DI pokalbis“ atidaro jį pilname ekrane -->
+        <section class="ch" :class="{ 'is-full': chatFull }" x-ref="chatBox" x-show="ver === 'v4' && (mode === 'chat' || chatFull)" x-cloak
+                 x-effect="if (ver === 'v4' && (mode === 'chat' || chatFull) && phase === 'results') chatEnsure()"
+                 @keydown.escape.window="chatFull && !panelOpen && closeChatFull()">
+          <header class="chf-bar" x-show="chatFull">
+            <span class="chf-brand"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5c.4 3.3 3.2 6.1 6.5 6.5-3.3.4-6.1 3.2-6.5 6.5-.4-3.3-3.2-6.1-6.5-6.5 3.3-.4 6.1-3.2 6.5-6.5Z" fill="currentColor"/></svg> DI pokalbis</span>
+            <span class="chf-q" x-text="chat.msgs.length ? chat.msgs[0].text : ''"></span>
+            <button type="button" class="chf-new" @click="chatRestart()">Naujas pokalbis</button>
+            <button type="button" class="pn-btn" @click="closeChatFull()" aria-label="Uždaryti" title="Uždaryti (Esc)">
+              <svg width="18" height="18" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+            </button>
+          </header>
+          <div class="chf-wrap">
+          <div class="chf-col">
           <template x-for="(m, i) in chat.msgs" :key="i">
             <div class="ch-msg" :class="'is-' + m.who">
               <template x-if="m.who === 'user'"><p class="ch-bubble" x-text="m.text"></p></template>
@@ -146,6 +164,19 @@
             </div>
             <small>DI atrenka SUFLERIO medžiagą ir išvadų nedaro. Prototipas: pokalbis iš anksto surašytas.</small>
           </form>
+          </div>
+          <!-- Pilname ekrane šaltiniai dešinėje (kaip Google AI Mode) -->
+          <aside class="chf-src" x-show="chatFull && sources.length">
+            <h3>Šaltiniai <span x-text="sources.length"></span></h3>
+            <template x-for="id in sources" :key="id">
+              <button type="button" @click="openPanel(id, true)">
+                <small><i class="a2-pro" x-show="R[id].pro">PRO</i><span x-text="R[id].type + ' · ' + R[id].date"></span></small>
+                <b x-text="R[id].title"></b>
+                <span class="chf-snip" x-text="R[id].snippet"></span>
+              </button>
+            </template>
+          </aside>
+          </div>
         </section>
 
         <!-- Režimai (V2) -->
@@ -601,9 +632,9 @@
   .transition-pn { transition: transform .32s var(--ms-ease); }
   .pn-off { transform: translateX(100%); }
 </style>
-<script src="assets/js/shell.js?v=1022s"></script>
-<script src="assets/js/data.js?v=1022s"></script>
-<script src="assets/js/loader.js?v=1022s"></script>
+<script src="assets/js/shell.js?v=1022t"></script>
+<script src="assets/js/data.js?v=1022t"></script>
+<script src="assets/js/loader.js?v=1022t"></script>
 <script>
   // Admin parametras: filtrai po vienu mygtuku „Filtrai“ arba visada matomi
   const ANSWERS_PARAM = { key: 'answers', label: 'Atsakymai į patikslinimą', type: 'radio', default: 'list', options: [
@@ -655,6 +686,7 @@
       vote: 0,
       rewriteFlash: false, // V4: klausimas lauke pasikeitė (trumpai paryškinam)
       chat: { key: '', msgs: [], step: 0, typing: false, draft: '' },   // V4 · DI chatas
+      chatFull: false,   // V4 · DI pokalbis pilname ekrane
       pMode: 'item',
       pBack: false,      // medžiaga atidaryta iš klausimo ekspertui formos     // panel'is: medžiaga (item) arba klausimas ekspertui (ask)
       ask: { q: '', sent: false, edit: false, me: { vardas: 'Laurynas', pavarde: 'Petrauskas', imone: 'UAB Įmonita', pareigos: 'Vyr. buhalteris', miestas: 'Vilnius', tel: '+370 600 00000' } },
@@ -741,7 +773,7 @@
       // V4: lauke rodomas klausimas pagal žingsnį
       queryFor(n) { return n === 0 ? this.origQuery : (this.sc.steps[n].rq || this.origQuery); },
       get sources() {
-        if (this.mode === 'chat') return [...new Set(this.chat.msgs.filter(m => m.card).flatMap(m => [m.card.main, ...m.card.quotes]))];
+        if (this.mode === 'chat' || this.chatFull) return [...new Set(this.chat.msgs.filter(m => m.card).flatMap(m => [m.card.main, ...m.card.quotes]))];
         return this.ai.kind === 'quotes' ? this.ai.quotes.map(q => q.id) : [];
       },
       get pastSearches() { return this.history.filter(h => h.scIdx !== this.scIdx).slice(0, 5); },
@@ -970,7 +1002,20 @@
         if (this.$refs.chatIn) this.$refs.chatIn.style.height = '';
         this.chat.step++; this.chatReply();
       },
-      chatScroll() { this.$nextTick(() => window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' })); },
+      chatScroll() {
+        this.$nextTick(() => {
+          const box = this.$refs.chatBox;
+          if (this.chatFull && box) box.scrollTo({ top: box.scrollHeight, behavior: 'smooth' });
+          else window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' });
+        });
+      },
+      chatRestart() { this.chat.key = ''; this.chatEnsure(); },
+      openChatFull() {
+        this.chatFull = true; document.body.classList.add('is-chatfull');
+        this.chatEnsure();
+        this.$nextTick(() => { this.chatScroll(); setTimeout(() => this.$refs.chatIn && this.$refs.chatIn.focus(), 200); });
+      },
+      closeChatFull() { this.chatFull = false; document.body.classList.remove('is-chatfull'); },
       openFromAsk(id) { this.openPanel(id); this.pBack = true; },
       backToAsk() { this.pBack = false; this.pMode = 'ask'; },
       askAdd(label) {

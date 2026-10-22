@@ -7,12 +7,12 @@
 <title>AI paieška: prototipas</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400..800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/shell.css">
-<link rel="stylesheet" href="assets/css/search.css">
-<link rel="stylesheet" href="assets/css/filters.css">
-<link rel="stylesheet" href="assets/css/search-v2.css">
-<link rel="stylesheet" href="assets/css/loader.css">
-<link rel="stylesheet" href="assets/css/admin.css">
+<link rel="stylesheet" href="assets/css/shell.css?v=1022b">
+<link rel="stylesheet" href="assets/css/search.css?v=1022b">
+<link rel="stylesheet" href="assets/css/filters.css?v=1022b">
+<link rel="stylesheet" href="assets/css/search-v2.css?v=1022b">
+<link rel="stylesheet" href="assets/css/loader.css?v=1022b">
+<link rel="stylesheet" href="assets/css/admin.css?v=1022b">
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
 </head>
 <body>
@@ -532,9 +532,9 @@
   .transition-pn { transition: transform .32s var(--ms-ease); }
   .pn-off { transform: translateX(100%); }
 </style>
-<script src="assets/js/shell.js"></script>
-<script src="assets/js/data.js"></script>
-<script src="assets/js/loader.js"></script>
+<script src="assets/js/shell.js?v=1022b"></script>
+<script src="assets/js/data.js?v=1022b"></script>
+<script src="assets/js/loader.js?v=1022b"></script>
 <script>
   // Admin parametras: filtrai po vienu mygtuku „Filtrai“ arba visada matomi
   const ANSWERS_PARAM = { key: 'answers', label: 'Atsakymai į patikslinimą', type: 'radio', default: 'list', options: [
@@ -759,6 +759,15 @@
       },
 
       resetDemo() { this.setMode('ai'); history.replaceState({ ph: 'start' }, ''); this.initParams(); this.loadScenario(0); this.phase = 'start'; this.query = this.activeQuery = this.origQuery = ''; this.adminOpen = false; window.scrollTo({ top: 0, behavior: 'smooth' }); },
+      // Logotipas: grįžtam į pradinį puslapį (dar neieškota)
+      goHome() {
+        if (this.phase === 'start') return;
+        if (this.phase === 'results') this.remember();
+        clearTimeout(this._t); this.pvClose();
+        this.loadScenario(0); this.phase = 'start'; this.query = this.activeQuery = this.origQuery = '';
+        if (this.ver === 'v4') history.pushState({ ph: 'start' }, '');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      },
       setMode(m, aiOnly = false) { this.mode = m; this.aiOnly = aiOnly; store.set('ai-paieska-mode', m); this.applyAi(); },
       loadScenario(i) {
         this.scIdx = i; this.step = 0; this.trail = []; this.vote = 0; this.own = '';

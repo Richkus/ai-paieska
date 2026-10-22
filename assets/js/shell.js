@@ -29,7 +29,7 @@
   const navPro = ['Pro mikroskopą', 'Geroji praktika', 'Pro komentarai', 'Profilaktika'];
 
   const sidebar = `
-    <a class="ms-logo" href="#" aria-label="Mokesčių SUFLERIS">${img('logo.svg', 102, 30)}</a>
+    <a class="ms-logo" href="#" aria-label="Mokesčių SUFLERIS" @click.prevent="goHome()">${img('logo.svg', 102, 30)}</a>
     <ul class="ms-nav ms-nav--main">
       ${navMain.map(n => `<li><a href="#">${n.icon}${n.label}</a></li>`).join('')}
     </ul>

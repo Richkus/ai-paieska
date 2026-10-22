@@ -224,7 +224,7 @@
             <div class="a2-foot">
               <div x-show="ver === 'v4'">
                 <div x-show="related.length">
-                  <p class="a2-rel-h" x-text="ai.kind === 'quotes' ? 'Susijusios paieškos' : 'Ieškokit konkrečiau'"></p>
+                  <p class="a2-rel-h" x-text="ai.kind === 'quotes' ? 'Tęskit temą' : 'Ieškokit konkrečiau'"></p>
                   <ul class="a2-list">
                     <template x-for="r in related" :key="r">
                       <li><button type="button" class="a2-row" @click="follow(r)"><i aria-hidden="true">↳</i><span x-text="r"></span></button></li>

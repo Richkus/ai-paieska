@@ -23,7 +23,7 @@ window.RESULTS = {
          quote: 'Kai taikoma suminė apskaita, savaitgalis gali būti įprasta darbo diena pagal grafiką, tada papildomos kompensacijos nereikia.' },
   r5:  { type: 'Testas', date: '2026-09-10', title: 'Darbo užmokestis: poilsio ir švenčių dienos',
          snippet: 'Pasitikrinkite žinias apie darbo užmokestį už darbą poilsio ir švenčių dienomis. 10 klausimų.' },
-  r6:  { type: 'Dokumento forma', date: '2025-06-02', title: 'Prašymas suteikti kitą poilsio dieną (forma)',
+  r6:  { type: 'Atmintinė', date: '2025-06-02', title: 'Prašymas suteikti kitą poilsio dieną (forma)',
          snippet: 'Pavyzdinė darbuotojo prašymo forma, kai vietoj padidinto apmokėjimo už darbą poilsio dieną prašoma suteikti kitą poilsio dieną.',
          quote: 'Prašyme nurodoma data, kurią dirbta poilsio dieną, ir pageidaujama laisvos dienos data.' },
   r7:  { type: 'Praktinė situacija', date: '2024-12-18', title: 'Darbas švenčių dieną ir viršvalandžiai: kaip skaičiuoti',
@@ -256,8 +256,8 @@ window.FILTERS = {
 };
 
 (function tagResults() {
-  const rub = { 'Praktinė situacija': 'Praktinės situacijos', 'Konsultacija': 'PRO konsultacijos', 'Straipsnis': 'Geroji praktika', 'Renginio įrašas': 'Seminarai ir vaizdo įrašai', 'Testas': 'Testai', 'Skaičiuoklė': 'Skaičiuoklės', 'Mokesčių naujiena': 'Mokesčių naujienos', 'Dokumento forma': 'Trumpai', 'Sąvadas': 'Geroji praktika' };
-  const fmt = { 'Renginio įrašas': 'Video', 'Testas': 'Testas', 'Skaičiuoklė': 'Skaičiuoklė', 'Dokumento forma': 'Dokumento forma' };
+  const rub = { 'Praktinė situacija': 'Praktinės situacijos', 'Konsultacija': 'PRO konsultacijos', 'Straipsnis': 'Geroji praktika', 'Renginio įrašas': 'Seminarai ir vaizdo įrašai', 'Testas': 'Testai', 'Skaičiuoklė': 'Skaičiuoklės', 'Mokesčių naujiena': 'Mokesčių naujienos', 'Atmintinė': 'Trumpai', 'Sąvadas': 'Geroji praktika' };
+  const fmt = { 'Renginio įrašas': 'Video', 'Testas': 'Testas', 'Skaičiuoklė': 'Skaičiuoklė', 'Atmintinė': 'Dokumento forma' };
   const tema = { r: 'Darbo laikas', k: 'Komandiruotės', p: 'PVM', g: 'Darbo užmokestis' };
   Object.entries(window.RESULTS).forEach(([id, r]) => {
     r.rub = rub[r.type] || 'Mokesčių naujienos';

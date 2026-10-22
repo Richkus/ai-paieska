@@ -214,7 +214,7 @@
 @media (max-width: 640px) { .lowc-row { flex-wrap: wrap; } .ex-foot { flex-direction: column; align-items: stretch; } }
 
 /* V4, plati tema: kryptys po paieškos lauku (Google „Refine“ principu) */
-.rf { margin: 6px 0 18px; }
+.rf { margin: 0 0 32px; }
 .rf-q { margin: 0 0 10px; color: var(--ms-ink); font-size: 16px; font-weight: 600; }
 .rf-chips { display: flex; flex-wrap: wrap; gap: 8px; }
 .rf-chip { display: inline-flex; align-items: center; gap: 8px; height: 34px; padding: 0 14px; border: 1px solid var(--ms-line-strong); border-radius: 17px; background: #fff; color: var(--ms-ink); font-size: 14px; transition: background .15s, border-color .15s, color .15s; }

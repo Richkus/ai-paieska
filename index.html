@@ -432,22 +432,6 @@
               <textarea id="ak-q" x-ref="askQ" rows="7" x-model="ask.q" placeholder="Įrašykite klausimą"></textarea>
               <p class="ak-warn" x-show="(ask.q.match(/\?/g) || []).length > 1" x-cloak>Atrodo, čia keli klausimai. Ekspertas atsakys į vieną, kitus geriau užduoti atskirai.</p>
 
-              <!-- Kontaktai iš paskyros: nereikia pildyti iš naujo -->
-              <div class="ak-me">
-                <div class="ak-me-row">
-                  <div>
-                    <small>Atsakysim jums</small>
-                    <span x-text="[ask.me.vardas + ' ' + ask.me.pavarde, ask.me.imone, ask.me.pareigos, ask.me.miestas, ask.me.tel].join(' · ')"></span>
-                  </div>
-                  <button type="button" @click="ask.edit = !ask.edit" x-text="ask.edit ? 'Baigti' : 'Keisti'"></button>
-                </div>
-                <div class="ak-grid" x-show="ask.edit" x-collapse.duration.250ms>
-                  <template x-for="f in [['vardas', 'Vardas'], ['pavarde', 'Pavardė'], ['imone', 'Įmonė'], ['pareigos', 'Pareigos'], ['miestas', 'Miestas'], ['tel', 'Telefono numeris']]" :key="f[0]">
-                    <label><span x-text="f[1] + '*'"></span><input type="text" x-model="ask.me[f[0]]"></label>
-                  </template>
-                </div>
-              </div>
-
               <div class="ak-foot">
                 <span class="ak-privacy">
                   <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6l7-3Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>

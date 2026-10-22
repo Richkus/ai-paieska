@@ -71,7 +71,7 @@
         <div class="sr-modes" x-show="ver === 'v4'" role="tablist" aria-label="Paieškos režimas">
           <button type="button" role="tab" :class="{ 'is-on': mode === 'ai' && aiOnly }" :aria-selected="mode === 'ai' && aiOnly" @click="setMode('ai', true)">
             <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5c.4 3.3 3.2 6.1 6.5 6.5-3.3.4-6.1 3.2-6.5 6.5-.4-3.3-3.2-6.1-6.5-6.5 3.3-.4 6.1-3.2 6.5-6.5Z" fill="currentColor"/></svg>
-            Su AI
+            DI režimas
           </button>
           <button type="button" role="tab" :class="{ 'is-on': mode === 'ai' && !aiOnly }" :aria-selected="mode === 'ai' && !aiOnly" @click="setMode('ai')">Visi rezultatai</button>
           <button type="button" role="tab" :class="{ 'is-on': mode === 'classic' }" :aria-selected="mode === 'classic'" @click="setMode('classic')">Nuorodos</button>

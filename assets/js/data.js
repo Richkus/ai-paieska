@@ -4,7 +4,7 @@
 
    Scenarijus = užklausa + žingsniai. Kiekvienas žingsnis:
      count   - kiek rezultatų po šito žingsnio
-     ai      - viršutinis blokas (quotes | directions | empty)
+     ai      - viršutinis blokas (quotes | directions | low | empty)
      results - rezultatų id sąraše
    Paspaudus bet kurį patikslinimą einama į kitą žingsnį.
    ========================================================== */
@@ -55,6 +55,12 @@ window.RESULTS = {
   p4:  { type: 'Praktinė situacija', date: '2026-06-11', title: 'Kada privaloma registruotis PVM mokėtoju',
          snippet: 'Apyvartos riba, savanoriška registracija ir dažniausios situacijos smulkiam verslui.',
          quote: 'Registruotis reikia, kai per paskutinius 12 mėnesių apyvarta viršija nustatytą ribą.' },
+  g1:  { type: 'Praktinė situacija', date: '2025-05-14', title: 'Reprezentacinės sąnaudos: kas priskiriama ir kiek atskaitoma',
+         snippet: 'Kokios išlaidos laikomos reprezentacinėmis ir kokia jų dalis gali būti atskaitoma apskaičiuojant pelno mokestį.' },
+  g2:  { type: 'Konsultacija', date: '2024-11-27', title: 'Dovanos darbuotojams: ar apmokestinama GPM?',
+         snippet: 'Darbdavys darbuotojams kalėdų proga dovanoja dovanų kuponus. Ar tai darbuotojų pajamos?' },
+  g3:  { type: 'Praktinė situacija', date: '2025-02-06', title: 'Įmonės renginys darbuotojams: mokesčiai',
+         snippet: 'Kaip apmokestinamos įmonės organizuoto renginio išlaidos, kai jame dalyvauja tik darbuotojai.' },
   p5:  { type: 'Mokesčių naujiena', date: '2026-10-02', title: 'Keičiasi PVM deklaracijos pildymo taisyklės',
          snippet: 'VMI patvirtino naują PVM deklaracijos formą. Ji bus taikoma nuo kito mokestinio laikotarpio.' },
 };
@@ -184,6 +190,20 @@ window.SCENARIOS = [
     ],
   },
   {
+    id: 'mazai',
+    label: 'Mažas panašumas',
+    query: 'Ar galima į sąnaudas įtraukti tortą darbuotojo gimtadieniui?',
+    classicCount: 23,
+    steps: [
+      {
+        count: 23,
+        results: ['g1', 'g3', 'g2'],
+        // Situacijos rastos, bet nė viena tiksliai neatitinka: DI ištraukų nerodom
+        ai: { kind: 'low', heading: 'Tiksliai panašių situacijų neradom', ask: 'Peržiūrėkit rezultatus žemiau arba klauskit eksperto.', chips: [] },
+      },
+    ],
+  },
+  {
     id: 'nera',
     label: 'Nėra rezultatų',
     query: 'Kaip apmokestinti kriptovaliutų kasimą Estijoje?',
@@ -238,7 +258,7 @@ window.FILTERS = {
 (function tagResults() {
   const rub = { 'Praktinė situacija': 'Praktinės situacijos', 'Konsultacija': 'PRO konsultacijos', 'Straipsnis': 'Geroji praktika', 'Renginio įrašas': 'Seminarai ir vaizdo įrašai', 'Testas': 'Testai', 'Skaičiuoklė': 'Skaičiuoklės', 'Mokesčių naujiena': 'Mokesčių naujienos', 'Dokumento forma': 'Trumpai', 'Sąvadas': 'Geroji praktika' };
   const fmt = { 'Renginio įrašas': 'Video', 'Testas': 'Testas', 'Skaičiuoklė': 'Skaičiuoklė', 'Dokumento forma': 'Dokumento forma' };
-  const tema = { r: 'Darbo laikas', k: 'Komandiruotės', p: 'PVM' };
+  const tema = { r: 'Darbo laikas', k: 'Komandiruotės', p: 'PVM', g: 'Darbo užmokestis' };
   Object.entries(window.RESULTS).forEach(([id, r]) => {
     r.rub = rub[r.type] || 'Mokesčių naujienos';
     r.fmt = fmt[r.type] || 'Tekstas';

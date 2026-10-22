@@ -17,11 +17,11 @@ Visos versijos yra viename puslapyje. Perjungiama apačioje kairėje per **Admin
 
 Prototipas prasideda nuo tuščios būsenos: paspaudus paieškos lauką rodomi pavyzdiniai klausimai, po Enter matosi įkėlimas ir tada rezultatai. Klausimas lieka paieškos lauke.
 
-Admin'e taip pat yra scenarijai (konkreti situacija, platus klausimas, trumpa frazė, nėra rezultatų) ir aktyvios versijos parametrai, jei jų yra. Senos nuorodos `v1/` ir `v2/` nukreipia į tą patį puslapį.
+Admin'e taip pat yra scenarijai (konkreti situacija, platus klausimas, trumpa frazė, mažas panašumas, nėra rezultatų) ir aktyvios versijos parametrai, jei jų yra. Senos nuorodos `v1/` ir `v2/` nukreipia į tą patį puslapį.
 
 Įkėlimo animacijos (taškai susidėlioja į S, S banga, žvaigždutė) peržiūrimos [`loaderis.html`](https://richkus.github.io/ai-paieska/loaderis.html), prototipe perjungiamos per Admin → Įkėlimo animacija ir Taškų skaičius S raidėje (5–8).
 
-Konkrečią būseną galima atidaryti nuoroda: `?v=3&s=savaitgalis&step=1` (scenarijai: `savaitgalis`, `komandiruote`, `pvm`, `nera`). Pridėjus `&shot=1` paslepiamas Admin mygtukas, patogu ekranams.
+Konkrečią būseną galima atidaryti nuoroda: `?v=3&s=savaitgalis&step=1` (scenarijai: `savaitgalis`, `komandiruote`, `pvm`, `mazai`, `nera`). Pridėjus `&shot=1` paslepiamas Admin mygtukas, patogu ekranams.
 
 ## Struktūra
 

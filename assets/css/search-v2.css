@@ -212,3 +212,17 @@
 .lowc .ex { margin: 14px 0 2px; }
 .lowc-link { margin-top: 10px; padding: 0; border: 0; background: none; color: var(--ms-link); font-size: 14px; }
 @media (max-width: 640px) { .lowc-row { flex-wrap: wrap; } .ex-foot { flex-direction: column; align-items: stretch; } }
+
+/* V4, plati tema: kryptys po paieškos lauku (Google „Refine“ principu) */
+.rf { margin: 6px 0 18px; }
+.rf-q { margin: 0 0 10px; color: var(--ms-ink); font-size: 16px; font-weight: 600; }
+.rf-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.rf-chip { display: inline-flex; align-items: center; gap: 8px; height: 34px; padding: 0 14px; border: 1px solid var(--ms-line-strong); border-radius: 17px; background: #fff; color: var(--ms-ink); font-size: 14px; transition: background .15s, border-color .15s, color .15s; }
+.rf-chip em { color: var(--ms-muted); font-style: normal; font-size: 12.5px; font-variant-numeric: tabular-nums; }
+.rf-chip:hover { border-color: var(--ai-accent); background: var(--ms-topbar); color: var(--ms-teal-dark); }
+
+/* Klausimas lauke pasikeitė: laukas trumpam paryškinamas */
+.ms-search.is-rewrite { animation: rw-flash 1.5s var(--ms-ease); }
+.ms-search.is-rewrite textarea { animation: rw-text 1.5s var(--ms-ease); }
+@keyframes rw-flash { 0%, 100% { box-shadow: none; } 15%, 60% { border-color: var(--ai-accent); box-shadow: 0 0 0 4px rgba(83, 169, 177, .25); } }
+@keyframes rw-text { 0%, 60% { color: var(--ai-accent); } 100% { color: var(--ms-ink); } }

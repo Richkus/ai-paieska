@@ -119,6 +119,7 @@ window.SCENARIOS = [
         ai: {
           kind: 'directions',
           heading: 'Tema plati. Kas jums aktualiausia?',
+          lead: 'Apie komandiruotės išlaidas yra kelios temos. Ką norit sužinoti?',
           directions: [
             { label: 'Dienpinigiai', count: 124, hint: 'dydžiai, GPM, vienos dienos komandiruotė' },
             { label: 'Kelionės ir nakvynės išlaidos', count: 86, hint: 'dokumentai, limitai' },
@@ -163,6 +164,7 @@ window.SCENARIOS = [
         ai: {
           kind: 'directions',
           heading: 'Radom daug. Siaurinkim?',
+          lead: 'Apie PVM yra daug temų. Ką norit sužinoti?',
           directions: [
             { label: 'Registracija PVM mokėtoju', count: 212, hint: 'apyvartos riba, savanoriška' },
             { label: 'PVM sąskaitos faktūros', count: 388, hint: 'išrašymas, registras' },

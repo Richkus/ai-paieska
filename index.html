@@ -183,7 +183,6 @@
                 <p class="a2-hint" x-show="!answers.length">Ne tai? Pakeiskit klausimą paieškos lauke viršuje.</p>
               </div>
               <div class="a2-votes">
-                <button type="button" class="a2-askex" x-show="ver === 'v4' && ai.kind === 'quotes'" @click="openAsk()">Neradot atsakymo? Klauskit eksperto</button>
                 <button type="button" class="a2-vote" :class="{ 'is-on': vote === 1 }" @click="vote = vote === 1 ? 0 : 1" aria-label="Padėjo" title="Padėjo">
                   <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 7v7H2V7h3Zm0 0 3-5.5c1 0 1.8.8 1.6 1.8L9.2 6H13a1.5 1.5 0 0 1 1.5 1.8l-1 5A1.5 1.5 0 0 1 12 14H5" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>
                 </button>

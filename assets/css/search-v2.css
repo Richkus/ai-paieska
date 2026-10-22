@@ -196,7 +196,7 @@
 .ex textarea:focus { border-color: var(--ms-field-text); box-shadow: 0 0 0 3px rgba(83, 169, 177, .2); }
 .ex-foot { display: flex; justify-content: flex-end; }
 .ex-foot small { flex: 1; color: var(--ms-muted); font-size: 12.5px; }
-.ex-btn { flex: 0 0 auto; height: 36px; padding: 0 18px; border: 0; border-radius: 18px; background: var(--ms-teal-dark); color: #fff; font-size: 14px; font-weight: 600; transition: opacity .15s, background .15s; }
+.ex-btn { flex: 0 0 auto; height: 40px; padding: 0 20px; border: 0; border-radius: 8px; background: var(--ms-teal-dark); color: #fff; font-size: 14px; font-weight: 600; transition: opacity .15s, background .15s; }
 .ex-btn:hover { background: var(--ms-teal); }
 .ex-btn:disabled { opacity: .35; cursor: default; }
 .ex-done { display: flex; align-items: center; gap: 8px; margin: 0; padding: 12px 14px; border-radius: 10px; background: #fff; color: var(--ms-teal-dark); font-size: 14px; font-weight: 600; }
@@ -207,7 +207,7 @@
 .lowc-row > svg { flex: 0 0 auto; color: var(--ms-muted); }
 .lowc-row p { flex: 1; margin: 0; color: var(--ms-sub); font-size: 14px; line-height: 1.5; }
 .lowc-row p b { color: var(--ms-ink); font-weight: 600; }
-.lowc-btn { flex: 0 0 auto; height: 32px; padding: 0 14px; border: 1px solid var(--ms-sidebar); border-radius: 16px; background: #fff; color: var(--ms-teal-dark); font-size: 13.5px; font-weight: 600; transition: background .15s, border-color .15s; }
+.lowc-btn { flex: 0 0 auto; height: 36px; padding: 0 16px; border: 1px solid var(--ms-sidebar); border-radius: 8px; background: #fff; color: var(--ms-teal-dark); font-size: 13.5px; font-weight: 600; transition: background .15s, border-color .15s; }
 .lowc-btn:hover { background: var(--ms-topbar); border-color: var(--ai-accent); }
 .lowc .ex { margin: 14px 0 2px; }
 .lowc-link { margin-top: 10px; padding: 0; border: 0; background: none; color: var(--ms-link); font-size: 14px; }
@@ -273,3 +273,8 @@
 .ak-done p b { color: var(--ms-ink); font-weight: 600; }
 .ak-done blockquote { margin: 0 0 24px; padding: 12px 14px; border-left: 2px solid var(--ai-line); background: var(--ms-surface-soft); color: var(--ms-ink-soft); font-size: 14px; line-height: 1.6; white-space: pre-wrap; }
 @media (max-width: 640px) { .ak-grid { grid-template-columns: 1fr; } .ak-foot { flex-direction: column; align-items: stretch; } }
+
+/* V4, nieko neradus: antraštė, paaiškinimas, CTA ir „Arba ieškokit plačiau“ su aiškiais tarpais */
+.a2-empty { margin-bottom: 28px; }
+.a2-empty .a2-rel-sub { margin-bottom: 18px; }
+.a2-empty + .a2-foot .a2-rel-h { margin-top: 0; }

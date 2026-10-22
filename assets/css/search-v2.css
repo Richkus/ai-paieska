@@ -373,3 +373,13 @@ body.is-chatfull { overflow: hidden; }
 .ms-main.is-topwhite .ms-search .ms-suggest { top: calc(100% + 8px); }
 .ms-main.is-topwhite .ms-content .v2 { padding-top: 4px; }
 .ms-main.is-topwhite .ms-search { margin-left: 16.5px; } /* laukas lygiuojasi su tab'ais, kaip Google */
+
+/* Kryptys sąrašu su paieškos ikona (kaip Google pasiūlymai) */
+.rf-list { margin: 0; padding: 0; list-style: none; }
+.rf-row { display: flex; align-items: center; gap: 14px; width: 100%; padding: 10px 10px 10px 4px; border: 0; border-radius: 8px; background: none; color: var(--ms-ink); font-size: 15px; text-align: left; transition: background .15s, color .15s; }
+.rf-row svg { flex: 0 0 auto; color: var(--ms-muted); transition: color .15s; }
+.rf-row span { flex: 1; min-width: 0; }
+.rf-row em { flex: 0 0 auto; color: var(--ms-muted); font-style: normal; font-size: 12.5px; font-variant-numeric: tabular-nums; }
+.rf-row:hover { background: var(--ms-surface-soft); color: var(--ms-teal-dark); }
+.rf-row:hover svg { color: var(--ai-accent); }
+.rf-q { margin-bottom: 6px; }

@@ -7,12 +7,12 @@
 <title>AI paieška: prototipas</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400..800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/shell.css?v=1022u">
-<link rel="stylesheet" href="assets/css/search.css?v=1022u">
-<link rel="stylesheet" href="assets/css/filters.css?v=1022u">
-<link rel="stylesheet" href="assets/css/search-v2.css?v=1022u">
-<link rel="stylesheet" href="assets/css/loader.css?v=1022u">
-<link rel="stylesheet" href="assets/css/admin.css?v=1022u">
+<link rel="stylesheet" href="assets/css/shell.css?v=1022v">
+<link rel="stylesheet" href="assets/css/search.css?v=1022v">
+<link rel="stylesheet" href="assets/css/filters.css?v=1022v">
+<link rel="stylesheet" href="assets/css/search-v2.css?v=1022v">
+<link rel="stylesheet" href="assets/css/loader.css?v=1022v">
+<link rel="stylesheet" href="assets/css/admin.css?v=1022v">
 <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.14.1/dist/cdn.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
 </head>
@@ -74,11 +74,15 @@
         <!-- V4, plati tema: kryptys pirmos po tab'ais (kaip Google „Refine“), paspaudus perrašomas klausimas lauke -->
         <div class="rf" x-show="ver === 'v4' && ai.kind === 'directions' && mode !== 'chat'" x-cloak>
           <p class="rf-q" x-text="ai.lead || ai.heading"></p>
-          <div class="rf-chips">
+          <!-- Sąrašas su paieškos ikona, kaip Google pasiūlymai -->
+          <ul class="rf-list">
             <template x-for="(d, i) in ai.directions" :key="d.label">
-              <button type="button" class="rf-chip" @click="follow(related[i] || d.label)" :title="related[i] || ''"><span x-text="d.label"></span><em x-text="d.count"></em></button>
+              <li><button type="button" class="rf-row" @click="follow(related[i] || d.label)">
+                <svg width="16" height="16" viewBox="0 0 18 18" aria-hidden="true"><circle cx="7.5" cy="7.5" r="5.75" stroke="currentColor" stroke-width="1.7" fill="none"/><path d="M12 12l4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+                <span x-text="related[i] || d.label"></span><em x-text="d.count"></em>
+              </button></li>
             </template>
-          </div>
+          </ul>
         </div>
 
         <!-- V4 · DI chatas: simuliatorius kolegoms. DI klausia ir veda prie citatų, išvadų nedaro -->
@@ -632,9 +636,9 @@
   .transition-pn { transition: transform .32s var(--ms-ease); }
   .pn-off { transform: translateX(100%); }
 </style>
-<script src="assets/js/shell.js?v=1022u"></script>
-<script src="assets/js/data.js?v=1022u"></script>
-<script src="assets/js/loader.js?v=1022u"></script>
+<script src="assets/js/shell.js?v=1022v"></script>
+<script src="assets/js/data.js?v=1022v"></script>
+<script src="assets/js/loader.js?v=1022v"></script>
 <script>
   // Admin parametras: filtrai po vienu mygtuku „Filtrai“ arba visada matomi
   const ANSWERS_PARAM = { key: 'answers', label: 'Atsakymai į patikslinimą', type: 'radio', default: 'list', options: [

@@ -641,7 +641,8 @@
       get countHtml() {
         const n = this.listCount;
         const from = this.mode === 'ai' && n !== this.sc.classicCount ? `<small>iš ${this.sc.classicCount}</small>` : '';
-        return `${n} ${this.rezultatai(n)}${from}`;
+        const r = this.rezultatai(n), adj = { 'rezultatas': 'plikas', 'rezultatai': 'pliki', 'rezultatų': 'plikų' }[r];
+        return `${n} ${adj} paieškos ${r}${from}`;
       },
       get shortQuery() { const q = this.sc.query; return q.length > 46 ? q.slice(0, 44) + '…' : q; },
 

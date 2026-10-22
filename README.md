@@ -11,7 +11,7 @@ Visos versijos yra viename puslapyje. Perjungiama apačioje kairėje per **Admin
 | Nuoroda | Kas tai |
 |---|---|
 | [`?v=2`](https://richkus.github.io/ai-paieska/?v=2) | **V2 · Dešinė kolona.** Vienas įvesties laukas viršuje, pakeitus tekstą prasideda nauja paieška. AI blokas be dėžučių: citatos + klausimas, į kurį atsakoma chip'ais arba „Kita…“. Dešinėje būsena: paieškos eiga, šaltiniai, ankstesnės paieškos. |
-| [`?v=4`](https://richkus.github.io/ai-paieska/?v=4) | **V4 · Kaip Google** (numatytoji). AI bloke nėra antraštės ir patikslinimo pill'o, tik žymė „DI atrinktos ištraukos iš panašių situacijų“, šaltiniai mažais pill'ais citatos gale. Po citatomis „Tęskit temą“ (↳): paspaudus klausimas įsirašo į paieškos lauką ir prasideda nauja paieška, grįžtama naršyklės Atgal. Tab'ai: **DI režimas** (tik AI atsakymas), **Viskas** (AI + rezultatai), **Rezultatų sąrašas** (paprasta paieška). |
+| [`?v=4`](https://richkus.github.io/ai-paieska/?v=4) | **V4 · Kaip Google** (numatytoji). AI bloke nėra antraštės ir patikslinimo pill'o, tik žymė „DI atrinktos ištraukos iš panašių situacijų“, šaltiniai mažais pill'ais citatos gale. Po citatomis „Tęskit temą“ (↳): paspaudus klausimas įsirašo į paieškos lauką ir prasideda nauja paieška, grįžtama naršyklės Atgal. Tab'ai: **DI režimas** (tik AI atsakymas), **Viskas** (AI + rezultatai), **Rezultatų sąrašas** (paprasta paieška), **DI chatas** (simuliatorius: DI mandagiai klausia 1–2 patikslinimo klausimų ir veda prie citatų; atsakoma mygtukais arba laisvai, laukas prilipęs apačioje; pokalbiai iš anksto surašyti `data.js` → `CHATS`). |
 
 Prototipas prasideda nuo tuščios būsenos: paspaudus paieškos lauką rodomi pavyzdiniai klausimai, po Enter matosi įkėlimas ir tada rezultatai. Paspaudus logotipą grįžtama į pradžią.
 

@@ -309,3 +309,61 @@ window.FILTERS = {
   };
   Object.entries(rel).forEach(([id, list]) => list.forEach((r, i) => { S[id].steps[i].related = r; }));
 })();
+
+/* ==========================================================
+   V4 · DI chatas (simuliatorius). Kiekvienam scenarijui iš anksto
+   surašytas pokalbis: DI klausia, žmogus atsako (mygtuku arba laisvai),
+   bet koks atsakymas veda į kitą žingsnį. Paskutinis žingsnis yra
+   atsakymo kortelė su citatomis iš SUFLERIO medžiagos.
+   ========================================================== */
+window.CHATS = {
+  savaitgalis: [
+    { text: 'Supratau: darbuotojas dirbo šeštadienį ir norit vietoj apmokėjimo duoti laisvą dieną. Kad parodyčiau tiksliausią medžiagą, patikslinkit: ar šeštadienis buvo numatytas jo darbo grafike?',
+      options: ['Ne, dirbo papildomai', 'Taip, dirba pagal suminę apskaitą', 'Nežinau, kaip patikrinti'] },
+    { text: 'Aišku. Dar vienas dalykas: ar laisvos dienos prašo pats darbuotojas, ar tai darbdavio siūlymas?',
+      options: ['Prašo darbuotojas', 'Siūlo darbdavys'] },
+    { text: 'Ačiū, radau situaciją, kuri atitinka jūsų atvejį. Štai kas apie tai parašyta SUFLERYJE:',
+      card: { main: 'r1', quotes: ['r1', 'r6'], more: ['r3', 'r2'] },
+      after: 'Ar dar kažkas neaišku?',
+      options: ['Kaip pažymėti žiniaraštyje?', 'Per kiek laiko suteikti dieną?'] },
+    { text: 'Apie žymėjimą žiniaraštyje SUFLERYJE rašoma taip:',
+      card: { main: 'r3', quotes: ['r3', 'r2'] },
+      after: 'Jei vis dar ne tai, galiu perduoti klausimą ekspertui.', expert: true },
+  ],
+  komandiruote: [
+    { text: 'Komandiruočių išlaidų tema plati. Kas jums šiuo metu aktualiausia?',
+      options: ['Dienpinigiai', 'Kelionės ir nakvynės išlaidos', 'Komandiruotė į užsienį', 'Įforminimas ir apskaita'] },
+    { text: 'Gerai. Kur vyksta komandiruotė?',
+      options: ['Lietuvoje', 'Užsienyje', 'Keliose šalyse'] },
+    { text: 'Štai kas SUFLERYJE rašoma apie dienpinigius komandiruotėje užsienyje:',
+      card: { main: 'k3', quotes: ['k3', 'k1'], tool: 'k4' },
+      after: 'Dienpinigių sumą galit apskaičiuoti skaičiuoklėje. Ar dar kažkas neaišku?',
+      options: ['Ar dienpinigiai apmokestinami?', 'Kokių dokumentų reikia?'] },
+    { text: 'Apie apmokestinimą:',
+      card: { main: 'k1', quotes: ['k1'] },
+      after: 'Jei vis dar ne tai, galiu perduoti klausimą ekspertui.', expert: true },
+  ],
+  pvm: [
+    { text: '„PVM“ apima daug temų. Apie ką norit sužinoti?',
+      options: ['Registracija PVM mokėtoju', 'PVM sąskaitos faktūros', 'PVM deklaravimas', 'PVM atskaita'] },
+    { text: 'Aišku. Kokia jūsų situacija?',
+      options: ['Viršijom apyvartos ribą', 'Norim registruotis savanoriškai'] },
+    { text: 'Štai kas SUFLERYJE rašoma apie privalomą registraciją PVM mokėtoju:',
+      card: { main: 'p4', quotes: ['p4'], more: ['p5'] },
+      after: 'Ar dar kažkas neaišku?',
+      options: ['Nuo kada skaičiuoti PVM?', 'Kaip užpildyti prašymą?'] },
+    { text: 'Tiksliai šiam klausimui atskiros medžiagos neradau. Artimiausia:',
+      card: { main: 'p5', quotes: [] },
+      after: 'Galiu perduoti klausimą ekspertui, jis atsakys asmeniškai.', expert: true },
+  ],
+  mazai: [
+    { text: 'Tiksliai tokios situacijos SUFLERYJE neradau, bet yra artimų temų. Kad parinkčiau tinkamiausią: tortas skirtas įmonės šventei ar dovana konkrečiam darbuotojui?',
+      options: ['Įmonės šventei', 'Dovana darbuotojui'] },
+    { text: 'Artimiausia medžiaga yra ši, bet jūsų atvejo ji tiesiogiai neaptaria:',
+      card: { main: 'g1', quotes: [], more: ['g3', 'g2'] },
+      after: 'Kad nesuklaidinčiau, siūlau paklausti eksperto.', expert: true },
+  ],
+  nera: [
+    { text: 'Šia tema SUFLERYJE medžiagos neradau. Galiu perduoti jūsų klausimą ekspertui, jis atsakys asmeniškai.', expert: true },
+  ],
+};

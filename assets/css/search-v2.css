@@ -282,3 +282,47 @@
 /* Panel'yje: grįžimas į klausimo formą */
 .pn-back { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px 0 8px; border: 0; border-radius: 8px; background: none; color: var(--ms-ink); font-size: 14px; font-weight: 600; transition: background .15s; }
 .pn-back:hover { background: var(--ms-surface-soft); }
+
+/* ==========================================================
+   V4 · DI chatas (simuliatorius)
+   ========================================================== */
+.ch { display: flex; flex-direction: column; gap: 22px; min-height: calc(100vh - 220px); }
+.ch-msg.is-user { display: flex; justify-content: flex-end; }
+.ch-bubble { max-width: 78%; margin: 0; padding: 10px 16px; border-radius: 18px 18px 4px 18px; background: var(--ms-topbar); color: var(--ms-ink); font-size: 15px; line-height: 1.55; white-space: pre-wrap; }
+.ch-ai { display: flex; align-items: flex-start; gap: 12px; }
+.ch-av { flex: 0 0 auto; display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--ms-topbar); color: var(--ai-accent); }
+.ch-body { flex: 1; min-width: 0; display: grid; gap: 12px; padding-top: 4px; }
+.ch-body > p { margin: 0; color: var(--ms-ink); font-size: 15.5px; line-height: 1.65; }
+.ch-card { display: grid; gap: 12px; padding: 16px 18px; border: 1px solid var(--ms-line); border-radius: 14px; background: #fff; }
+.ch-main { display: grid; gap: 2px; padding: 0; border: 0; background: none; text-align: left; }
+.ch-main small { color: var(--ms-muted); font-size: 12.5px; }
+.ch-main b { color: var(--ms-ink); font-size: 16px; font-weight: 600; line-height: 1.4; }
+.ch-main:hover b { color: var(--ms-link); }
+.ch-quote { margin: 0; padding-left: 14px; border-left: 2px solid var(--ai-line); color: var(--ms-ink-soft); font-size: 14.5px; line-height: 1.65; }
+.ch-tool { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: 1px solid var(--ms-line); border-radius: 10px; background: var(--ms-surface-soft); color: var(--ms-teal-dark); font-size: 14px; font-weight: 600; text-align: left; transition: border-color .15s; }
+.ch-tool span { flex: 1; }
+.ch-tool em { color: var(--ms-link); font-style: normal; font-weight: 400; font-size: 13px; }
+.ch-tool:hover { border-color: var(--ai-accent); }
+.ch-more { display: grid; gap: 2px; padding-top: 10px; border-top: 1px solid var(--ms-line); }
+.ch-more small { margin-bottom: 4px; color: var(--ms-muted); font-size: 12.5px; }
+.ch-more button { display: flex; align-items: baseline; gap: 10px; padding: 4px 0; border: 0; background: none; color: var(--ms-ink); font-size: 14px; text-align: left; }
+.ch-more button span { flex: 1; }
+.ch-more button em { color: var(--ms-muted); font-style: normal; font-size: 12px; }
+.ch-more button:hover span { color: var(--ms-link); }
+.ch-ex { justify-self: start; }
+.ch-opts { display: flex; flex-wrap: wrap; gap: 8px; }
+.ch-opts button { height: 36px; padding: 0 14px; border: 1px solid var(--ms-sidebar); border-radius: 8px; background: #fff; color: var(--ms-teal-dark); font-size: 14px; transition: background .15s, border-color .15s; }
+.ch-opts button:hover { background: var(--ms-topbar); border-color: var(--ai-accent); }
+.ch-tools { display: flex; gap: 2px; margin-left: -6px; }
+.ch-typing { display: flex; align-items: center; gap: 8px; margin: 4px 0 0; color: var(--ai-accent); font-size: 14px; font-weight: 600; }
+.ch-msg { animation: ch-in .3s var(--ms-ease); }
+@keyframes ch-in { from { opacity: 0; transform: translateY(6px); } }
+
+/* Įvesties laukas prilipęs prie ekrano apačios */
+.ch-compose { position: sticky; bottom: 0; z-index: 5; margin-top: auto; padding: 18px 0 16px; background: linear-gradient(to bottom, rgba(255, 255, 255, 0), #fff 28%); }
+.ch-field { display: flex; align-items: flex-end; gap: 8px; padding: 8px 8px 8px 16px; border: 1px solid var(--ms-line-strong); border-radius: 16px; background: #fff; box-shadow: 0 6px 24px rgba(15, 40, 42, .08); transition: border-color .15s, box-shadow .15s; }
+.ch-field:focus-within { border-color: var(--ms-field-text); box-shadow: 0 0 0 3px rgba(83, 169, 177, .2), 0 6px 24px rgba(15, 40, 42, .08); }
+.ch-field textarea { flex: 1; min-width: 0; height: 36px; max-height: 160px; padding: 7px 0; border: 0; outline: none; resize: none; background: none; font: inherit; font-size: 15px; line-height: 22px; color: var(--ms-ink); }
+.ch-field button { flex: 0 0 auto; display: grid; place-items: center; width: 36px; height: 36px; padding: 0; border: 0; border-radius: 10px; background: var(--ms-teal-dark); color: #fff; transition: opacity .15s; }
+.ch-field button:disabled { opacity: .3; cursor: default; }
+.ch-compose small { display: block; margin-top: 8px; color: var(--ms-muted); font-size: 12px; text-align: center; }

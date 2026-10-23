@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="assets/css/shell.css?v=1025k">
 <link rel="stylesheet" href="assets/css/search.css?v=1025k">
 <link rel="stylesheet" href="assets/css/filters.css?v=1025k">
-<link rel="stylesheet" href="assets/css/search-v2.css?v=1025o">
+<link rel="stylesheet" href="assets/css/search-v2.css?v=1025p">
 <link rel="stylesheet" href="assets/css/loader-ai.css?v=1025k">
 <link rel="stylesheet" href="assets/css/admin.css?v=1025k">
 <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.14.1/dist/cdn.min.js"></script>
@@ -358,7 +358,24 @@
               <textarea rows="1" x-ref="chatIn" x-model="chat.draft" placeholder="Klauskite toliau…" aria-label="Žinutė"
                         @input="$el.style.height = 'auto'; $el.style.height = Math.min($el.scrollHeight, 160) + 'px'"
                         @keydown.enter="if (!$event.shiftKey) { $event.preventDefault(); chatSend(chat.draft); }"></textarea>
-              <button type="submit" :disabled="!chat.draft.trim() || chat.typing" aria-label="Siųsti">
+              <!-- Šaltiniai: kur DI ieško atsakymo (SUFLERIO turinys + išoriniai) -->
+              <div class="ch-srcw" @click.outside="srcOpen = false" @keydown.escape="srcOpen = false">
+                <button type="button" class="ch-srcbtn" :class="{ 'is-open': srcOpen }" @click="srcOpen = !srcOpen" :aria-expanded="srcOpen" aria-haspopup="true">
+                  <i aria-hidden="true"></i><span>Šaltiniai</span><b x-text="srcCount"></b>
+                  <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><path d="M2 3.5 5 6.5l3-3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+                <div class="ch-srcpop" x-show="srcOpen" x-cloak x-transition.opacity.duration.120ms>
+                  <template x-for="g in SRC_GROUPS" :key="g.h">
+                    <div class="ch-srcg">
+                      <p x-text="g.h"></p>
+                      <template x-for="o in g.items" :key="o">
+                        <label class="ch-srco"><input type="checkbox" :value="o" x-model="srcSel"><span x-text="o"></span></label>
+                      </template>
+                    </div>
+                  </template>
+                </div>
+              </div>
+              <button type="submit" class="ch-sendbtn" :disabled="!chat.draft.trim() || chat.typing" aria-label="Siųsti">
                 <svg width="16" height="16" viewBox="0 0 14 14" aria-hidden="true"><path d="M7 12V2M3 6l4-4 4 4" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
               </button>
             </div>
@@ -1618,6 +1635,13 @@
       },
       pvLeave() { clearTimeout(this._pvIn); this._pvOut = setTimeout(() => this.pvClose(), 220); },
       pvKeep() { clearTimeout(this._pvOut); },
+      SRC_GROUPS: [
+        { h: 'SUFLERIO turinys', items: ['Praktinės situacijos', 'Praktinės situacijos (išplėstos)', 'Vaizdo įrašai', 'Atmintinės'] },
+        { h: 'Išoriniai šaltiniai', items: ['VMI', 'Sodra', 'VDI', 'EUR-Lex', 'e-TAR'] },
+      ],
+      srcOpen: false,
+      srcSel: ['Praktinės situacijos', 'Praktinės situacijos (išplėstos)', 'Vaizdo įrašai', 'Atmintinės', 'VMI'],
+      get srcCount() { return this.srcSel.length; },
       copyText(t) { try { navigator.clipboard.writeText(t); } catch (e) {} },
       pvClose() { clearTimeout(this._pvIn); clearTimeout(this._pvOut); this.pv = { ...this.pv, id: null }; },
     };

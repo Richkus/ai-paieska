@@ -333,8 +333,8 @@
 .ch-field { display: flex; align-items: flex-end; gap: 8px; padding: 8px 8px 8px 16px; border: 1px solid var(--ms-line-strong); border-radius: 16px; background: #fff; box-shadow: 0 6px 24px rgba(15, 40, 42, .08); transition: border-color .15s, box-shadow .15s; }
 .ch-field:focus-within { border-color: var(--ms-field-text); box-shadow: 0 0 0 3px rgba(83, 169, 177, .2), 0 6px 24px rgba(15, 40, 42, .08); }
 .ch-field textarea { flex: 1; min-width: 0; height: 36px; max-height: 160px; padding: 7px 0; border: 0; outline: none; resize: none; background: none; font: inherit; font-size: 15px; line-height: 22px; color: var(--ms-ink); }
-.ch-field button { flex: 0 0 auto; display: grid; place-items: center; width: 36px; height: 36px; padding: 0; border: 0; border-radius: 10px; background: var(--ms-teal-dark); color: #fff; transition: opacity .15s; }
-.ch-field button:disabled { opacity: .3; cursor: default; }
+.ch-field .ch-sendbtn { flex: 0 0 auto; display: grid; place-items: center; width: 36px; height: 36px; padding: 0; border: 0; border-radius: 10px; background: var(--ms-teal-dark); color: #fff; transition: opacity .15s; }
+.ch-field .ch-sendbtn:disabled { opacity: .3; cursor: default; }
 .ch-compose small { display: block; margin-top: 8px; color: var(--ms-muted); font-size: 12px; text-align: center; }
 
 /* ==========================================================
@@ -776,3 +776,24 @@ body.is-chatmodal { overflow: hidden; }
 .a2-tools { display: flex; align-items: center; gap: 2px; margin: 10px 0 0 -6px; }
 .a2-tools.ch-tools { margin: 6px 0 0 -6px; }
 .a2-disc-under { margin: 10px 0 18px; padding-top: 10px; border-top: 1px dashed var(--ms-line-strong); }
+
+/* DI režimo šaltinių pasirinkimas prie siuntimo mygtuko */
+.ch-srcw { position: relative; flex: 0 0 auto; }
+.ch-srcbtn { display: inline-flex; align-items: center; gap: 7px; height: 36px; padding: 0 12px; border: 0; border-radius: 10px; background: #e2efef; color: var(--ms-teal-dark); font-size: 14px; font-weight: 600; white-space: nowrap; transition: background .15s, color .15s; }
+.ch-srcbtn i { width: 6px; height: 6px; border-radius: 50%; background: var(--ms-teal); }
+.ch-srcbtn b { min-width: 18px; height: 18px; padding: 0 5px; border-radius: 4px; background: #fff; font-size: 11.5px; line-height: 18px; text-align: center; font-variant-numeric: tabular-nums; }
+.ch-srcbtn svg { transition: transform .2s var(--ms-ease); }
+.ch-srcbtn:hover { background: #d3e7e7; }
+.ch-srcbtn.is-open { background: var(--ms-teal-dark); color: #fff; }
+.ch-srcbtn.is-open i { background: #fff; }
+.ch-srcbtn.is-open b { background: rgba(255, 255, 255, .18); }
+.ch-srcbtn.is-open svg { transform: rotate(180deg); }
+.ch-srcpop { position: absolute; right: 0; bottom: calc(100% + 10px); z-index: 20; width: 280px; padding: 6px 0; border: 1px solid var(--ms-line); border-radius: 12px; background: #fff; box-shadow: 0 16px 40px rgba(15, 40, 42, .14), 0 2px 6px rgba(15, 40, 42, .05); }
+.ch-srcg + .ch-srcg { margin-top: 4px; padding-top: 4px; border-top: 1px solid var(--ms-line); }
+.ch-srcg p { margin: 10px 16px 4px; color: var(--ms-muted); font-size: 11px; font-weight: 600; letter-spacing: .8px; text-transform: uppercase; }
+.ch-srco { display: flex; align-items: center; gap: 12px; padding: 8px 16px; color: var(--ms-ink); font-size: 14.5px; cursor: pointer; transition: background .12s; }
+.ch-srco:hover { background: var(--ms-surface-soft); }
+.ch-srco input { appearance: none; -webkit-appearance: none; flex: 0 0 auto; display: grid; place-items: center; width: 18px; height: 18px; margin: 0; border: 1.5px solid #c9d6d7; border-radius: 5px; background: #fff; cursor: pointer; transition: background .12s, border-color .12s; }
+.ch-srco input:checked { border-color: #6aa7b0; background: #6aa7b0 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.3l2.6 2.6L12 5.5' stroke='%23fff' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 12px no-repeat; }
+.ch-srco input:focus-visible { outline: 2px solid rgba(83, 169, 177, .4); outline-offset: 2px; }
+@media (max-width: 400px) { .ch-srcbtn span { display: none; } }

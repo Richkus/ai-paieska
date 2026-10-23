@@ -625,3 +625,4 @@ body.is-chatfull { overflow: hidden; }
 .is-serif .ch-main b { font-size: 17px; }
 .is-serif .a2-rel-h { font-size: 16.5px; }
 .is-serif .home-tip strong { font-size: 16px; }
+.home-tip .home-new { font-family: 'Open Sans', system-ui, sans-serif; } /* žetonas visada Sans, net kai antraštės serifinės */

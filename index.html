@@ -230,7 +230,7 @@
                             <template x-if="a.kind === 'file'">
                               <div class="art-file" x-data="{ got: false }">
                                 <span class="art-doc" x-text="R[a.id].file"></span>
-                                <div><small x-text="(R[a.id].kind || 'Failas') + ' atsisiuntimui'"></small><b x-text="R[a.id].title"></b><em x-text="R[a.id].file + (R[a.id].pages ? ' · ' + R[a.id].pages + ' psl.' : '') + ' · ' + R[a.id].date"></em></div>
+                                <div><small x-text="(R[a.id].kind || 'Failas') + ' atsisiuntimui'"></small><b x-text="R[a.id].title"></b></div>
                                 <button type="button" class="art-dl" :class="{ 'is-done': got }" @click="got = true">
                                   <svg x-show="!got" width="15" height="15" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2v8M4.5 7 8 10.5 11.5 7M3 13.5h10" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
                                   <span x-text="got ? '✓ Atsisiųsta' : 'Atsisiųsti'"></span>

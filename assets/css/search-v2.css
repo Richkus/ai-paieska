@@ -736,3 +736,6 @@ body.is-chatmodal { overflow: hidden; }
 .ch-card .art::after { content: ''; position: absolute; inset: 0; border-radius: inherit; background: linear-gradient(90deg, #eef4f4 0%, #f8fbfb 50%, #eef4f4 100%); background-size: 200% 100%; animation: art-load 1.5s ease forwards, sk-shine 1s linear infinite; pointer-events: none; }
 @keyframes art-load { 0%, 55% { opacity: 1; } 100% { opacity: 0; visibility: hidden; } }
 @media (prefers-reduced-motion: reduce) { .ch-card, .ch-card *, .ch-card .art::after { animation: none !important; } .ch-card .art::after { display: none; } }
+/* Ankstesnių paieškų meniu: tekstas lygiuojasi su tab'ais, nuo pokalbio atskirtas vertikalia linija */
+.ch-rail { margin-left: -10px; padding-right: 14px; border-right: 1px solid var(--ms-line); min-height: 320px; align-content: start; }
+.ch .chf-wrap { grid-template-columns: 206px minmax(0, 1fr); gap: 32px; }

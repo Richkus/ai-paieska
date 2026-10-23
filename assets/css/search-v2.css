@@ -744,3 +744,7 @@ body.is-chatmodal { overflow: hidden; }
 .ch:not(.is-modal) .chf-wrap { grid-template-columns: minmax(0, 1fr); }
 .v2:has(.ch:not(.is-modal):not([style*="none"])) { max-width: calc(760px + 40px + 280px + var(--ms-gutter) * 2); grid-template-columns: minmax(0, 760px) 280px; }
 .v2.no-side:has(.ch:not(.is-modal):not([style*="none"])) { max-width: calc(760px + var(--ms-gutter) * 2); grid-template-columns: minmax(0, 760px); }
+/* Modale: istorija lygiuojasi su DI ikona antraštėje, vertikali linija per visą aukštį */
+.ch.is-modal .chf-wrap { align-items: stretch; min-height: calc(100vh - 56px - 61px); padding: 0 40px 0 24px; }
+.ch.is-modal .ch-rail { position: sticky; top: 61px; align-self: stretch; max-height: none; min-height: 0; height: calc(100vh - 56px - 61px); margin-left: -10px; padding: 24px 14px 24px 0; }
+.ch.is-modal .chf-col { padding-top: 24px; }

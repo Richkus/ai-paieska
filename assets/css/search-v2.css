@@ -602,3 +602,11 @@ body.is-chatfull { overflow: hidden; }
 .ak-att-i span { flex: 1; min-width: 0; }
 .ak-att-i button { flex: 0 0 auto; width: 22px; height: 22px; padding: 0; border: 0; border-radius: 50%; background: none; color: var(--ms-muted); font-size: 15px; }
 .ak-att-i button:hover { background: var(--ms-pill); color: var(--ms-ink); }
+
+/* Plaukiojantis „Klausti DI“ mygtukas ekrano apačioje (kaip Dovetail „Chat with data“) */
+.ask-pill { position: fixed; bottom: 24px; left: calc(var(--ms-sidebar-w) + (100vw - var(--ms-sidebar-w)) / 2); z-index: 45; display: inline-flex; align-items: center; gap: 8px; height: 44px; padding: 0 20px 0 16px; border: 1px solid var(--ms-line); border-radius: 22px; background: rgba(255, 255, 255, .96); color: var(--ms-ink); font-size: 14.5px; font-weight: 600; box-shadow: 0 8px 28px rgba(15, 40, 42, .16), 0 1px 3px rgba(15, 40, 42, .08); backdrop-filter: blur(8px); transform: translateX(-50%); transition: box-shadow .2s, transform .2s var(--ms-ease); }
+.ask-pill:hover { box-shadow: 0 10px 32px rgba(184, 83, 153, .22), 0 0 0 1px rgba(255, 127, 125, .35); transform: translateX(-50%) translateY(-2px); }
+.ask-pill .ai-ic { margin: -6px 0; }
+.pill-anim { transition: opacity .25s var(--ms-ease), transform .3s var(--ms-ease); }
+.pill-off { opacity: 0; transform: translateX(-50%) translateY(12px); }
+@media (max-width: 860px) { .ask-pill { left: 50%; bottom: 16px; } }

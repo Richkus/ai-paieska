@@ -7,12 +7,12 @@
 <title>AI paieška: prototipas</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400..800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/shell.css?v=1024e">
-<link rel="stylesheet" href="assets/css/search.css?v=1024e">
-<link rel="stylesheet" href="assets/css/filters.css?v=1024e">
-<link rel="stylesheet" href="assets/css/search-v2.css?v=1024e">
-<link rel="stylesheet" href="assets/css/loader-ai.css?v=1024e">
-<link rel="stylesheet" href="assets/css/admin.css?v=1024e">
+<link rel="stylesheet" href="assets/css/shell.css?v=1024f">
+<link rel="stylesheet" href="assets/css/search.css?v=1024f">
+<link rel="stylesheet" href="assets/css/filters.css?v=1024f">
+<link rel="stylesheet" href="assets/css/search-v2.css?v=1024f">
+<link rel="stylesheet" href="assets/css/loader-ai.css?v=1024f">
+<link rel="stylesheet" href="assets/css/admin.css?v=1024f">
 <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.14.1/dist/cdn.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
 </head>
@@ -567,6 +567,14 @@
       </div>
     </main>
 
+    <!-- Plaukiojantis „Klausti DI“ (kaip Dovetail „Chat with data“): visada pasiekiamas perėjimas į pokalbį -->
+    <button type="button" class="ask-pill" x-show="phase === 'results' && mode !== 'chat' && !panelOpen" x-cloak
+            x-transition:enter="pill-anim" x-transition:enter-start="pill-off" x-transition:leave="pill-anim" x-transition:leave-end="pill-off"
+            @click="chatFromResults()">
+      <img class="ai-ic" src="assets/img/ai.svg" width="11" height="19" alt="" aria-hidden="true">
+      <span>Klausti DI apie šią paiešką</span>
+    </button>
+
     <footer data-shell="footer"></footer>
   </div>
 
@@ -765,9 +773,9 @@
   .transition-pn { transition: transform .32s var(--ms-ease); }
   .pn-off { transform: translateX(100%); }
 </style>
-<script src="assets/js/shell.js?v=1024e"></script>
-<script src="assets/js/data.js?v=1024e"></script>
-<script src="assets/js/loader.js?v=1024e"></script>
+<script src="assets/js/shell.js?v=1024f"></script>
+<script src="assets/js/data.js?v=1024f"></script>
+<script src="assets/js/loader.js?v=1024f"></script>
 <script>
   // Admin parametras: filtrai po vienu mygtuku „Filtrai“ arba visada matomi
   // V4 tab'ai. icon: ai | chat. Kurie rodomi, valdoma Admin'e (TABS_PARAM)
@@ -1273,6 +1281,17 @@
         if (u.length < 2) return u[0] || this.activeQuery;
         const mid = u.slice(1, -1), last = u[u.length - 1];
         return `Situacija: ${u[0]}` + (mid.length ? `\nPatikslinimai: ${mid.join('; ').replace(/[.?!]?$/, m => m || '.')}` : '') + `\nKlausimas: ${last}`;
+      },
+      // Iš rezultatų į pokalbį: jei buvo „DI trumpai“, pokalbis prasideda nuo jo, toliau DI tikslina
+      chatFromResults() {
+        const sum = this.ai.summary;
+        this.setMode('chat'); window.scrollTo({ top: 0 });
+        if (sum) {
+          clearTimeout(this._ct);
+          this.chat = { key: this.scIdx + '|' + this.activeQuery, msgs: [{ who: 'user', text: this.activeQuery }, { who: 'ai', text: 'Trumpai, ką radau:', card: { summary: sum } }], step: 0, typing: false, draft: '', misses: 0, expertShown: false };
+          this.chatReply();
+        } else this.chatEnsure();
+        this.$nextTick(() => setTimeout(() => this.$refs.chatIn && this.$refs.chatIn.focus({ preventScroll: true }), 300));
       },
       recoverPick(r) {
         if (r === '__wide') { this.setMode('ai'); window.scrollTo({ top: 0, behavior: 'smooth' }); return; }

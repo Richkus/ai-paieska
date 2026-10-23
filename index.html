@@ -7,13 +7,13 @@
 <title>AI paieška: prototipas</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400..800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/shell.css?v=1023d">
-<link rel="stylesheet" href="assets/css/search.css?v=1023d">
-<link rel="stylesheet" href="assets/css/filters.css?v=1023d">
-<link rel="stylesheet" href="assets/css/search-v2.css?v=1023d">
-<link rel="stylesheet" href="assets/css/loader.css?v=1023d">
-<link rel="stylesheet" href="assets/css/loader-ai.css?v=1023d">
-<link rel="stylesheet" href="assets/css/admin.css?v=1023d">
+<link rel="stylesheet" href="assets/css/shell.css?v=1023e">
+<link rel="stylesheet" href="assets/css/search.css?v=1023e">
+<link rel="stylesheet" href="assets/css/filters.css?v=1023e">
+<link rel="stylesheet" href="assets/css/search-v2.css?v=1023e">
+<link rel="stylesheet" href="assets/css/loader.css?v=1023e">
+<link rel="stylesheet" href="assets/css/loader-ai.css?v=1023e">
+<link rel="stylesheet" href="assets/css/admin.css?v=1023e">
 <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.14.1/dist/cdn.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
 </head>
@@ -194,14 +194,14 @@
         </div>
 
         <!-- Įkėlimas po paieškos -->
-        <div class="sk" :class="{ 'is-card': ver === 'v4' && mode === 'ai' && p.aiStyle !== 'plain' }" x-show="phase === 'loading'" x-cloak aria-live="polite">
+        <div class="sk" :class="{ 'is-card': ver === 'v4' && mode === 'ai' && p.aiStyle !== 'plain', 'is-only': ver === 'v4' && aiOnly }" x-show="phase === 'loading'" x-cloak aria-live="polite">
           <p class="sk-label"><span class="sk-ic" x-html="LOADER(p.loader || 'ai-dots', 21, +(p.dots || 7))"></span> Ieškom SUFLERIO medžiagoje…</p>
           <i style="width:55%;height:20px"></i><i style="width:92%"></i><i style="width:80%"></i><i style="width:88%"></i><i style="width:40%"></i>
         </div>
 
         <!-- ===== V2 · AI blokas be dėžučių ===== -->
         <template x-if="mode === 'ai' && !(ver === 'v4' && ['low', 'directions'].includes(ai.kind))">
-          <section class="a2" :class="{ 'is-card': ver === 'v4' && p.aiStyle !== 'plain', 'is-plain': ver === 'v4' && p.aiStyle === 'plain' }" aria-live="polite">
+          <section class="a2" :class="{ 'is-card': ver === 'v4' && p.aiStyle !== 'plain', 'is-plain': ver === 'v4' && p.aiStyle === 'plain', 'is-only': ver === 'v4' && aiOnly }" aria-live="polite">
             <!-- Į ką ką tik atsakėt: lieka matoma, kad būtų aišku, kodėl pasikeitė -->
             <div class="a2-answered" x-show="lastAnswer && ver === 'v2'" x-cloak :title="lastAnswer && lastAnswer.q">
               <span x-text="busy ? 'Tikslinam pagal jūsų atsakymą' : 'Patikslinta pagal jūsų atsakymą'"></span>
@@ -648,9 +648,9 @@
   .transition-pn { transition: transform .32s var(--ms-ease); }
   .pn-off { transform: translateX(100%); }
 </style>
-<script src="assets/js/shell.js?v=1023d"></script>
-<script src="assets/js/data.js?v=1023d"></script>
-<script src="assets/js/loader.js?v=1023d"></script>
+<script src="assets/js/shell.js?v=1023e"></script>
+<script src="assets/js/data.js?v=1023e"></script>
+<script src="assets/js/loader.js?v=1023e"></script>
 <script>
   // Admin parametras: filtrai po vienu mygtuku „Filtrai“ arba visada matomi
   const ANSWERS_PARAM = { key: 'answers', label: 'Atsakymai į patikslinimą', type: 'radio', default: 'list', options: [

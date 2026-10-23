@@ -405,3 +405,10 @@ body.is-chatfull { overflow: hidden; }
 /* Įkėlimas V4 toje pačioje kortelėje kaip DI atsakymas, kad ikona ir antraštė liktų vietoje */
 .sk.is-card { padding: 24px 28px 22px; border: 1px solid var(--ms-line); border-radius: 16px; background: var(--ms-topbar); }
 .sk.is-card i { background: rgba(255, 255, 255, .8); }
+
+/* „DI režimas“ tab'e DI dalis vienintelė, todėl kortelė balta, tik su rėmeliu (žalsvas fonas lieka „Viskas“ tab'e) */
+.a2.is-card.is-only, .sk.is-card.is-only { background: #fff; border-color: var(--ms-line-strong); }
+.a2.is-card.is-only .a2-row:hover { background: var(--ms-surface-soft); }
+.a2.is-card.is-only .a2-cite { background: var(--ms-surface-soft); }
+.a2.is-card.is-only .a2-cite:hover { background: var(--ms-pill); }
+.sk.is-card.is-only i { background: linear-gradient(90deg, var(--ms-pill) 0%, #f7fafa 50%, var(--ms-pill) 100%); background-size: 200% 100%; }

@@ -739,3 +739,8 @@ body.is-chatmodal { overflow: hidden; }
 /* Ankstesnių paieškų meniu: tekstas lygiuojasi su tab'ais, nuo pokalbio atskirtas vertikalia linija */
 .ch-rail { margin-left: -10px; padding-right: 14px; border-right: 1px solid var(--ms-line); min-height: 320px; align-content: start; }
 .ch .chf-wrap { grid-template-columns: 206px minmax(0, 1fr); gap: 32px; }
+/* Ankstesnės paieškos tik modale; puslapyje (tab'e) pokalbis be šoninio meniu */
+.ch:not(.is-modal) .ch-rail { display: none; }
+.ch:not(.is-modal) .chf-wrap { grid-template-columns: minmax(0, 1fr); }
+.v2:has(.ch:not(.is-modal):not([style*="none"])) { max-width: calc(760px + 40px + 280px + var(--ms-gutter) * 2); grid-template-columns: minmax(0, 760px) 280px; }
+.v2.no-side:has(.ch:not(.is-modal):not([style*="none"])) { max-width: calc(760px + var(--ms-gutter) * 2); grid-template-columns: minmax(0, 760px); }

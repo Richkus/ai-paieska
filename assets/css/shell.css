@@ -147,3 +147,10 @@ img { display: block; }
 .ms-search textarea { height: 38px; max-height: 158px; padding: 9px 0; font-size: 15.5px; }
 .ms-search-clear { margin-top: 7px; }
 .ms-search-go { margin-top: 5px; }
+
+/* Paieškos mygtukas su fonu (kaip Airbnb), DI gradientu */
+.ms-search { padding-right: 4px; }
+.ms-search-go { display: grid; place-items: center; width: 32px; height: 32px; margin-top: 3px; border-radius: 50%; background: linear-gradient(135deg, #ff7f7d, #b85399); box-shadow: 0 2px 6px rgba(184, 83, 153, .3); transition: transform .15s, box-shadow .15s, filter .15s; }
+.ms-search-go:hover { filter: brightness(1.05); box-shadow: 0 3px 10px rgba(184, 83, 153, .4); transform: scale(1.04); }
+.ms-search-go:active { transform: scale(.96); }
+.ms-search-clear { margin-right: 6px; }

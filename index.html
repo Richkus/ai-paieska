@@ -350,7 +350,7 @@
           </template>
           <div class="ch-msg is-ai" x-show="chat.typing">
             <!-- Kol DI ieško, animuojasi pati avataro ikona; atėjus atsakymui jos vietoje lieka nejudanti ikona -->
-            <div class="ch-ai"><i class="ch-av is-busy" aria-hidden="true" x-html="LOADER(p.loader || 'ai-draw', 20)"></i><p class="ch-typing">Ieškau SUFLERIO medžiagoje…</p></div>
+            <div class="ch-ai"><i class="ch-av is-busy" aria-hidden="true" x-html="LOADER(p.loader || 'ai-draw', 20)"></i><p class="ch-typing">Ieškoma rezultatų…</p></div>
           </div>
 
           <!-- Laukas prilipęs apačioje, kaip įprastuose chat'uose -->
@@ -390,7 +390,7 @@
 
         <!-- Įkėlimas po paieškos -->
         <div class="sk" :class="{ 'is-card': ver === 'v4' && mode === 'ai' && p.aiStyle !== 'plain', 'is-only': ver === 'v4' && aiOnly }" x-show="phase === 'loading'" x-cloak aria-live="polite">
-          <p class="sk-label"><span class="sk-ic" x-html="LOADER(p.loader || 'ai-draw', 21)"></span> Ieškom SUFLERIO medžiagoje…</p>
+          <p class="sk-label"><span class="sk-ic" x-html="LOADER(p.loader || 'ai-draw', 21)"></span> Ieškoma rezultatų…</p>
           <i style="width:55%;height:20px"></i><i style="width:92%"></i><i style="width:80%"></i><i style="width:88%"></i><i style="width:40%"></i>
         </div>
 

@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="assets/css/shell.css?v=1025s">
 <link rel="stylesheet" href="assets/css/search.css?v=1025k">
 <link rel="stylesheet" href="assets/css/filters.css?v=1025k">
-<link rel="stylesheet" href="assets/css/search-v2.css?v=1025x">
+<link rel="stylesheet" href="assets/css/search-v2.css?v=1025y">
 <link rel="stylesheet" href="assets/css/loader-ai.css?v=1025k">
 <link rel="stylesheet" href="assets/css/admin.css?v=1025w">
 <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.14.1/dist/cdn.min.js"></script>
@@ -319,6 +319,8 @@
                         </template>
                       </div>
                     </template>
+                    <!-- Įrankių juosta iškart po atsakymo kortele, ne po tolesniu DI klausimu -->
+                    <template x-if="m.card"><div class="a2-tools ch-tools" x-data="{ saved: false }"><button type="button" class="a2-vote" @click="copyText((m.card.summary || []).map(x => x.t).join(' ') || m.text)" aria-label="Kopijuoti" title="Kopijuoti"><svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true"><rect x="5.5" y="5.5" width="8.5" height="8.5" rx="2" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M10.5 3.6V3.5a1.5 1.5 0 0 0-1.5-1.5H4A1.5 1.5 0 0 0 2.5 3.5V9A1.5 1.5 0 0 0 4 10.5h.1" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></button><button type="button" class="a2-vote is-save" :class="{ 'is-on': saved }" @click="saved = !saved" :aria-label="saved ? 'Išsaugota' : 'Išsaugoti'" :title="saved ? 'Išsaugota' : 'Išsaugoti'"><svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8a.5.5 0 0 1 .5.5v11l-4.5-3-4.5 3V3a.5.5 0 0 1 .5-.5Z" :fill="saved ? 'currentColor' : 'none'" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg></button><button type="button" class="a2-vote"  aria-label="Padėjo" title="Padėjo"><svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 7v7H2V7h3Zm0 0 3-5.5c1 0 1.8.8 1.6 1.8L9.2 6H13a1.5 1.5 0 0 1 1.5 1.8l-1 5A1.5 1.5 0 0 1 12 14H5" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg></button><button type="button" class="a2-vote"  aria-label="Nepadėjo" title="Nepadėjo"><svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true" style="transform:scaleY(-1)"><path d="M5 7v7H2V7h3Zm0 0 3-5.5c1 0 1.8.8 1.6 1.8L9.2 6H13a1.5 1.5 0 0 1 1.5 1.8l-1 5A1.5 1.5 0 0 1 12 14H5" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg></button></div></template>
                     <p class="ch-after" x-show="m.after" x-text="m.afterTyped ?? m.after"></p>
                     <template x-if="m.recover">
                       <ul class="a2-list ch-opts" x-show="i === chat.msgs.length - 1">
@@ -341,7 +343,6 @@
                         <li><button type="button" class="a2-row" @click="chatSend(o, o !== OFFTOPIC)"><i aria-hidden="true">↳</i><span x-text="o"></span></button></li>
                       </template>
                     </ul>
-                    <template x-if="m.card && m.card.summary"><div class="a2-tools ch-tools" x-data="{ saved: false }"><button type="button" class="a2-vote" @click="copyText(m.card.summary.map(x => x.t).join(' '))" aria-label="Kopijuoti" title="Kopijuoti"><svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true"><rect x="5.5" y="5.5" width="8.5" height="8.5" rx="2" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M10.5 3.6V3.5a1.5 1.5 0 0 0-1.5-1.5H4A1.5 1.5 0 0 0 2.5 3.5V9A1.5 1.5 0 0 0 4 10.5h.1" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></button><button type="button" class="a2-vote is-save" :class="{ 'is-on': saved }" @click="saved = !saved" :aria-label="saved ? 'Išsaugota' : 'Išsaugoti'" :title="saved ? 'Išsaugota' : 'Išsaugoti'"><svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8a.5.5 0 0 1 .5.5v11l-4.5-3-4.5 3V3a.5.5 0 0 1 .5-.5Z" :fill="saved ? 'currentColor' : 'none'" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg></button><button type="button" class="a2-vote"  aria-label="Padėjo" title="Padėjo"><svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 7v7H2V7h3Zm0 0 3-5.5c1 0 1.8.8 1.6 1.8L9.2 6H13a1.5 1.5 0 0 1 1.5 1.8l-1 5A1.5 1.5 0 0 1 12 14H5" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg></button><button type="button" class="a2-vote"  aria-label="Nepadėjo" title="Nepadėjo"><svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true" style="transform:scaleY(-1)"><path d="M5 7v7H2V7h3Zm0 0 3-5.5c1 0 1.8.8 1.6 1.8L9.2 6H13a1.5 1.5 0 0 1 1.5 1.8l-1 5A1.5 1.5 0 0 1 12 14H5" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg></button></div></template>
                   </div>
                 </div>
               </template>

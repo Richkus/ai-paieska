@@ -773,7 +773,7 @@ body.is-chatmodal { overflow: hidden; }
 
 /* Mini įrankių juosta po DI turiniu: kopijuoti, išsaugoti, 👍/👎 (kairėje) */
 .a2-tools { display: flex; align-items: center; gap: 2px; margin: 10px 0 0 -6px; }
-.a2-tools.ch-tools { margin: 6px 0 0 -6px; }
+.a2-tools.ch-tools { margin: -4px 0 0 -6px; }
 .a2-disc-under { margin: 10px 0 18px; padding-top: 10px; border-top: 1px dashed var(--ms-line-strong); }
 
 /* DI režimo šaltinių pasirinkimas prie siuntimo mygtuko */

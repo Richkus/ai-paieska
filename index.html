@@ -356,7 +356,7 @@
                         @input="$el.style.height = 'auto'; $el.style.height = Math.min($el.scrollHeight, 160) + 'px'"
                         @keydown.enter="if (!$event.shiftKey) { $event.preventDefault(); chatSend(chat.draft); }"></textarea>
               <!-- Šaltiniai: kur DI ieško atsakymo (SUFLERIO turinys + išoriniai) -->
-              <div class="ch-srcw" @click.outside="srcOpen = false" @keydown.escape="srcOpen = false">
+              <div class="ch-srcw" x-show="p.srcBtn !== 'off'" @click.outside="srcOpen = false" @keydown.escape="srcOpen = false">
                 <button type="button" class="ch-srcbtn" :class="{ 'is-open': srcOpen }" @click="srcOpen = !srcOpen" :aria-expanded="srcOpen" aria-haspopup="true">
                   <i aria-hidden="true"></i><span>Šaltiniai <span class="ch-srcn" x-text="srcCount"></span></span>
                   <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><path d="M2 3.5 5 6.5l3-3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -993,6 +993,11 @@
     { id: 'mark', label: 'Tik kitos spalvos numeriai' },
     { id: 'off', label: 'Išjungti (tik SUFLERIO turinys)' },
   ] };
+  // Admin parametras (V4): „Šaltiniai“ mygtukas DI režimo lauke
+  const SRCBTN_PARAM = { key: 'srcBtn', label: 'Šaltinių mygtukas DI lauke', type: 'radio', default: 'on', options: [
+    { id: 'on', label: 'Rodomas' },
+    { id: 'off', label: 'Paslėptas' },
+  ] };
   // Admin parametras (V4): subtilus indikatorius eksperto klausimo formoje, ar užtenka konteksto
   const QMETER_PARAM = { key: 'qmeter', label: 'Klausimo konteksto indikatorius', type: 'radio', default: 'dot', options: [
     { id: 'dot', label: 'Taškelis su tekstu' },
@@ -1171,7 +1176,7 @@
       ask: { q: '', sent: false, edit: false, attach: [], me: { vardas: 'Laurynas', pavarde: 'Petrauskas', imone: 'UAB Įmonita', pareigos: 'Vyr. buhalteris', miestas: 'Vilnius', tel: '+370 600 00000' } },
       // ---------- Versijos ----------
       VERSIONS: [
-        { id: 'v4', label: 'V4 · Kaip Google', desc: 'Susijusios paieškos tampa nauja paieška, grįžtama naršyklės Atgal. Tab\'ai: DI režimas · Viskas · Rezultatų sąrašas', params: [TABS_PARAM, CHAT_VIEW_PARAM, SERIF_PARAM, SIDE_PARAM, TOP_PARAM, AI_STYLE_PARAM, EXT_PARAM, QMETER_PARAM, LOADER_PARAM] },
+        { id: 'v4', label: 'V4 · Kaip Google', desc: 'Susijusios paieškos tampa nauja paieška, grįžtama naršyklės Atgal. Tab\'ai: DI režimas · Viskas · Rezultatų sąrašas', params: [TABS_PARAM, CHAT_VIEW_PARAM, SERIF_PARAM, SIDE_PARAM, TOP_PARAM, AI_STYLE_PARAM, EXT_PARAM, SRCBTN_PARAM, QMETER_PARAM, LOADER_PARAM] },
       ],
       ver: (() => {
         const q = new URLSearchParams(location.search).get('v');

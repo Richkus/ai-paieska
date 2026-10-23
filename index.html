@@ -7,10 +7,10 @@
 <title>AI paieška: prototipas</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400..800&family=Source+Serif+4:opsz,wght@8..60,500..700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/shell.css?v=1026d">
+<link rel="stylesheet" href="assets/css/shell.css?v=1026g">
 <link rel="stylesheet" href="assets/css/search.css?v=1025k">
 <link rel="stylesheet" href="assets/css/filters.css?v=1025k">
-<link rel="stylesheet" href="assets/css/search-v2.css?v=1026f">
+<link rel="stylesheet" href="assets/css/search-v2.css?v=1026g">
 <link rel="stylesheet" href="assets/css/loader.css?v=1025z">
 <link rel="stylesheet" href="assets/css/loader-ai.css?v=1026e">
 <link rel="stylesheet" href="assets/css/admin.css?v=1025w">
@@ -27,7 +27,7 @@
    2. Markup'e pridėk bloką su ver === 'vN'.
    3. params: version-specifiniai admin nustatymai, pasiekiami per p.<key>.
 -->
-<div class="ms-app" x-data="search()" :class="{ 'is-serif': p.serif === 'serif' }" @popstate.window="onPop($event)" @keydown.escape.window="closePanel(); pvClose()" @scroll.window.passive="pv.id && pvClose(); scrolled = scrollY > 4; popStyle.position && fbPopClose()">
+<div class="ms-app" x-data="search()" :class="{ 'is-serif': p.serif === 'serif' }" @popstate.window="onPop($event)" @keydown.escape.window="closePanel(); pvClose()" @keydown.window="if (ver === 'v5' && (($event.metaKey || $event.ctrlKey) && $event.key.toLowerCase() === 'k')) { $event.preventDefault(); k5.open ? k5Close() : openK5(); }" @scroll.window.passive="pv.id && pvClose(); scrolled = scrollY > 4; popStyle.position && fbPopClose()">
   <aside class="ms-sidebar" data-shell="sidebar"></aside>
 
   <div class="ms-main" :class="{ 'is-topwhite': ver === 'v4' && p.top === 'white', 'is-scrolled': scrolled }">
@@ -35,7 +35,7 @@
 
     <main class="ms-content">
       <!-- Pradinė būsena: žmogus dar nieko neieškojo (low-fi „Naujausi“) -->
-      <div class="home" x-show="phase === 'start'">
+      <div class="home" x-show="phase === 'start' || ver === 'v5'">
         <h1>Naujausi</h1>
         <div class="home-grid">
           <!-- 1. Praktinė situacija (PRO): pilkas fonas, taškų raštas, linijinė iliustracija -->
@@ -83,7 +83,7 @@
         </div>
       </div>
 
-      <div x-show="phase !== 'start'" :class="{ 'v2': true, 'no-side': ver === 'v4' && p.side !== 'show', 'is-classic': mode === 'classic', 'is-loading': phase === 'loading', 'is-busy': !!busy }">
+      <div x-show="ver === 'v5' ? chatModal : phase !== 'start'" :class="{ 'v2': true, 'is-v5': ver === 'v5', 'no-side': ver === 'v4' && p.side !== 'show', 'is-classic': mode === 'classic', 'is-loading': phase === 'loading', 'is-busy': !!busy }">
       <div class="v2-main">
 
         <!-- V4: tab'ų juosta kaip Google. Kurie tab'ai rodomi, valdoma Admin'e; netelpantys slenkami horizontaliai (kraštuose fade ir rodyklė) -->
@@ -181,11 +181,16 @@
         <!-- Tas pats pokalbis: tab'e „DI chatas“ puslapio viduje, „DI pokalbis“ atidaro jį pilname ekrane -->
         <!-- Admin „DI režimas: peržiūra“ = modalas: tamsus fonas, pokalbis dideliame lange -->
         <div class="ch-bd" x-show="chatModal" x-cloak x-transition.opacity.duration.200ms @click="closeChatModal()"></div>
-        <section class="ch" :class="{ 'is-modal': chatModal }" x-ref="chatBox" x-show="mode === 'chat' || chatModal" x-cloak
+        <section class="ch" :class="{ 'is-modal': chatModal, 'is-v5': ver === 'v5' }" x-ref="chatBox" x-show="mode === 'chat' || chatModal" x-cloak
                  x-effect="if ((mode === 'chat' || chatModal) && phase === 'results') chatEnsure()"
                  @keydown.escape.window="chatModal && !panelOpen && closeChatModal()">
           <header class="chm-bar" x-show="chatModal">
-            <span class="chm-brand"><img class="ai-ic" src="assets/img/ai.svg" width="15" height="26" alt="" aria-hidden="true"> DI režimas</span>
+            <span class="chm-brand" x-show="ver !== 'v5'"><img class="ai-ic" src="assets/img/ai.svg" width="15" height="26" alt="" aria-hidden="true"> DI režimas</span>
+            <!-- V5: tas pats perjungiklis kaip paieškos modale -->
+            <div class="k5-seg" x-show="ver === 'v5'">
+              <button type="button" @click="closeChatModal(); openK5('search', activeQuery)"><svg width="13" height="13" viewBox="0 0 18 18" aria-hidden="true"><circle cx="7.5" cy="7.5" r="6" stroke="currentColor" stroke-width="1.8" fill="none"/><path d="M12 12l4.5 4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Paieška</button>
+              <button type="button" class="is-on"><img class="ai-ic" src="assets/img/ai.svg" width="8" height="14" alt="" aria-hidden="true">Klausti DI</button>
+            </div>
             <span class="chm-q" x-text="activeQuery"></span>
             <button type="button" class="pn-btn" @click="closeChatModal()" aria-label="Uždaryti" title="Uždaryti (Esc)">
               <svg width="18" height="18" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
@@ -797,6 +802,92 @@
     </template>
   </aside>
 
+  <!-- V5 · Paieška modale (kaip Clay): viršuje tik mygtukas, paieška ir DI klausimas atsidaro modale -->
+  <div class="k5-bd" x-show="k5.open" x-cloak @click="k5Close()"></div>
+  <div class="k5" x-show="k5.open" x-cloak role="dialog" aria-modal="true" aria-label="Paieška"
+       @keydown.escape.stop="panelOpen ? closePanel() : k5Close()">
+    <div class="k5-head">
+      <label class="k5-field" x-show="k5.tab === 'search'">
+        <svg width="16" height="16" viewBox="0 0 18 18" aria-hidden="true"><circle cx="7.5" cy="7.5" r="6" stroke="currentColor" stroke-width="1.8" fill="none"/><path d="M12 12l4.5 4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        <input type="text" x-ref="k5In" x-model="k5.q" @input.debounce.200ms="k5Run()" placeholder="Ieškokite SUFLERYJE arba klauskite DI…" autocomplete="off" spellcheck="false"
+               @keydown.down.prevent="k5Move(1)" @keydown.up.prevent="k5Move(-1)" @keydown.enter.prevent="k5Enter()">
+        <button type="button" class="k5-clear" x-show="k5.q" @click="k5.q = ''; k5Run(); $refs.k5In.focus()" aria-label="Išvalyti">×</button>
+      </label>
+      <p class="k5-title" x-show="k5.tab === 'ask'"><img class="ai-ic" src="assets/img/ai.svg" width="10" height="17" alt="" aria-hidden="true"> Klausti DI</p>
+      <div class="k5-seg">
+        <button type="button" :class="{ 'is-on': k5.tab === 'search' }" @click="k5Tab('search')"><svg width="13" height="13" viewBox="0 0 18 18" aria-hidden="true"><circle cx="7.5" cy="7.5" r="6" stroke="currentColor" stroke-width="1.8" fill="none"/><path d="M12 12l4.5 4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Paieška</button>
+        <button type="button" :class="{ 'is-on': k5.tab === 'ask' }" @click="k5Tab('ask')"><img class="ai-ic" src="assets/img/ai.svg" width="8" height="14" alt="" aria-hidden="true">Klausti DI</button>
+      </div>
+      <button type="button" class="pn-btn" @click="k5Close()" aria-label="Uždaryti" title="Uždaryti (Esc)"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+    </div>
+
+    <!-- Paieška: rezultatai iškart, pirma eilutė perjungia į DI pokalbį -->
+    <div class="k5-body" x-ref="k5Body" x-show="k5.tab === 'search'">
+      <template x-if="!k5.q.trim()">
+        <div class="k5-empty">
+          <p class="k5-h">Pabandykit paklausti savais žodžiais</p>
+          <template x-for="s in suggestions" :key="s">
+            <button type="button" class="k5-row" @click="k5.q = s; k5Run()"><svg width="14" height="14" viewBox="0 0 18 18" aria-hidden="true"><circle cx="7.5" cy="7.5" r="6" stroke="currentColor" stroke-width="1.8" fill="none"/><path d="M12 12l4.5 4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span x-text="s"></span></button>
+          </template>
+          <template x-if="recentSearches && recentSearches.length">
+            <div>
+              <p class="k5-h">Ankstesnės paieškos</p>
+              <template x-for="s in recentSearches" :key="s">
+                <button type="button" class="k5-row" @click="k5.q = s; k5Run()"><svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.2" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 4.6V8l2.4 1.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span x-text="s"></span></button>
+              </template>
+            </div>
+          </template>
+        </div>
+      </template>
+      <template x-if="k5.q.trim()">
+        <div>
+          <button type="button" class="k5-ask" :class="{ 'is-sel': k5.sel === -1 }" @click="k5Ask(k5.q)" @mouseenter="k5.sel = -1">
+            <img class="ai-ic" src="assets/img/ai.svg" width="11" height="19" alt="" aria-hidden="true">
+            <span>Klausti DI: <b x-text="k5.q"></b></span>
+            <small>Pradėti pokalbį <kbd>↵</kbd></small>
+          </button>
+          <div class="k5-chips">
+            <template x-for="t in k5Types" :key="t.k">
+              <button type="button" :class="{ 'is-on': k5.type === t.k }" @click="k5.type = t.k; k5.sel = -1" x-text="t.label + ' (' + t.n + ')'"></button>
+            </template>
+          </div>
+          <ul class="k5-list">
+            <template x-for="(id, i) in k5Shown" :key="id">
+              <li><button type="button" class="k5-res" :class="{ 'is-sel': k5.sel === i }" :data-i="i" @click="openPanel(id)" @mouseenter="k5.sel = i">
+                <small><i class="a2-pro" x-show="R[id].pro">PRO</i><span x-text="R[id].type + ' · ' + R[id].date"></span></small>
+                <b x-html="k5Hl(R[id].title)"></b>
+                <span x-html="k5Hl(R[id].snippet || '')"></span>
+                <em x-show="k5.sel === i" aria-hidden="true">↵</em>
+              </button></li>
+            </template>
+          </ul>
+          <p class="k5-none" x-show="!k5Shown.length">Pagal šį žodį turinio neradom. Paklauskit DI savais žodžiais, jis padės patikslinti.</p>
+        </div>
+      </template>
+    </div>
+
+    <!-- Klausti DI: pasisveikinimas, pavyzdžiai ir laukas; išsiuntus atsidaro pokalbis -->
+    <div class="k5-body k5-askb" x-show="k5.tab === 'ask'">
+      <div class="k5-hello">
+        <img class="ai-ic" src="assets/img/ai.svg" width="17" height="29" alt="" aria-hidden="true">
+        <div>
+          <p><b>Sveiki!</b> Esu SUFLERIO DI.</p>
+          <p>Atsakau pagal SUFLERIO turinį ir visada parodau, iš kur atsakymas. Klauskit savais žodžiais.</p>
+        </div>
+      </div>
+      <div class="k5-sugg">
+        <template x-for="s in suggestions" :key="s"><button type="button" @click="k5Ask(s)" x-text="s"></button></template>
+      </div>
+      <form class="ch-field k5-compose" @submit.prevent="k5Ask(k5.askQ)">
+        <textarea rows="1" x-ref="k5Ask" x-model="k5.askQ" placeholder="Pvz. Kokio dydžio dienpinigiai Vokietijoje?" aria-label="Klausimas DI"
+                  @keydown.enter="if (!$event.shiftKey) { $event.preventDefault(); k5Ask(k5.askQ); }"></textarea>
+        <button type="submit" class="ch-sendbtn" :disabled="!k5.askQ.trim()" aria-label="Siųsti"><svg width="16" height="16" viewBox="0 0 14 14" aria-hidden="true"><path d="M7 12V2M3 6l4-4 4 4" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      </form>
+    </div>
+
+    <div class="k5-foot" x-show="k5.tab === 'search'"><span><kbd>↑</kbd><kbd>↓</kbd> naršyti</span><span><kbd>↵</kbd> atidaryti</span><span><kbd>Esc</kbd> uždaryti</span></div>
+  </div>
+
   <!-- Greita peržiūra užvedus pelę ant šaltinio (kaip Wikipedia / Notion) -->
   <div class="pv" x-show="pv.id" x-cloak role="tooltip"
        :class="{ ['is-' + pv.place]: true, 'is-mini': pv.mini }" :style="pv.mini && pv.place === 'above' ? `left:${pv.x}px; bottom:${pv.y}px` : `left:${pv.x}px; top:${pv.y}px`"
@@ -897,7 +988,7 @@
       <!-- Scenarijus: ką paieška rado. „Konkreti situacija“ turi du santraukos rodymo būdus -->
       <div class="ms-admin-group">Scenarijus</div>
       <template x-for="(a, ai) in adminScen" :key="ai">
-        <label class="ms-admin-opt"><input type="radio" name="ms-scenario" :checked="scIdx === a.idx && (!a.sum || sumMode === a.sum) && !!a.off === offDemo" @change="sumMode = a.sum || sumMode; offDemo = !!a.off; loadScenario(a.idx); if (a.off) setMode('chat')"><span x-text="a.label"></span></label>
+        <label class="ms-admin-opt"><input type="radio" name="ms-scenario" :checked="scIdx === a.idx && (!a.sum || sumMode === a.sum) && !!a.off === offDemo" @change="sumMode = a.sum || sumMode; offDemo = !!a.off; loadScenario(a.idx); if (ver === 'v5') { adminOpen = false; a.off ? k5Ask(sc.query) : openK5('search', sc.query); } else if (a.off) setMode('chat')"><span x-text="a.label"></span></label>
       </template>
       <div class="ms-admin-group" x-show="VERSIONS.length > 1">Versija</div>
       <template x-for="v in VERSIONS.length > 1 ? VERSIONS : []" :key="v.id">
@@ -950,7 +1041,7 @@
   .transition-pn { transition: transform .32s var(--ms-ease); }
   .pn-off { transform: translateX(100%); }
 </style>
-<script src="assets/js/shell.js?v=1025k"></script>
+<script src="assets/js/shell.js?v=1026g"></script>
 <script src="assets/js/data.js?v=1026b"></script>
 <script src="assets/js/loader.js?v=1026e"></script>
 <script>
@@ -1178,11 +1269,12 @@
       // ---------- Versijos ----------
       VERSIONS: [
         { id: 'v4', label: 'V4 · Kaip Google', desc: 'Susijusios paieškos tampa nauja paieška, grįžtama naršyklės Atgal. Tab\'ai: DI režimas · Viskas · Rezultatų sąrašas', params: [TABS_PARAM, CHAT_VIEW_PARAM, SERIF_PARAM, SIDE_PARAM, TOP_PARAM, AI_STYLE_PARAM, EXT_PARAM, SRCBTN_PARAM, QMETER_PARAM, LOADER_PARAM] },
+        { id: 'v5', label: 'V5 · Paieška modale (kaip Clay)', desc: 'Viršuje tik mygtukas (⌘K). Paieška ir DI klausimas atsidaro modale, rezultatai ir pokalbis ten pat.', params: [EXT_PARAM, SRCBTN_PARAM, QMETER_PARAM, LOADER_PARAM] },
       ],
       ver: (() => {
         const q = new URLSearchParams(location.search).get('v');
         const v = q ? 'v' + q.replace(/^v/, '') : store.get('ai-paieska-ver');
-        return 'v4';
+        return ['v4', 'v5'].includes(v) ? v : 'v4';
       })(),
       p: {},             // aktyvios versijos admin parametrai
       fbOpen: false,
@@ -1209,6 +1301,8 @@
         const u = new URL(location.href); u.searchParams.set('v', v.slice(1)); history.replaceState(null, '', u);
         this.initParams(); this.other = false; this.closePanel();
         if (v !== 'v4') { this.aiOnly = false; if (this.mode === 'chat') this.mode = 'ai'; }
+        this.k5.open = false; if (this.chatModal) this.closeChatModal();
+        if (v === 'v5') { this.phase = 'start'; this.query = ''; return; }
         if (this.phase === 'results') { if (v === 'v4') this.query = this.activeQuery = this.queryFor(this.step); else this.query = this.activeQuery = this.origQuery; }
       },
       tabGuard() { if (this.ver === 'v4' && this.p.tabs && !this.tabsShown.some(t => this.tabActive(t))) { const t = this.tabsShown[0]; if (t) this.selectTab(t); } },
@@ -1749,6 +1843,11 @@
       },
       showArt(a) {
         this.artOn = a.id; this.pvClose(); this.closePanel();
+        if (a.scen && this.ver === 'v5') {
+          if (this.chatModal) this.closeChatModal();
+          const sc = this.S.find(x => x.id === a.scen.sid); this.sumMode = a.scen.sum || 'cite';
+          return this.openK5('search', sc.query);
+        }
         if (a.scen) {
           if (this.chatModal) this.closeChatModal();
           this.sumMode = a.scen.sum || 'cite'; this.offDemo = false;
@@ -1759,8 +1858,63 @@
         const idx = this.S.findIndex(x => x.id === 'savaitgalis');
         if (this.phase !== 'results' || this.scIdx !== idx) this.loadScenario(idx);
         clearTimeout(this._ct); clearTimeout(this._st);
+        if (this.ver === 'v5') this.activeQuery = a.chat.q;   // V5 modalo antraštėje rodomas klausimas
         this.chat = { key: this.scIdx + '|' + this.activeQuery, msgs: [{ who: 'user', text: a.chat.q }, { who: 'ai', stage: 'done', ...a.chat.msg }], step: 99, typing: false, draft: '', misses: 0, expertShown: false };
-        if (this.p.chatView === 'modal') this.openChatModal(true); else { this.setMode('chat'); window.scrollTo({ top: 0 }); }
+        this.k5.open = false;
+        if (this.p.chatView === 'modal' || this.ver === 'v5') this.openChatModal(true); else { this.setMode('chat'); window.scrollTo({ top: 0 }); }
+      },
+      // ---------- V5 · Paieška modale ----------
+      k5: { open: false, tab: 'search', q: '', idx: -1, type: 'all', sel: -1, askQ: '' },
+      openK5(tab = 'search', q = '') {
+        this.k5 = { ...this.k5, open: true, tab, sel: -1, type: 'all' };
+        if (q) { this.k5.q = q; this.k5Run(); }
+        this.$nextTick(() => setTimeout(() => (tab === 'search' ? this.$refs.k5In : this.$refs.k5Ask)?.focus(), 60));
+      },
+      k5Close() { this.k5.open = false; },
+      k5Tab(t) {
+        // Jei pokalbis apie šį klausimą jau vyksta, „Klausti DI“ jį tęsia
+        if (t === 'ask' && this.chat.msgs.length && this.phase === 'results') { this.k5.open = false; return this.openChatModal(); }
+        this.k5.tab = t;
+        if (t === 'ask' && !this.k5.askQ) this.k5.askQ = this.k5.q;
+        this.$nextTick(() => (t === 'search' ? this.$refs.k5In : this.$refs.k5Ask)?.focus());
+      },
+      k5Run() {
+        const q = this.k5.q.trim().toLowerCase();
+        this.k5.sel = -1; this.k5.type = 'all';
+        this.k5.idx = q ? this.S.findIndex(s => s.id === (this.scenarioFor(q) || 'nera')) : -1;
+        if (this.$refs.k5Body) this.$refs.k5Body.scrollTop = 0;
+      },
+      get k5All() { return this.k5.idx < 0 ? [] : [...new Set(this.S[this.k5.idx].steps.flatMap(s => s.results))]; },
+      get k5Types() {
+        const all = this.k5All, by = {};
+        all.forEach(id => { const t = this.R[id].type; by[t] = (by[t] || 0) + 1; });
+        return [{ k: 'all', label: 'Visi', n: all.length }, ...Object.entries(by).map(([k, n]) => ({ k, label: k, n }))];
+      },
+      get k5Shown() { return this.k5.type === 'all' ? this.k5All : this.k5All.filter(id => this.R[id].type === this.k5.type); },
+      // Užklausos žodžiai paryškinami (pagal šaknį, kad tiktų ir kitos galūnės)
+      k5Hl(text) {
+        const esc = String(text).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+        const stems = this.k5.q.toLowerCase().split(/[^a-ząčęėįšųūž0-9]+/i).filter(w => w.length >= 4).map(w => w.slice(0, Math.max(4, w.length - 2)).replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+        return stems.length ? esc.replace(new RegExp('((?:' + stems.join('|') + ')[^\\s.,;:!?„“()]*)', 'gi'), '<mark>$1</mark>') : esc;
+      },
+      k5Move(d) {
+        const n = this.k5Shown.length;
+        this.k5.sel = Math.max(-1, Math.min(n - 1, this.k5.sel + d));
+        this.$nextTick(() => { const el = this.$refs.k5Body?.querySelector(this.k5.sel < 0 ? '.k5-ask' : `.k5-res[data-i="${this.k5.sel}"]`); el && el.scrollIntoView({ block: 'nearest' }); });
+      },
+      k5Enter() {
+        if (!this.k5.q.trim()) return;
+        if (this.k5.sel < 0) this.k5Ask(this.k5.q); else this.openPanel(this.k5Shown[this.k5.sel]);
+      },
+      // DI klausimas: užkraunam scenarijų ir atidarom pokalbį tame pačiame modale
+      k5Ask(text) {
+        const q = (text || '').trim();
+        if (!q) return;
+        const idx = this.S.findIndex(s => s.id === (this.scenarioFor(q.toLowerCase()) || 'nera'));
+        this.loadScenario(idx);
+        this.query = this.activeQuery = this.origQuery = q;
+        this.k5 = { ...this.k5, open: false, askQ: '' };
+        this.openChatModal();
       },
       // ---------- Greita peržiūra ----------
       pv: { id: null, x: 0, y: 0, place: 'below', mini: false },

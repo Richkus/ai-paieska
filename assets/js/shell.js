@@ -48,7 +48,14 @@
     </ul>`;
 
   const topbar = `
-    <form class="ms-search" role="search" :class="{ 'is-rewrite': rewriteFlash, 'is-glow': searchGlow }" @submit.prevent="submitSearch()">
+    <!-- V5: vietoj lauko ryškus mygtukas, atidaro paieškos modalą (⌘K) -->
+    <button type="button" class="ms-k5btn" x-show="ver === 'v5'" x-cloak @click="openK5()" aria-label="Ieškoti arba klausti DI (⌘K)">
+      <svg width="16" height="16" viewBox="0 0 18 18" aria-hidden="true"><circle cx="7.5" cy="7.5" r="6" stroke="currentColor" stroke-width="1.8" fill="none"/><path d="M12 12l4.5 4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      <span>Ieškoti arba klausti DI</span>
+      <i class="ms-k5btn-ai">${img('ai.svg', 9, 15, 'ai-ic')}DI</i>
+      <kbd>⌘K</kbd>
+    </button>
+    <form class="ms-search" role="search" x-show="ver !== 'v5'" :class="{ 'is-rewrite': rewriteFlash, 'is-glow': searchGlow }" @submit.prevent="submitSearch()">
       <!-- Laukas auga žemyn, kai tekstas netelpa vienoje eilutėje; atitraukus fokusą vėl viena eilutė -->
       <textarea rows="1" x-model="query" x-ref="search" :placeholder="searchPH" aria-label="Paieška" autocomplete="off" spellcheck="false"
              x-effect="query; $nextTick(() => { if (document.activeElement === $el) { $el.style.height = 'auto'; $el.style.height = $el.scrollHeight + 'px'; } })"

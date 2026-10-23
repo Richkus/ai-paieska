@@ -79,8 +79,8 @@
 /* ---------- Klasikiniai rezultatai (kaip dabartinė paieška) ---------- */
 .sr-list { margin: 0; padding: 0; list-style: none; }
 .sr-item { border-bottom: 1px solid var(--ms-line); }
-.sr-item button { display: grid; grid-template-columns: minmax(0, 1fr) 150px; gap: 28px; width: 100%; padding: 22px 0; border: 0; background: none; text-align: left; transition: background .15s; }
-.sr-item button:hover h3 { color: var(--ms-link); }
+.sr-item > button { display: grid; grid-template-columns: minmax(0, 1fr) 150px; gap: 28px; width: 100%; padding: 22px 0; border: 0; background: none; text-align: left; transition: background .15s; }
+.sr-item > button:hover h3 { color: var(--ms-link); }
 .sr-item h3 { margin: 0 0 6px; color: var(--ms-ink-soft); font-size: 18px; font-weight: 700; line-height: 1.3; transition: color .15s; }
 .sr-item p { margin: 0 0 8px; color: var(--ms-ink-soft); font-size: 15px; line-height: 1.55; }
 .sr-meta { color: var(--ms-muted); font-size: 13px; text-transform: uppercase; letter-spacing: .02em; }
@@ -113,7 +113,7 @@
 @media (max-width: 860px) {
   .ai { padding: 18px 16px 14px; }
   .ai-dirs { grid-template-columns: minmax(0, 1fr); }
-  .sr-item button { grid-template-columns: minmax(0, 1fr); }
+  .sr-item > button { grid-template-columns: minmax(0, 1fr); }
   .sr-thumb { display: none; }
   .sr-counts { margin-left: 0; width: 100%; }
   .pn { width: 100vw; }

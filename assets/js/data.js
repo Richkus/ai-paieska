@@ -380,6 +380,10 @@ window.CHATS = {
     v1: { type: 'Renginio įrašas', date: '2026-05-28', title: 'Darbo santykiai 2026: kas pasikeitė', snippet: '1 dalis: darbo laiko apskaita, poilsio dienos ir kompensavimas.', part: '1 val. 12 min.' },
     v2: { type: 'Renginio įrašas', date: '2026-03-19', title: 'PVM praktikoje: dažniausios klaidos', snippet: 'Seminaro įrašas apie PVM atskaitą, sąskaitas faktūras ir registraciją.', part: '58 min.' },
     v3: { type: 'Renginio įrašas', date: '2026-02-11', title: 'Komandiruočių išlaidos be klaidų', snippet: 'Dienpinigiai, nakvynė, kelionės dokumentai ir avansinė apyskaita.', part: '1 val. 4 min.' },
+    // Renginio įrašas su keliais epizodais (playlist'as)
+    v4: { type: 'Renginio įrašas', date: '2026-06-01', title: 'SUPERBUHALTERIŲ DIENOS | Leidžiami / neleidžiami atskaitymai apskaičiuojant pelno mokestį už 2025 metus',
+          snippet: 'Mokesčių SUFLERIO ekspertės pakvietė SUPERBUHALTERIŲ dienų renginio dalyvius įsitraukti į azartišką, gyvai vykusį žaidimą. Jo metu dalyviams buvo pateikti 16 klausimų apie leidžiamų ir neleidžiamų atskaitymų taikymą.',
+          playlist: { badge: '3 DIENA', summary: '1 min.', episodes: ['Superbuhalterių protmūšis', 'Leidžiami atskaitymai: praktiniai atvejai', 'Klausimai ir atsakymai'] } },
     f1: { type: 'Atmintinė', date: '2026-07-01', title: 'Darbo poilsio dieną kompensavimo atmintinė', snippet: 'Vieno lapo atmintinė: kada mokamas dvigubas atlygis, kada suteikiama kita poilsio diena.', file: 'PDF', kind: 'Atmintinė' },
     f2: { type: 'Atmintinė', date: '2026-05-12', title: 'Įsakymas dėl komandiruotės (šablonas)', snippet: 'Redaguojamas įsakymo šablonas su visais privalomais rekvizitais.', file: 'DOCX', kind: 'Dokumento šablonas' },
     f3: { type: 'Atmintinė', date: '2026-04-03', title: 'PVM mokėtojo registracijos žingsniai', snippet: 'Atmintinė: dokumentai, terminai ir dažniausios klaidos registruojantis PVM mokėtoju.', file: 'PDF', kind: 'Atmintinė' },

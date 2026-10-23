@@ -391,8 +391,6 @@ body.is-chatfull { overflow: hidden; }
 /* DI chatas: žinutės slenkamos tik tiek, kad matytųsi virš lauko; viršutinis laukas išjungtas */
 .ch-msg { scroll-margin-bottom: 130px; }
 .ch.is-full .ch-msg { scroll-margin-bottom: 130px; scroll-margin-top: 80px; }
-.ms-search.is-locked { opacity: .5; box-shadow: none; cursor: not-allowed; }
-.ms-search.is-locked textarea { cursor: not-allowed; }
 .ms-search-go:disabled { cursor: not-allowed; }
 
 /* Generuojant animuojasi pati DI ikona (avatare ir prieš antraštę), ne atskiras elementas */
@@ -535,3 +533,9 @@ body.is-chatfull { overflow: hidden; }
 .ch .ch-opts .a2-row:hover { background: var(--ms-surface-soft); color: var(--ms-teal-dark); border-color: transparent; }
 .tb-more-l { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .tb-measure button { font-weight: 400; }
+
+/* Pokalbio metu: užuomina po viršutiniu lauku ir naujos temos pasiūlymas */
+.ms-search-note { position: absolute; left: 16px; top: calc(100% + 6px); z-index: 51; margin: 0; padding: 6px 10px; border-radius: 8px; background: var(--ms-ink); color: #fff; font-size: 12.5px; white-space: nowrap; pointer-events: none; }
+.ms-search-note:not([style*="none"]) + .ms-suggest { top: calc(100% + 40px); }
+.ch-newq { display: flex; flex-wrap: wrap; gap: 8px; }
+.ch-newq .ex-btn { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }

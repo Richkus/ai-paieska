@@ -7,12 +7,12 @@
 <title>AI paieška: prototipas</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400..800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/shell.css?v=1023s">
-<link rel="stylesheet" href="assets/css/search.css?v=1023s">
-<link rel="stylesheet" href="assets/css/filters.css?v=1023s">
-<link rel="stylesheet" href="assets/css/search-v2.css?v=1023s">
-<link rel="stylesheet" href="assets/css/loader-ai.css?v=1023s">
-<link rel="stylesheet" href="assets/css/admin.css?v=1023s">
+<link rel="stylesheet" href="assets/css/shell.css?v=1023u">
+<link rel="stylesheet" href="assets/css/search.css?v=1023u">
+<link rel="stylesheet" href="assets/css/filters.css?v=1023u">
+<link rel="stylesheet" href="assets/css/search-v2.css?v=1023u">
+<link rel="stylesheet" href="assets/css/loader-ai.css?v=1023u">
+<link rel="stylesheet" href="assets/css/admin.css?v=1023u">
 <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.14.1/dist/cdn.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
 </head>
@@ -207,11 +207,17 @@
                       </div>
                     </template>
                     <p x-show="m.after" x-text="m.after"></p>
+                    <template x-if="m.newSearch">
+                    <div class="ch-newq" x-show="i === chat.msgs.length - 1">
+                      <button type="button" class="ex-btn" @click="query = m.newSearch; submitSearch()" x-text="'Ieškoti: „' + m.newSearch + '“'"></button>
+                      <button type="button" class="lowc-btn" @click="chat.msgs.push({ who: 'ai', text: 'Gerai, tęsiam. Ką dar norit sužinoti apie pradinį klausimą?' }); chatScroll()">Tęsti šį pokalbį</button>
+                    </div>
+                    </template>
                     <button type="button" class="ex-btn ch-ex" x-show="m.expert" @click="openAsk(chatQuestion)">Klausti eksperto</button>
                     <!-- Atsakymo variantai sąrašu su ↳, kaip „Tęskit temą“ -->
                     <ul class="a2-list ch-opts" x-show="m.options && i === chat.msgs.length - 1 && !chat.typing">
                       <template x-for="o in m.options || []" :key="o">
-                        <li><button type="button" class="a2-row" @click="chatSend(o)"><i aria-hidden="true">↳</i><span x-text="o"></span></button></li>
+                        <li><button type="button" class="a2-row" @click="chatSend(o, true)"><i aria-hidden="true">↳</i><span x-text="o"></span></button></li>
                       </template>
                     </ul>
                     <div class="ch-tools" x-show="m.card && m.card.summary">
@@ -232,7 +238,7 @@
           <!-- Laukas prilipęs apačioje, kaip įprastuose chat'uose -->
           <form class="ch-compose" @submit.prevent="chatSend(chat.draft)">
             <div class="ch-field">
-              <textarea rows="1" x-ref="chatIn" x-model="chat.draft" placeholder="Rašykit atsakymą arba naują klausimą…" aria-label="Žinutė"
+              <textarea rows="1" x-ref="chatIn" x-model="chat.draft" placeholder="Klauskite toliau…" aria-label="Žinutė"
                         @input="$el.style.height = 'auto'; $el.style.height = Math.min($el.scrollHeight, 160) + 'px'"
                         @keydown.enter="if (!$event.shiftKey) { $event.preventDefault(); chatSend(chat.draft); }"></textarea>
               <button type="submit" :disabled="!chat.draft.trim() || chat.typing" aria-label="Siųsti">
@@ -697,9 +703,9 @@
   .transition-pn { transition: transform .32s var(--ms-ease); }
   .pn-off { transform: translateX(100%); }
 </style>
-<script src="assets/js/shell.js?v=1023s"></script>
-<script src="assets/js/data.js?v=1023s"></script>
-<script src="assets/js/loader.js?v=1023s"></script>
+<script src="assets/js/shell.js?v=1023u"></script>
+<script src="assets/js/data.js?v=1023u"></script>
+<script src="assets/js/loader.js?v=1023u"></script>
 <script>
   // Admin parametras: filtrai po vienu mygtuku „Filtrai“ arba visada matomi
   // V4 tab'ai. icon: ai | chat. Kurie rodomi, valdoma Admin'e (TABS_PARAM)
@@ -899,7 +905,8 @@
       mode: store.get('ai-paieska-mode') === 'classic' ? 'classic' : 'ai',
       aiOnly: false,     // V4 tab'as „Su AI“: tik AI atsakymas, be nuorodų
       // DI chate rašoma apačioje, todėl viršutinis paieškos laukas tuo metu išjungtas
-      get searchLocked() { return this.ver === 'v4' && this.mode === 'chat' && this.phase === 'results'; },
+      // Pokalbio metu viršutinis laukas = nauja paieška, apatinis = klausti toliau
+      get searchNote() { return this.mode === 'chat' && this.phase === 'results' ? 'Nauja paieška pradės naują pokalbį' : ''; },
       get hideLinks() { return this.ver === 'v4' && ((this.mode === 'ai' && this.aiOnly) || this.mode === 'chat'); },
       panelOpen: false,
       adminOpen: false,
@@ -1085,14 +1092,18 @@
         this.f = { rub: [], tema: [], fmt: [], data: '' }; this.aiF = []; this.sort = 'rel'; this.applyAi();
       },
       // Pakeitus tekstą viršuje prasideda nauja paieška; senoji nukeliauja į „Ankstesnes paieškas“
+      // Pagal raktinius žodžius parenkamas prototipo scenarijus (null, jei nieko neatpažinta)
+      scenarioFor(text) {
+        const rules = [[/tort|gimtadien|dovan|reprezent/, 'mazai'], [/žiniaraš/, 'nedaug'], [/šeštad|savaitg|laisv|poilsio/, 'savaitgalis'], [/komandir|dienpinig/, 'komandiruote'], [/pvm|pelno mokest|nekilnojam|kripto/, 'nera']];
+        const hit = rules.find(([re]) => re.test(text.toLowerCase()));
+        return hit ? hit[1] : null;
+      },
       submitSearch() {
         const typed = this.query.trim();
         if (!typed || (typed === this.activeQuery && this.phase === 'results')) return;
         const wasResults = this.phase === 'results';
         const q = typed.toLowerCase();
-        const rules = [[/tort|gimtadien|dovan|reprezent/, 'mazai'], [/žiniaraš/, 'nedaug'], [/šeštad|savaitg|laisv|poilsio/, 'savaitgalis'], [/komandir|dienpinig/, 'komandiruote']];
-        const hit = rules.find(([re]) => re.test(q));
-        const idx = this.S.findIndex(s => s.id === (hit ? hit[1] : 'nera'));
+        const idx = this.S.findIndex(s => s.id === (this.scenarioFor(q) || 'nera'));
         if (wasResults) this.remember();
         this.loadScenario(idx);
         this.query = this.activeQuery = this.origQuery = typed;
@@ -1198,11 +1209,19 @@
         clearTimeout(this._ct);
         this._ct = setTimeout(() => { this.chat.typing = false; this.chat.msgs.push({ who: 'ai', ...turn }); this.chatScroll(); }, 1400);
       },
-      chatSend(text) {
+      chatSend(text, fromOption = false) {
         text = (text || '').trim();
         if (!text || this.chat.typing) return;
         this.chat.msgs.push({ who: 'user', text }); this.chat.draft = '';
         if (this.$refs.chatIn) this.$refs.chatIn.style.height = '';
+        // Laisvai įrašyta visai kita tema: nesiejam su šiuo pokalbiu, siūlom naują paiešką
+        const topic = id => ({ savaitgalis: 'darbo', nedaug: 'darbo', komandiruote: 'kom', mazai: 'rep', nera: 'kita' })[id];
+        const other = !fromOption && this.scenarioFor(text);
+        if (other && topic(other) !== topic(this.sc.id)) {
+          this.chat.typing = true; this.chatScroll(); clearTimeout(this._ct);
+          this._ct = setTimeout(() => { this.chat.typing = false; this.chat.msgs.push({ who: 'ai', text: 'Atrodo, tai nauja tema. Kad atsakymas būtų tikslus, geriau pradėti naują paiešką.', newSearch: text }); this.chatScroll(); }, 900);
+          return;
+        }
         this.chat.step++; this.chatReply();
       },
       // Naujausia žinutė parodoma virš apačioje prilipusio lauko; puslapio iki pat apačios (footerio) neslenkam

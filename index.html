@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="assets/css/shell.css?v=1026r">
 <link rel="stylesheet" href="assets/css/search.css?v=1025k">
 <link rel="stylesheet" href="assets/css/filters.css?v=1025k">
-<link rel="stylesheet" href="assets/css/search-v2.css?v=1026q">
+<link rel="stylesheet" href="assets/css/search-v2.css?v=1026s">
 <link rel="stylesheet" href="assets/css/loader.css?v=1025z">
 <link rel="stylesheet" href="assets/css/loader-ai.css?v=1026e">
 <link rel="stylesheet" href="assets/css/admin.css?v=1025w">
@@ -142,6 +142,12 @@
                  x-effect="document.body.classList.toggle('is-chatfill', chatFill); if ((mode === 'chat' || chatModal) && phase === 'results') chatEnsure()"
                  @keydown.escape.window="if (chatModal && !panelOpen) closeChatModal(); else if (chatFill && !panelOpen) setMode('ai')">
           <header class="chm-bar" x-show="chatModal || chatFill">
+            <!-- Per visą langą: grįžimas kairėje kaip Google AI Mode / Notion (tai navigacija, ne lango uždarymas) -->
+            <button type="button" class="chm-back" x-show="chatFill" @click="setMode('ai'); window.scrollTo({ top: 0 })" title="Atgal į rezultatus (Esc)">
+              <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8H3.5M7.5 3.5 3 8l4.5 4.5" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Rezultatai
+            </button>
+            <span class="chm-sep" x-show="chatFill" aria-hidden="true"></span>
             <span class="chm-brand" x-show="ver !== 'v5'"><img class="ai-ic" src="assets/img/ai.svg" width="15" height="26" alt="" aria-hidden="true"> DI režimas</span>
             <!-- V5: tas pats perjungiklis kaip paieškos modale -->
             <div class="k5-seg" x-show="ver === 'v5'">
@@ -158,10 +164,7 @@
               <a href="#" title="Planų kainos" aria-label="Planų kainos"><img src="assets/img/ic-skaitliukai.svg" width="19" height="20" alt=""></a>
               <a href="#" title="Laurynas" aria-label="Laurynas"><i class="ms-ico-user"><img src="assets/img/ic-head-circle.svg" width="22" height="22" alt="" class="is-ring"><img src="assets/img/ic-head.svg" width="16" height="14" alt="" class="is-head"></i></a>
             </nav>
-            <!-- Per visą turinio langą: aiškus „Uždaryti“, grįžtama į tab'us -->
-            <button type="button" class="chm-close" x-show="chatFill" @click="setMode('ai'); window.scrollTo({ top: 0 })" title="Uždaryti (Esc)">
-              Uždaryti <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-            </button>
+
           </header>
           <div class="chf-wrap">
           <!-- Siauras šoninis meniu su ankstesnėmis paieškomis (kaip Claude): ilgi pavadinimai nublunka -->

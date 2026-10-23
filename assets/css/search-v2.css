@@ -976,9 +976,16 @@ body.is-chatfill { overflow: hidden; }
 .ch.is-filltop .chf-wrap { min-height: calc(100vh - var(--ms-frame) - var(--ms-topbar-h)); }
 .ch.is-filltop .ch-rail { top: var(--ms-topbar-h); height: calc(100vh - var(--ms-frame) - var(--ms-topbar-h)); }
 .ch.is-filltop .chf-col { min-height: calc(100vh - var(--ms-frame) - var(--ms-topbar-h)); }
-.chm-nav { display: flex; align-items: center; gap: 4px; margin-left: auto; padding-right: 12px; border-right: 1px solid var(--ms-line-strong); }
+.chm-nav { display: flex; align-items: center; gap: 4px; margin-left: auto; }
 .chm-nav a { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 8px; transition: background .15s; }
 .chm-nav a:hover { background: rgba(255, 255, 255, .7); }
 .chm-nav img { opacity: .7; }
 .chm-nav .ms-ico-user { opacity: 1; }
 .ch.is-filltop .chm-q { flex: 1; }
+
+/* „← Rezultatai“ kairėje: grįžimas iš DI režimo per visą langą */
+.chm-back { display: inline-flex; align-items: center; gap: 6px; height: 32px; margin-left: -10px; padding: 0 10px; border: 0; border-radius: 8px; background: none; color: var(--ms-sub); font-size: 14px; font-weight: 600; white-space: nowrap; cursor: pointer; transition: background .15s, color .15s; }
+.chm-back:hover { background: rgba(15, 83, 84, .06); color: var(--ms-ink); }
+.chm-back svg { transition: transform .2s var(--ms-ease); }
+.chm-back:hover svg { transform: translateX(-2px); }
+.chm-sep { flex: 0 0 auto; width: 1px; height: 20px; background: var(--ms-line-strong); }

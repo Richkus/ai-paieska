@@ -404,7 +404,7 @@
               <span class="a2-label" x-show="ver === 'v4'" x-text="ai.kind === 'quotes' ? (ai.summary ? 'SUFLERIO DI santrauka' : 'DI atrinktos ištraukos iš panašių situacijų') : ai.heading"></span>
               <button type="button" class="a2-info" @mouseenter="tip = true" @mouseleave="tip = false" @focus="tip = true" @blur="tip = false" aria-label="Kaip tai veikia">
                 <svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.3" fill="none"/><path d="M8 7.2v4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><circle cx="8" cy="5" r=".9" fill="currentColor"/></svg>
-                <span class="a2-tip" x-show="tip" x-cloak x-transition.opacity.duration.120ms x-text="ai.summary ? 'Apibendrinimą parašė SUFLERIO DI pagal rastą medžiagą. Kiekvienas teiginys turi šaltinį, paspaudus jį atsidaro citata.' : 'Rodom tik ištraukas iš SUFLERIO medžiagos. Išvadų nedarom, sprendimą priimat jūs.'"></span>
+                <span class="a2-tip" x-show="tip" x-cloak x-transition.opacity.duration.120ms x-text="ai.summary ? 'Apibendrinimą parašė SUFLERIO DI pagal rastą turinį. Kiekvienas teiginys turi šaltinį, paspaudus jį atsidaro citata.' : 'Rodom tik ištraukas iš SUFLERIO turinio. Išvadų nedarom, sprendimą priimat jūs.'"></span>
               </button>
             </div>
 
@@ -676,7 +676,7 @@
 
   <!-- Šoninis panel'is -->
   <div class="pn-backdrop" x-show="panelOpen" x-cloak x-transition.opacity.duration.250ms @click="closePanel()"></div>
-  <aside class="pn" x-show="panelOpen" x-cloak role="dialog" aria-modal="true" aria-label="Medžiaga"
+  <aside class="pn" x-show="panelOpen" x-cloak role="dialog" aria-modal="true" aria-label="Turinys"
          x-transition:enter="transition-pn" x-transition:enter-start="pn-off" x-transition:leave="transition-pn" x-transition:leave-end="pn-off">
     <template x-if="pMode === 'item' && pId">
       <div style="display:contents">
@@ -706,23 +706,23 @@
             <h1 x-text="R[pId].title"></h1>
             <template x-if="R[pId].part"><div class="pn-video" x-text="'▶ Vaizdo įrašas atsidaro ties: ' + R[pId].part"></div></template>
             <p x-text="R[pId].snippet"></p>
-            <p class="pn-filler">Pavyzdinis tekstas. Čia bus pilnas medžiagos turinys: įvadas, situacijos aprašymas ir paaiškinimai.</p>
+            <p class="pn-filler">Pavyzdinis tekstas. Čia bus pilnas turinys: įvadas, situacijos aprašymas ir paaiškinimai.</p>
             <p class="pn-filler">Pavyzdinis tekstas. Dar viena pastraipa, kad būtų matyti, kaip panel'is nuslenka iki citatos.</p>
             <template x-if="R[pId].quote">
               <p class="pn-cite" x-ref="cite"><small>Citata, kurią parodėm paieškoje</small><span x-text="R[pId].quote"></span></p>
             </template>
             <template x-if="!R[pId].pro">
               <div>
-                <p class="pn-filler">Pavyzdinis tekstas. Tolesni paaiškinimai, pavyzdžiai ir nuorodos į susijusią medžiagą.</p>
+                <p class="pn-filler">Pavyzdinis tekstas. Tolesni paaiškinimai, pavyzdžiai ir nuorodos į susijusį turinį.</p>
                 <p class="pn-filler">Pavyzdinis tekstas. Pabaiga.</p>
               </div>
             </template>
             <template x-if="R[pId].pro">
               <div class="pw">
                 <div class="pw-fade" aria-hidden="true"></div>
-                <p class="pw-blur" aria-hidden="true">Tolesni paaiškinimai, pavyzdžiai ir nuorodos į susijusią medžiagą. Šita dalis matoma tik su PRO planu.</p>
+                <p class="pw-blur" aria-hidden="true">Tolesni paaiškinimai, pavyzdžiai ir nuorodos į susijusį turinį. Šita dalis matoma tik su PRO planu.</p>
                 <div class="pw-card">
-                  <h3>Visa medžiaga prieinama su PRO planu</h3>
+                  <h3>Visas turinys prieinamas su PRO planu</h3>
                   <p>Paieškoje rodėm tik ištrauką. Visą konsultaciją, pavyzdžius ir dokumentų formas rasit su PRO planu.</p>
                   <a class="pw-cta" href="#">Rinktis planą</a>
                   <a class="pw-alt" href="#">Pasitarti su vadybininku</a>
@@ -825,11 +825,11 @@
         <h4 x-text="R[pv.id].title"></h4>
         <div class="pv-body" x-ref="pvBody">
           <p x-text="R[pv.id].snippet"></p>
-          <p class="pn-filler">Pavyzdinis tekstas. Čia bus medžiagos turinys: situacijos aprašymas, kas svarbu ir į ką atkreipti dėmesį.</p>
+          <p class="pn-filler">Pavyzdinis tekstas. Čia bus turinys: situacijos aprašymas, kas svarbu ir į ką atkreipti dėmesį.</p>
           <p class="pn-filler">Pavyzdinis tekstas. Dar viena pastraipa, kad matytųsi, kaip kortelė nuslenka iki citatos.</p>
           <template x-if="R[pv.id].quote"><p class="pv-cite" x-text="R[pv.id].quote"></p></template>
           <template x-if="!R[pv.id].pro"><p class="pn-filler">Pavyzdinis tekstas. Tolesni paaiškinimai ir pavyzdžiai.</p></template>
-          <template x-if="R[pv.id].pro"><p class="pv-lock">Visa medžiaga prieinama su PRO planu.</p></template>
+          <template x-if="R[pv.id].pro"><p class="pv-lock">Visas turinys prieinamas su PRO planu.</p></template>
         </div>
         <button type="button" class="pv-open" @click="openPanel(pv.id, true); pvClose()">Atidaryti <span aria-hidden="true">→</span></button>
       </div>
@@ -860,7 +860,7 @@
          x-transition:enter="brain-anim" x-transition:enter-start="brain-off" x-transition:leave="brain-anim" x-transition:leave-end="brain-off" aria-label="Kaip veikia DI paieška">
     <button type="button" class="brain-x" @click="brainOpen = false" aria-label="Uždaryti">×</button>
     <h2>Kaip veikia DI paieška</h2>
-    <p class="brain-lead">Galima klausti savais žodžiais. DI ieško <b>tik SUFLERIO medžiagoje</b> ir veda prie šaltinių.</p>
+    <p class="brain-lead">Galima klausti savais žodžiais. DI ieško <b>SUFLERIO turinyje</b> (o jei įjungta, ir oficialiuose šaltiniuose) ir veda prie šaltinių.</p>
 
     <h3>DI elgiasi pagal tai, ką rado</h3>
     <ul>
@@ -957,7 +957,7 @@
   .pn-off { transform: translateX(100%); }
 </style>
 <script src="assets/js/shell.js?v=1025k"></script>
-<script src="assets/js/data.js?v=1026a"></script>
+<script src="assets/js/data.js?v=1026b"></script>
 <script src="assets/js/loader.js?v=1025z"></script>
 <script>
   // Admin parametras: filtrai po vienu mygtuku „Filtrai“ arba visada matomi
@@ -998,7 +998,7 @@
   const EXT_PARAM = { key: 'ext', label: 'Išoriniai šaltiniai', type: 'radio', default: 'pills', options: [
     { id: 'pills', label: 'Kitos spalvos numeriai + šaltinių juosta' },
     { id: 'mark', label: 'Tik kitos spalvos numeriai' },
-    { id: 'off', label: 'Išjungti (tik SUFLERIO medžiaga)' },
+    { id: 'off', label: 'Išjungti (tik SUFLERIO turinys)' },
   ] };
   // Admin parametras (V4): subtilus indikatorius eksperto klausimo formoje, ar užtenka konteksto
   const QMETER_PARAM = { key: 'qmeter', label: 'Klausimo konteksto indikatorius', type: 'radio', default: 'dot', options: [
@@ -1606,8 +1606,8 @@
         if (!turn) {
           this.chat.misses++;
           if (this.chat.misses === 1) turn = { text: 'Tiksliai neradau. Gal turit omeny vieną iš šių?', recover: [...(this.sc.steps[0].related || []).slice(0, 2), '__wide'] };
-          else if (!this.chat.expertShown) turn = { text: 'Ir šiam klausimui tikslios medžiagos SUFLERYJE neradau. Galiu perduoti jį ekspertui: pridėsiu pokalbio santrauką ir šaltinius, kuriuos jau peržiūrėjot.', expert: true };
-          else turn = { text: 'Šiam klausimui tikslios medžiagos SUFLERYJE neradau. Pabandykit paklausti kitaip arba spauskit „Klausti eksperto“ apačioje.' };
+          else if (!this.chat.expertShown) turn = { text: 'Ir šiam klausimui tikslaus turinio SUFLERYJE neradau. Galiu perduoti jį ekspertui: pridėsiu pokalbio santrauką ir šaltinius, kuriuos jau peržiūrėjot.', expert: true };
+          else turn = { text: 'Šiam klausimui tikslaus turinio SUFLERYJE neradau. Pabandykit paklausti kitaip arba spauskit „Klausti eksperto“ apačioje.' };
         }
         if (turn.expert) this.chat.expertShown = true;
         clearTimeout(this._ct);
@@ -1730,8 +1730,8 @@
             chat('c-gist', 'Mintis + citatos', 'Ar galima suteikti kitą poilsio dieną?', { text: 'Trumpai, ką radau:', card: { summary: S1 } }, { sum: 'quotes' }),
             chat('c-main', 'Pagrindinis šaltinis', 'Darbuotojas dirbo šeštadienį', { text: 'Labiausiai tinka ši praktinė situacija:', card: { main: 'r1', summary: [S1[0]] } }),
             chat('c-quote', 'Citatos iš šaltinių', 'Komandiruotė į užsienį', { text: 'SUFLERYJE apie tai rašoma taip:', card: { quotes: ['k3', 'k1'] } }),
-            chat('c-list', 'Medžiagų sąrašas', 'Ką paskaityti apie darbą poilsio dieną?', { text: 'Štai medžiagos šia tema:', card: { list: ['r1', 'r3', 'r7'] } }),
-            chat('c-more', '„Taip pat gali praversti“', 'Darbas poilsio dieną', { text: 'Pagrindinė medžiaga:', card: { main: 'r3', more: ['r5', 'r4'] } }),
+            chat('c-list', 'Turinio sąrašas', 'Ką paskaityti apie darbą poilsio dieną?', { text: 'Štai turinys šia tema:', card: { list: ['r1', 'r3', 'r7'] } }),
+            chat('c-more', '„Taip pat gali praversti“', 'Darbas poilsio dieną', { text: 'Pagrindinis turinys:', card: { main: 'r3', more: ['r5', 'r4'] } }),
           ] },
           { h: 'DI režimo artefaktai', items: [
             chat('a-calc', 'Skaičiuoklė (gyva)', 'Kiek dienpinigių už Vokietiją ir Lenkiją?', { text: 'Suskaičiavau, pakeiskit pagal savo komandiruotę:', card: { summary: S2, artifacts: [{ kind: 'calc', rows: [{ country: 'Vokietija', days: 2 }, { country: 'Lenkija', days: 1 }] }] } }),
@@ -1743,7 +1743,7 @@
           { h: 'DI režimo situacijos', items: [
             chat('x-opts', 'Patikslinimo pasirinkimai', 'Ką reikia žinoti apie komandiruotes?', { text: 'Tema plati. Kas jums šiuo metu aktualiausia?', options: ['Dienpinigiai', 'Kelionės ir nakvynės išlaidos', 'Įforminimas ir apskaita'] }),
             chat('x-recover', 'Tiksliai nerado: atkūrimas', 'Kaip su viršvalandžiais naktį?', { text: 'Tiksliai neradau. Gal turit omeny vieną iš šių?', recover: ['Darbas švenčių dieną ir viršvalandžiai', 'Darbas poilsio dieną', '__wide'] }),
-            chat('x-expert', 'Siūlo klausti eksperto', 'Ar taikyti PVM lengvatą renginiui?', { text: 'Šia tema SUFLERYJE medžiagos neradau. Galiu perduoti jūsų klausimą ekspertui, jis atsakys asmeniškai.', expert: true }),
+            chat('x-expert', 'Siūlo klausti eksperto', 'Ar taikyti PVM lengvatą renginiui?', { text: 'Šia tema SUFLERYJE turinio neradau. Galiu perduoti jūsų klausimą ekspertui, jis atsakys asmeniškai.', expert: true }),
             chat('x-off', 'Nukrypimas nuo temos', 'O kaip apmokestinami komandiruotės dienpinigiai?', { text: 'Atrodo, tai jau kita tema. Pradėti naują paiešką?', newSearch: 'Kaip apmokestinami komandiruotės dienpinigiai?', topic: 'poilsio dieną' }),
           ] },
         ];

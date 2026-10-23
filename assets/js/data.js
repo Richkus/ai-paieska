@@ -163,7 +163,7 @@ window.SCENARIOS = [
         count: 3,
         results: ['r3', 'f4', 'r2'],
         // Rezultatų nedaug ir jie tikslūs: DI neapibendrina, tik vienu sakiniu pasako, kad tai tinka
-        ai: { kind: 'few', heading: 'Radom 3 medžiagas, kurios tiksliai tinka jūsų klausimui', chips: [] },
+        ai: { kind: 'few', heading: 'Radom turinį, kuris tiksliai tinka jūsų klausimui', chips: [] },
       },
     ],
   },
@@ -192,7 +192,7 @@ window.SCENARIOS = [
         results: [],
         ai: {
           kind: 'empty',
-          heading: 'Šia tema medžiagos neradom',
+          heading: 'Šia tema turinio neradom',
           ask: 'Pabandykit plačiau arba užduokit klausimą ekspertui.',
           chips: ['Kriptovaliutų apmokestinimas', 'Pajamos iš užsienio'],
         },
@@ -287,7 +287,7 @@ window.FILTERS = {
    ========================================================== */
 window.CHATS = {
   savaitgalis: [
-    { text: 'Supratau: darbuotojas dirbo šeštadienį ir norit vietoj apmokėjimo duoti laisvą dieną. Kad parodyčiau tiksliausią medžiagą, patikslinkit: ar šeštadienis buvo numatytas jo darbo grafike?',
+    { text: 'Supratau: darbuotojas dirbo šeštadienį ir norit vietoj apmokėjimo duoti laisvą dieną. Kad parodyčiau tiksliausią turinį, patikslinkit: ar šeštadienis buvo numatytas jo darbo grafike?',
       options: ['Ne, dirbo papildomai', 'Taip, dirba pagal suminę apskaitą', 'Nežinau, kaip patikrinti'] },
     { text: 'Aišku. Dar vienas dalykas: ar laisvos dienos prašo pats darbuotojas, ar tai darbdavio siūlymas?',
       options: ['Prašo darbuotojas', 'Siūlo darbdavys'] },
@@ -315,12 +315,12 @@ window.CHATS = {
   mazai: [
     { text: 'Tiksliai tokios situacijos SUFLERYJE neradau, bet yra artimų temų. Kad parinkčiau tinkamiausią: tortas skirtas įmonės šventei ar dovana konkrečiam darbuotojui?',
       options: ['Įmonės šventei', 'Dovana darbuotojui'] },
-    { text: 'Artimiausia medžiaga yra ši, bet jūsų atvejo ji tiesiogiai neaptaria:',
+    { text: 'Artimiausias turinys yra šis, bet jūsų atvejo jis tiesiogiai neaptaria:',
       card: { main: 'g1', quotes: [], more: ['g3', 'g2'] },
       after: 'Kad nesuklaidinčiau, siūlau paklausti eksperto.', expert: true },
   ],
   nera: [
-    { text: 'Šia tema SUFLERYJE medžiagos neradau. Galiu perduoti jūsų klausimą ekspertui, jis atsakys asmeniškai.', expert: true },
+    { text: 'Šia tema SUFLERYJE turinio neradau. Galiu perduoti jūsų klausimą ekspertui, jis atsakys asmeniškai.', expert: true },
   ],
 };
 
@@ -429,7 +429,7 @@ window.COMPETENCIES = [
   C.komandiruote[3].card.artifacts = [{ kind: 'video', id: 'v3', at: '18:20' }];
   C.savaitgalis[2].card.artifacts = [{ kind: 'file', id: 'r6' }];
   C.savaitgalis[3].card.artifacts = [{ kind: 'video', id: 'r4', at: '24:10' }];
-  C.nedaug = [{ text: 'Radau 3 medžiagas, kurios tiesiai atsako į jūsų klausimą:', card: { list: ['r3', 'f4', 'r2'] } }];
+  C.nedaug = [{ text: 'Radau turinį, kuris tiesiai atsako į jūsų klausimą:', card: { list: ['r3', 'f4', 'r2'] } }];
 })();
 
 /* Kompetencijų medžiaga: kuriai kompetencijai ir moduliui priklauso */

@@ -7,12 +7,12 @@
 <title>AI paieška: prototipas</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400..800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/shell.css?v=1023p">
-<link rel="stylesheet" href="assets/css/search.css?v=1023p">
-<link rel="stylesheet" href="assets/css/filters.css?v=1023p">
-<link rel="stylesheet" href="assets/css/search-v2.css?v=1023p">
-<link rel="stylesheet" href="assets/css/loader-ai.css?v=1023p">
-<link rel="stylesheet" href="assets/css/admin.css?v=1023p">
+<link rel="stylesheet" href="assets/css/shell.css?v=1023q">
+<link rel="stylesheet" href="assets/css/search.css?v=1023q">
+<link rel="stylesheet" href="assets/css/filters.css?v=1023q">
+<link rel="stylesheet" href="assets/css/search-v2.css?v=1023q">
+<link rel="stylesheet" href="assets/css/loader-ai.css?v=1023q">
+<link rel="stylesheet" href="assets/css/admin.css?v=1023q">
 <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.14.1/dist/cdn.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
 </head>
@@ -208,11 +208,12 @@
                     </template>
                     <p x-show="m.after" x-text="m.after"></p>
                     <button type="button" class="ex-btn ch-ex" x-show="m.expert" @click="openAsk(chatQuestion)">Klausti eksperto</button>
-                    <div class="ch-opts" x-show="m.options && i === chat.msgs.length - 1 && !chat.typing">
+                    <!-- Atsakymo variantai sąrašu su ↳, kaip „Tęskit temą“ -->
+                    <ul class="a2-list ch-opts" x-show="m.options && i === chat.msgs.length - 1 && !chat.typing">
                       <template x-for="o in m.options || []" :key="o">
-                        <button type="button" @click="chatSend(o)" x-text="o"></button>
+                        <li><button type="button" class="a2-row" @click="chatSend(o)"><i aria-hidden="true">↳</i><span x-text="o"></span></button></li>
                       </template>
-                    </div>
+                    </ul>
                     <div class="ch-tools" x-show="m.card && m.card.summary">
                       <p class="a2-disc"><img class="ai-ic" src="assets/img/ai.svg" width="9" height="16" alt="" aria-hidden="true">Esu SUFLERIO DI ir galiu suklysti, todėl pasitikrinkit šaltiniuose.</p>
                       <button type="button" class="a2-vote" aria-label="Padėjo" title="Padėjo"><svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 7v7H2V7h3Zm0 0 3-5.5c1 0 1.8.8 1.6 1.8L9.2 6H13a1.5 1.5 0 0 1 1.5 1.8l-1 5A1.5 1.5 0 0 1 12 14H5" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg></button>
@@ -696,9 +697,9 @@
   .transition-pn { transition: transform .32s var(--ms-ease); }
   .pn-off { transform: translateX(100%); }
 </style>
-<script src="assets/js/shell.js?v=1023p"></script>
-<script src="assets/js/data.js?v=1023p"></script>
-<script src="assets/js/loader.js?v=1023p"></script>
+<script src="assets/js/shell.js?v=1023q"></script>
+<script src="assets/js/data.js?v=1023q"></script>
+<script src="assets/js/loader.js?v=1023q"></script>
 <script>
   // Admin parametras: filtrai po vienu mygtuku „Filtrai“ arba visada matomi
   // V4 tab'ai. icon: ai | chat. Kurie rodomi, valdoma Admin'e (TABS_PARAM)

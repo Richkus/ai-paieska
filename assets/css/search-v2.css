@@ -955,3 +955,16 @@ a.src-pill:not([href]) { cursor: default; }
   .ch.is-rail .ch-rail { display: grid; position: sticky; top: calc(var(--ms-topbar-h) + 12px); align-self: start; height: calc(100vh - var(--ms-topbar-h) - 32px); min-height: 0; max-height: none; margin-left: -10px; padding: 4px 14px 16px 0; border-right: 1px solid var(--ms-line); animation: rail-in .35s var(--ms-ease); }
 }
 @keyframes rail-in { from { opacity: 0; transform: translateX(-10px); } }
+
+/* V4 „DI režimas per visą turinio langą“: kaip modalas, tik užpildo baltą sritį po viršutine juosta, su „Uždaryti“ */
+body.is-chatfill { overflow: hidden; }
+.ch.is-fill { position: fixed; top: calc(var(--ms-frame) + var(--ms-topbar-h)); left: var(--ms-sidebar-w); right: var(--ms-frame); bottom: 0; z-index: 25; display: block; overflow-y: auto; background: #fff; animation: fill-in .28s var(--ms-ease); }
+@keyframes fill-in { from { opacity: 0; transform: translateY(8px); } }
+.ch.is-fill .chf-wrap { display: grid; grid-template-columns: 206px minmax(0, 1fr); gap: 32px; align-items: stretch; max-width: 1240px; min-height: calc(100vh - var(--ms-frame) - var(--ms-topbar-h) - 61px); margin: 0 auto; padding: 0 40px 0 24px; }
+.ch.is-fill .ch-rail { display: grid; position: sticky; top: 61px; align-self: stretch; height: calc(100vh - var(--ms-frame) - var(--ms-topbar-h) - 61px); min-height: 0; max-height: none; margin-left: -10px; padding: 24px 14px 24px 0; border-right: 1px solid var(--ms-line); }
+.ch.is-fill .chf-col { display: flex; flex-direction: column; gap: 22px; min-height: calc(100vh - var(--ms-frame) - var(--ms-topbar-h) - 61px); padding-top: 24px; }
+.ch.is-fill .ch-compose { margin-top: auto; padding-bottom: 20px; }
+.chm-close { display: inline-flex; align-items: center; gap: 8px; height: 34px; padding: 0 12px 0 14px; border: 1px solid var(--ms-line-strong); border-radius: 8px; background: #fff; color: var(--ms-ink); font-size: 14px; font-weight: 600; cursor: pointer; transition: background .15s, border-color .15s; }
+.chm-close:hover { background: var(--ms-surface-soft); border-color: var(--ms-field-text); }
+.chm-close svg { color: var(--ms-sub); }
+@media (max-width: 900px) { .ch.is-fill { left: 0; right: 0; } .ch.is-fill .chf-wrap { grid-template-columns: minmax(0, 1fr); padding: 0 16px; } .ch.is-fill .ch-rail { display: none; } }

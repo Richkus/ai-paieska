@@ -7,12 +7,12 @@
 <title>AI paieška: prototipas</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400..800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/shell.css?v=1023o">
-<link rel="stylesheet" href="assets/css/search.css?v=1023o">
-<link rel="stylesheet" href="assets/css/filters.css?v=1023o">
-<link rel="stylesheet" href="assets/css/search-v2.css?v=1023o">
-<link rel="stylesheet" href="assets/css/loader-ai.css?v=1023o">
-<link rel="stylesheet" href="assets/css/admin.css?v=1023o">
+<link rel="stylesheet" href="assets/css/shell.css?v=1023p">
+<link rel="stylesheet" href="assets/css/search.css?v=1023p">
+<link rel="stylesheet" href="assets/css/filters.css?v=1023p">
+<link rel="stylesheet" href="assets/css/search-v2.css?v=1023p">
+<link rel="stylesheet" href="assets/css/loader-ai.css?v=1023p">
+<link rel="stylesheet" href="assets/css/admin.css?v=1023p">
 <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.14.1/dist/cdn.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
 </head>
@@ -441,7 +441,8 @@
           </div>
         </div>
 
-        <ul class="sr-list" x-show="!hideLinks && mode !== 'comp'">
+        <h3 class="cc-h" x-show="mode === 'comp'" x-cloak>Medžiaga kompetencijose <span x-text="list.length"></span></h3>
+        <ul class="sr-list" x-show="!hideLinks">
           <template x-for="id in list" :key="id">
             <li class="sr-item" :class="{ 'is-pl': R[id].playlist }">
               <!-- Renginio įrašas su epizodais (playlist'as) -->
@@ -476,13 +477,14 @@
                   <h3 x-text="R[id].title"></h3>
                   <p x-text="R[id].snippet"></p>
                   <div class="sr-meta"><span x-text="R[id].date"></span> | <span x-text="R[id].type"></span><template x-if="R[id].part"><em x-text="' · ' + R[id].part"></em></template><template x-if="R[id].file"><em class="sr-file" x-text="R[id].file"></em></template><template x-if="mode === 'tests' && R[id].cat"><em x-text="' · ' + R[id].cat"></em></template></div>
+                  <template x-if="mode === 'comp' && R[id].comp"><div class="cc-tag" :class="'is-' + R[id].comp"><b x-text="COMP.find(c => c.id === R[id].comp).title"></b><span x-text="R[id].mod"></span></div></template>
                 </div>
                 <div class="sr-thumb" x-text="R[id].type"></div>
               </button>
             </li>
           </template>
         </ul>
-        <div class="sr-empty" x-show="!hideLinks && mode !== 'comp' && !list.length" x-cloak>
+        <div class="sr-empty" x-show="!hideLinks && !list.length" x-cloak>
           <p x-text="anyFilter ? 'Pagal pasirinktus filtrus nieko nėra.' : 'Rezultatų nėra.'"></p>
           <button type="button" class="a2-chip" x-show="anyFilter" @click="clearAll()">Išvalyti filtrus</button>
         </div>
@@ -715,9 +717,9 @@
   .transition-pn { transition: transform .32s var(--ms-ease); }
   .pn-off { transform: translateX(100%); }
 </style>
-<script src="assets/js/shell.js?v=1023o"></script>
-<script src="assets/js/data.js?v=1023o"></script>
-<script src="assets/js/loader.js?v=1023o"></script>
+<script src="assets/js/shell.js?v=1023p"></script>
+<script src="assets/js/data.js?v=1023p"></script>
+<script src="assets/js/loader.js?v=1023p"></script>
 <script>
   // Admin parametras: filtrai po vienu mygtuku „Filtrai“ arba visada matomi
   // V4 tab'ai. icon: ai | chat. Kurie rodomi, valdoma Admin'e (TABS_PARAM)
@@ -855,6 +857,13 @@
         return '';
       },
       filesBy(kind, fmts) { return Object.keys(this.R).filter(id => this.R[id].file && (!kind || this.R[id].kind === kind) && (!fmts.length || fmts.includes(this.R[id].file))); },
+      // Kompetencijų medžiaga: priklauso kompetencijai ir moduliui; su paieška susijusi pirma
+      get compResults() {
+        const sel = this.COMP.find(c => c.title === this.xf['c-comp']);
+        const mine = new Set(this.sc.steps.flatMap(s => s.results));
+        return Object.keys(this.R).filter(id => this.R[id].comp && (!sel || this.R[id].comp === sel.id))
+          .sort((a, b) => (mine.has(b) - mine.has(a)) || this.R[b].date.localeCompare(this.R[a].date));
+      },
       get compMatch() { return this.COMP.filter(c => c.match.includes(this.sc.id)); },
       get compList() {
         const l = this.COMP.filter(c => !this.xf['c-comp'] || c.title === this.xf['c-comp']);
@@ -987,6 +996,7 @@
       get baseCount() { return this.mode === 'ai' ? this.sc.steps[this.step].count : this.ver === 'v4' ? Math.round(this.sc.classicCount * .6) : this.sc.classicCount; },
       get list() {
         if (this.isTyped) return this.typedList;
+        if (this.mode === 'comp') return this.compResults;
         const l = this.baseList.filter(id => this.match(id));
         return this.sort === 'new' ? [...l].sort((a, b) => this.R[b].date.localeCompare(this.R[a].date)) : l;
       },

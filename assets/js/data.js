@@ -361,9 +361,9 @@ window.CHATS = {
 
 /* Kompetencijų centras: trys kompetencijos su moduliais. match = scenarijai, kuriems kompetencija aktuali */
 window.COMPETENCIES = [
-  { id: 'it', title: 'Ilgalaikis turtas', desc: 'Apskaita, nusidėvėjimas, perkainojimas ir nurašymas.', icon: 'building', modules: ['Pripažinimas ir įvertinimas', 'Nusidėvėjimas', 'Perkainojimas', 'Nurašymas ir pardavimas'], match: ['pvm'] },
+  { id: 'it', title: 'Ilgalaikis turtas', desc: 'Apskaita, nusidėvėjimas, perkainojimas ir nurašymas.', icon: 'building', modules: ['Pripažinimas ir įvertinimas', 'Nusidėvėjimas', 'Perkainojimas', 'Nurašymas ir pardavimas'], match: [] },
   { id: 'ig', title: 'Įmonių grupės', desc: 'Sandoriai tarp susijusių asmenų, kainodara ir konsolidavimas.', icon: 'percent', modules: ['Susiję asmenys', 'Sandorių kainodara', 'Paskolos grupėje', 'Konsolidavimas'], match: [] },
-  { id: 'ds', title: 'Darbo santykiai ir darbo užmokestis', desc: 'Darbo laikas, poilsis, komandiruotės ir darbo užmokesčio skaičiavimas.', icon: 'people', modules: ['Darbo laikas ir poilsis', 'Komandiruotės', 'Darbo užmokestis ir priedai', 'Atostogos'], match: ['savaitgalis', 'komandiruote'] },
+  { id: 'ds', title: 'Darbo santykiai ir darbo užmokestis', desc: 'Darbo laikas, poilsis, komandiruotės ir darbo užmokesčio skaičiavimas.', icon: 'people', modules: ['Darbo laikas ir poilsis', 'Komandiruotės', 'Darbo užmokestis ir priedai', 'Atostogos'], match: ['savaitgalis', 'komandiruote', 'nedaug'] },
 ];
 
 /* ==========================================================
@@ -400,4 +400,22 @@ window.COMPETENCIES = [
   C.savaitgalis[2].text = 'Ačiū, radau situaciją, kuri atitinka jūsų atvejį. Trumpai:';
   C.komandiruote[2].text = 'Trumpai apie dienpinigius komandiruotėje užsienyje:';
   C.nedaug = [{ text: 'Radau 3 medžiagas, kurios tiesiai atsako į jūsų klausimą:', card: { list: ['r3', 'f4', 'r2'] } }];
+})();
+
+/* Kompetencijų medžiaga: kuriai kompetencijai ir moduliui priklauso */
+(function compMaterials() {
+  const R = window.RESULTS;
+  Object.assign(R, {
+    it1: { type: 'Praktinė situacija', date: '2026-05-06', title: 'Ilgalaikio turto nusidėvėjimas: kada keisti normatyvą', snippet: 'Kaip pagrįsti nusidėvėjimo normatyvo pakeitimą ir kaip tai atspindėti apskaitoje.' },
+    it2: { type: 'Renginio įrašas', date: '2026-02-24', title: 'Ilgalaikio turto perkainojimas praktikoje', snippet: 'Seminaro įrašas: perkainojimo dokumentai ir pelno mokesčio pasekmės.', part: '47 min.' },
+    ig1: { type: 'Konsultacija', date: '2026-04-15', title: 'Paskola susijusiai įmonei: palūkanos ir kainodara', snippet: 'Kokias palūkanas taikyti grupės įmonių paskoloms, kad atitiktų rinkos kainą.' },
+    ig2: { type: 'Praktinė situacija', date: '2025-12-02', title: 'Sandorių kainodaros dokumentacija mažai įmonių grupei', snippet: 'Kada privaloma rengti dokumentaciją ir ką ji turi apimti.' },
+  });
+  ['it1', 'it2', 'ig1', 'ig2'].forEach(id => { const r = R[id]; r.rub = r.type === 'Renginio įrašas' ? 'Seminarai ir vaizdo įrašai' : 'Praktinės situacijos'; r.fmt = r.type === 'Renginio įrašas' ? 'Video' : 'Tekstas'; r.pro = r.type === 'Konsultacija'; r.tema = 'Ilgalaikis turtas'; });
+  const map = {
+    ds: { 'Darbo laikas ir poilsis': ['r1', 'r2', 'r3', 'r4', 'r6', 'r7', 't1', 'v1', 'f1', 'f4'], 'Komandiruotės': ['k1', 'k2', 'k3', 'k5', 'k6', 't2', 'v3', 'f2', 'f5'], 'Darbo užmokestis ir priedai': ['r5', 't4'] },
+    it: { 'Nusidėvėjimas': ['it1'], 'Perkainojimas': ['it2'] },
+    ig: { 'Paskolos grupėje': ['ig1'], 'Sandorių kainodara': ['ig2'] },
+  };
+  Object.entries(map).forEach(([comp, mods]) => Object.entries(mods).forEach(([mod, ids]) => ids.forEach(id => { if (R[id]) { R[id].comp = comp; R[id].mod = mod; } })));
 })();

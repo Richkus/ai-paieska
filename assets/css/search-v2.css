@@ -517,3 +517,15 @@ body.is-chatfull { overflow: hidden; }
 .ch-list small { color: var(--ms-muted); font-size: 12px; }
 .ch-list b { color: var(--ms-ink); font-size: 15px; font-weight: 600; }
 .ch-list button:hover b { color: var(--ms-link); }
+
+/* Kompetencijų kortelės: CTA visada apačioje, vienoje linijoje */
+.cc-card small { margin-top: auto; padding-top: 4px; }
+.cc-card h3 { min-height: 0; }
+/* Kompetencijų medžiaga sąraše */
+.cc-h { display: flex; align-items: baseline; gap: 8px; margin: 8px 0 0; padding-bottom: 12px; border-bottom: 1px solid var(--ms-line); color: var(--ms-ink); font-size: 16px; font-weight: 600; }
+.cc-h span { color: var(--ms-muted); font-weight: 400; font-size: 14px; }
+.cc-tag { display: inline-flex; align-items: center; gap: 0; margin-top: 8px; border: 1px solid var(--ms-line-strong); border-radius: 6px; overflow: hidden; font-size: 12px; line-height: 1; }
+.cc-tag b { padding: 5px 8px; background: var(--ms-topbar); color: var(--ms-teal-dark); font-weight: 600; }
+.cc-tag span { padding: 5px 8px; color: var(--ms-sub); }
+.cc-tag.is-it b { background: #eef3fb; color: #3c5a8a; }
+.cc-tag.is-ig b { background: #f6eef6; color: #8a3c7a; }

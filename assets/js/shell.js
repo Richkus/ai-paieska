@@ -56,7 +56,7 @@
              @keydown.enter="if (!$event.shiftKey) { $event.preventDefault(); suggestOpen = false; $el.blur(); $el.form.requestSubmit(); }"
              @keydown.escape="suggestOpen = false; $el.blur()"></textarea>
       <button type="button" class="ms-search-clear" x-show="query" x-cloak @click="query = ''; $el.previousElementSibling.focus()" aria-label="Išvalyti">×</button>
-      <button type="submit" class="ms-search-go" aria-label="Ieškoti su DI"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="11" r="6.4" fill="none" stroke="#fff" stroke-width="2.4"/><path d="M15 16l4.8 4.8" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/><path d="M19.2 1.8c.22 1.7 1.42 2.88 3.05 3.05-1.63.22-2.83 1.4-3.05 3.05-.22-1.65-1.42-2.83-3.05-3.05 1.63-.17 2.83-1.35 3.05-3.05Z" fill="#fff" transform="translate(19 5) scale(1.45) translate(-19.2 -4.85)"/></svg></button>
+      <button type="submit" class="ms-search-go" aria-label="Ieškoti su DI"><svg width="19" height="19" viewBox="0 0 24 24" overflow="visible" aria-hidden="true"><circle cx="9" cy="12.5" r="6" fill="none" stroke="#fff" stroke-width="2.3"/><path d="M13.6 17.1l4.6 4.6" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/><path d="M19.2 1.8c.22 1.7 1.42 2.88 3.05 3.05-1.63.22-2.83 1.4-3.05 3.05-.22-1.65-1.42-2.83-3.05-3.05 1.63-.17 2.83-1.35 3.05-3.05Z" fill="#fff" transform="translate(19.6 4.4) scale(1.75) translate(-19.2 -4.85)"/></svg></button>
       <div class="ms-tip" x-show="searchTip" x-cloak x-transition.opacity.duration.200ms role="status" @mousedown.prevent>
         <b>Nauja: DI paieška</b>
         <span>Dabar galit klausti savais žodžiais, DI priartins jus prie atsakymo.</span>

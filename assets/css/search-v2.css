@@ -989,3 +989,6 @@ body.is-chatfill { overflow: hidden; }
 .chm-back svg { transition: transform .2s var(--ms-ease); }
 .chm-back:hover svg { transform: translateX(-2px); }
 .chm-sep { flex: 0 0 auto; width: 1px; height: 20px; background: var(--ms-line-strong); }
+
+/* Mano klausimo burbulas pokalbyje: vos ryškesnis teal atspalvis (tarp Claude ir ChatGPT intensyvumo) */
+.ch-bubble { background: #e2eeef; }

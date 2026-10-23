@@ -1000,3 +1000,5 @@ body.is-chatfill { overflow: hidden; }
 /* DI režimas per visą langą: ankstesnių paieškų blokas ~30 px platesnis */
 .ch.is-fill .chf-wrap { grid-template-columns: 236px minmax(0, 1fr); }
 @media (max-width: 900px) { .ch.is-fill .chf-wrap { grid-template-columns: minmax(0, 1fr); } }
+/* DI režimas per visą langą: pokalbio plotis ribojamas patogiam skaitymui (~70 ženklų eilutė), centruojamas */
+.ch.is-fill .chf-col { width: 100%; max-width: 760px; margin: 0 auto; }

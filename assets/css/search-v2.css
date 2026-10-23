@@ -610,3 +610,4 @@ body.is-chatfull { overflow: hidden; }
 .pill-anim { transition: opacity .25s var(--ms-ease), transform .3s var(--ms-ease); }
 .pill-off { opacity: 0; transform: translateX(-50%) translateY(12px); }
 @media (max-width: 860px) { .ask-pill { left: 50%; bottom: 16px; } }
+.rf-ov { margin-bottom: 18px; }

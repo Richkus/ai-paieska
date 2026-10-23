@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="assets/css/shell.css?v=1025s">
 <link rel="stylesheet" href="assets/css/search.css?v=1025k">
 <link rel="stylesheet" href="assets/css/filters.css?v=1025k">
-<link rel="stylesheet" href="assets/css/search-v2.css?v=1025y">
+<link rel="stylesheet" href="assets/css/search-v2.css?v=1025z">
 <link rel="stylesheet" href="assets/css/loader.css?v=1025z">
 <link rel="stylesheet" href="assets/css/loader-ai.css?v=1025k">
 <link rel="stylesheet" href="assets/css/admin.css?v=1025w">
@@ -239,7 +239,7 @@
                 <template x-for="(x, i) in sumOf(m.card.summary)" :key="i">
                   <p><span x-text="x.t.replace(/\s*\S+$/, '')"></span> <span class="cite-nw"><span x-text="(x.t.match(/\S+$/) || [''])[0]"></span><button type="button" class="cite-n" :class="{ 'is-pro': R[x.src].pro, 'is-ext': R[x.src].ext }" @click="pvClose(); openCite(x.src)" @mouseenter="pvEnter(x.src, $el, true)" @mouseleave="pvLeave()" @focus="pvEnter(x.src, $el, true)" @blur="pvLeave()" :aria-label="'Šaltinis: ' + R[x.src].title"><span x-text="citeNo(sumOf(m.card.summary), x.src)"></span></button></span></p>
                 </template>
-              <template x-if="p.ext === 'pills'"><div class="src-pills"><template x-for="d in srcDomains(m.card.summary)" :key="d.k"><a class="src-pill" :class="d.ext ? 'is-ext' : ''" :href="d.url || null" :target="d.url ? '_blank' : null" rel="noopener" @click="!d.url && $event.preventDefault()"><i></i><span x-text="d.k"></span><svg x-show="d.url" width="11" height="11" viewBox="0 0 12 12" aria-hidden="true"><path d="M7 2h3v3M10 2 5.5 6.5M9 7.5V10H2V3h2.5" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></template></div></template>
+              <template x-if="p.ext === 'pills'"><div class="src-pills"><template x-for="d in srcDomains(m.card.summary)" :key="d.k"><a class="src-pill" :class="d.ext ? 'is-ext' : ''" :href="d.url || null" :target="d.url ? '_blank' : null" rel="noopener" @click="!d.url && $event.preventDefault()"><span class="src-dots"><template x-for="t in d.dots" :key="t"><i :class="'is-' + t"></i></template></span><span x-text="d.k"></span><svg x-show="d.url" width="11" height="11" viewBox="0 0 12 12" aria-hidden="true"><path d="M7 2h3v3M10 2 5.5 6.5M9 7.5V10H2V3h2.5" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></template></div></template>
               </div>
               
                         </template>
@@ -427,7 +427,7 @@
                 <template x-for="(x, i) in sumOf(ai.summary)" :key="i">
                   <p><span x-text="x.t.replace(/\s*\S+$/, '')"></span> <span class="cite-nw"><span x-text="(x.t.match(/\S+$/) || [''])[0]"></span><button type="button" class="cite-n" :class="{ 'is-pro': R[x.src].pro, 'is-ext': R[x.src].ext }" @click="pvClose(); openCite(x.src)" @mouseenter="pvEnter(x.src, $el, true)" @mouseleave="pvLeave()" @focus="pvEnter(x.src, $el, true)" @blur="pvLeave()" :aria-label="'Šaltinis: ' + R[x.src].title"><span x-text="citeNo(sumOf(ai.summary), x.src)"></span></button></span></p>
                 </template>
-              <template x-if="p.ext === 'pills'"><div class="src-pills"><template x-for="d in srcDomains(ai.summary)" :key="d.k"><a class="src-pill" :class="d.ext ? 'is-ext' : ''" :href="d.url || null" :target="d.url ? '_blank' : null" rel="noopener" @click="!d.url && $event.preventDefault()"><i></i><span x-text="d.k"></span><svg x-show="d.url" width="11" height="11" viewBox="0 0 12 12" aria-hidden="true"><path d="M7 2h3v3M10 2 5.5 6.5M9 7.5V10H2V3h2.5" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></template></div></template>
+              <template x-if="p.ext === 'pills'"><div class="src-pills"><template x-for="d in srcDomains(ai.summary)" :key="d.k"><a class="src-pill" :class="d.ext ? 'is-ext' : ''" :href="d.url || null" :target="d.url ? '_blank' : null" rel="noopener" @click="!d.url && $event.preventDefault()"><span class="src-dots"><template x-for="t in d.dots" :key="t"><i :class="'is-' + t"></i></template></span><span x-text="d.k"></span><svg x-show="d.url" width="11" height="11" viewBox="0 0 12 12" aria-hidden="true"><path d="M7 2h3v3M10 2 5.5 6.5M9 7.5V10H2V3h2.5" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></template></div></template>
               </div>
               
             </template>
@@ -1671,8 +1671,11 @@
       openCite(id) { const r = this.R[id]; if (r.ext) window.open(r.url, '_blank', 'noopener'); else this.openPanel(id, true); },
       srcDomains(list) {
         const ids = [...new Set(this.sumOf(list).map(x => x.src))];
-        const out = ids.some(id => !this.R[id].ext) ? [{ k: 'SUFLERIS', ext: false }] : [];
-        ids.filter(id => this.R[id].ext).forEach(id => { const r = this.R[id]; if (!out.some(d => d.k === r.ext)) out.push({ k: r.ext, ext: true, url: r.url }); });
+        const own = ids.filter(id => !this.R[id].ext);
+        // SUFLERIS: teal taškas baziniam turiniui, rožinis PRO; jei rasta abiejų, rodom abu
+        const dots = [own.some(id => !this.R[id].pro) && 'base', own.some(id => this.R[id].pro) && 'pro'].filter(Boolean);
+        const out = own.length ? [{ k: 'SUFLERIS', ext: false, dots }] : [];
+        ids.filter(id => this.R[id].ext).forEach(id => { const r = this.R[id]; if (!out.some(d => d.k === r.ext)) out.push({ k: r.ext, ext: true, url: r.url, dots: ['ext'] }); });
         return out;
       },
       citeNo(list, src) { return [...new Set(list.map(x => x.src))].indexOf(src) + 1; },

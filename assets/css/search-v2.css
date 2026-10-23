@@ -822,8 +822,10 @@ body.is-chatmodal { overflow: hidden; }
 .cite-n.is-ext:hover, .cite-n.is-ext:focus-visible { background: #c4675c; color: #fff; }
 .src-pills { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 0; }
 .src-pill { display: inline-flex; align-items: center; gap: 7px; height: 30px; padding: 0 11px; border: 1px solid var(--ms-line); border-radius: 8px; background: #fff; color: var(--ms-sub); font-size: 13px; text-decoration: none; transition: border-color .15s, color .15s; }
-.src-pill i { width: 7px; height: 7px; border-radius: 50%; background: var(--ms-teal); }
-.src-pill.is-ext i { background: #d9796e; }
+.src-dots { display: inline-flex; gap: 3px; }
+.src-dots i { width: 7px; height: 7px; border-radius: 50%; background: var(--ms-teal); }
+.src-dots i.is-pro { background: #d58cbd; }
+.src-dots i.is-ext { background: #d9796e; }
 .src-pill svg { color: var(--ms-muted); }
 a.src-pill[href]:hover { border-color: var(--ms-line-strong); color: var(--ms-ink); }
 a.src-pill:not([href]) { cursor: default; }

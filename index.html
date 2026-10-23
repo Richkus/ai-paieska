@@ -7,12 +7,12 @@
 <title>AI paieška: prototipas</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400..800&family=Source+Serif+4:opsz,wght@8..60,500..700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/shell.css?v=1024u">
-<link rel="stylesheet" href="assets/css/search.css?v=1024u">
-<link rel="stylesheet" href="assets/css/filters.css?v=1024u">
-<link rel="stylesheet" href="assets/css/search-v2.css?v=1024u">
-<link rel="stylesheet" href="assets/css/loader-ai.css?v=1024u">
-<link rel="stylesheet" href="assets/css/admin.css?v=1024u">
+<link rel="stylesheet" href="assets/css/shell.css?v=1024v">
+<link rel="stylesheet" href="assets/css/search.css?v=1024v">
+<link rel="stylesheet" href="assets/css/filters.css?v=1024v">
+<link rel="stylesheet" href="assets/css/search-v2.css?v=1024v">
+<link rel="stylesheet" href="assets/css/loader-ai.css?v=1024v">
+<link rel="stylesheet" href="assets/css/admin.css?v=1024v">
 <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.14.1/dist/cdn.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
 </head>
@@ -328,7 +328,7 @@
 
             <!-- DI apibendrinimas: trumpi sakiniai, kiekvieno gale šaltinis (kaip LRT „Klauskite DI“) -->
             <!-- Variantas: bendra mintis, po ja citatos su šaltiniais -->
-            <template x-if="ai.kind === 'quotes' && ai.summary && p.sum === 'quotes'">
+            <template x-if="ai.kind === 'quotes' && ai.summary && sumMode === 'quotes'">
               <div class="a2-gistq">
                 <template x-for="(g, gi) in (ai.gist || ai.summary.map(x => x.t).join(' ')).split('\n\n')" :key="gi"><p class="a2-gist" x-text="g"></p></template>
                 <ul class="a2-quotes">
@@ -340,7 +340,7 @@
                 </ul>
               </div>
             </template>
-            <template x-if="ai.kind === 'quotes' && ai.summary && p.sum !== 'quotes'">
+            <template x-if="ai.kind === 'quotes' && ai.summary && sumMode !== 'quotes'">
               <div class="a2-sum">
                 <template x-for="(x, i) in ai.summary" :key="i">
                   <p><span x-text="x.t"></span> <button type="button" class="cite-n" :class="{ 'is-pro': R[x.src].pro }" @click="pvClose(); openPanel(x.src, true)" @mouseenter="pvEnter(x.src, $el)" @mouseleave="pvLeave()" @focus="pvEnter(x.src, $el)" @blur="pvLeave()" :aria-label="'Šaltinis: ' + R[x.src].title"><span x-text="citeNo(ai.summary, x.src)"></span></button></p>
@@ -785,6 +785,11 @@
   <div class="ms-admin" @keydown.escape.window="adminOpen = false">
     <div class="ms-admin-panel" x-show="adminOpen" x-cloak x-transition.opacity.scale.95.origin.bottom.left.duration.150ms @click.outside="adminOpen = false">
       <div class="ms-admin-title">Prototipo nustatymai</div>
+      <!-- Scenarijus: ką paieška rado. „Konkreti situacija“ turi du santraukos rodymo būdus -->
+      <div class="ms-admin-group">Scenarijus</div>
+      <template x-for="(a, ai) in adminScen" :key="ai">
+        <label class="ms-admin-opt"><input type="radio" name="ms-scenario" :checked="scIdx === a.idx && (!a.sum || sumMode === a.sum)" @change="sumMode = a.sum || sumMode; loadScenario(a.idx)"><span x-text="a.label"></span></label>
+      </template>
       <div class="ms-admin-group" x-show="VERSIONS.length > 1">Versija</div>
       <template x-for="v in VERSIONS.length > 1 ? VERSIONS : []" :key="v.id">
         <label class="ms-admin-opt" :title="v.desc"><input type="radio" name="ms-ver" :checked="ver === v.id" @change="setVer(v.id)"><span x-text="v.label"></span></label>
@@ -812,10 +817,6 @@
           </template>
         </div>
       </template>
-      <div class="ms-admin-group">Scenarijus</div>
-      <template x-for="(s, i) in S" :key="s.id">
-        <label class="ms-admin-opt"><input type="radio" name="ms-scenario" :value="i" :checked="scIdx === i" @change="loadScenario(i)"><span x-text="s.label"></span></label>
-      </template>
       <button type="button" class="ms-admin-reset" @click="resetDemo()">Atstatyti ir grįžti į pradžią</button>
     </div>
     <button type="button" class="ms-admin-btn" @click="adminOpen = !adminOpen" :aria-expanded="adminOpen" aria-label="Prototipo nustatymai">
@@ -829,9 +830,9 @@
   .transition-pn { transition: transform .32s var(--ms-ease); }
   .pn-off { transform: translateX(100%); }
 </style>
-<script src="assets/js/shell.js?v=1024u"></script>
-<script src="assets/js/data.js?v=1024u"></script>
-<script src="assets/js/loader.js?v=1024u"></script>
+<script src="assets/js/shell.js?v=1024v"></script>
+<script src="assets/js/data.js?v=1024v"></script>
+<script src="assets/js/loader.js?v=1024v"></script>
 <script>
   // Admin parametras: filtrai po vienu mygtuku „Filtrai“ arba visada matomi
   // V4 tab'ai. icon: ai | chat. Kurie rodomi, valdoma Admin'e (TABS_PARAM)
@@ -847,11 +848,6 @@
   ];
   const TABS_PARAM = { key: 'tabs', label: 'Tab\'ai juostoje', type: 'checks', default: ['chat', 'all', 'comp', 'video', 'list', 'tests', 'files', 'plain'],
     options: TABS.map(t => ({ id: t.id, label: t.label })) };
-  // Admin parametras (V4): kaip rodyti „DI trumpai“
-  const SUM_PARAM = { key: 'sum', label: 'DI trumpai: rodymas', type: 'radio', default: 'cite', options: [
-    { id: 'cite', label: 'Sakiniai su šaltinių numeriais' },
-    { id: 'quotes', label: 'Bendra mintis + citatos su šaltiniais' },
-  ] };
   // Admin parametras (V4): antraščių šriftas. Serifinis tik akcentams, kad dizainas būtų „žmogiškesnis“
   const SERIF_PARAM = { key: 'serif', label: 'Antraščių šriftas', type: 'radio', default: 'sans', options: [
     { id: 'sans', label: 'Open Sans (kaip dabar)' },
@@ -1017,6 +1013,12 @@
         const n = this.typedList.length;
         return n + ' ' + ({ tests: ['testas', 'testai', 'testų'], video: ['vaizdo įrašas', 'vaizdo įrašai', 'vaizdo įrašų'], files: ['failas', 'failai', 'failų'] }[this.mode] || ['', '', ''])[(d => d === 0 || (n % 100 > 10 && n % 100 < 20) ? 2 : d === 1 ? 0 : 1)(n % 10)];
       },
+      sumMode: new URLSearchParams(location.search).get('sum') === 'quotes' ? 'quotes' : 'cite',   // „DI trumpai“: sakiniai su šaltiniais | mintis + citatos
+      get adminScen() {
+        return this.S.flatMap((s, idx) => s.id === 'savaitgalis'
+          ? [{ idx, sum: 'cite', label: s.label + ' · sakiniai su šaltiniais' }, { idx, sum: 'quotes', label: s.label + ' · mintis + citatos' }]
+          : [{ idx, label: s.label }]);
+      },
       brainOpen: false,  // prezentacijos lapelis „Kaip veikia DI paieška“
       scrolled: false,   // puslapis paslinktas (baltai viršutinei juostai rodom šešėlį)
       pMode: 'item',
@@ -1024,7 +1026,7 @@
       ask: { q: '', sent: false, edit: false, attach: [], me: { vardas: 'Laurynas', pavarde: 'Petrauskas', imone: 'UAB Įmonita', pareigos: 'Vyr. buhalteris', miestas: 'Vilnius', tel: '+370 600 00000' } },
       // ---------- Versijos ----------
       VERSIONS: [
-        { id: 'v4', label: 'V4 · Kaip Google', desc: 'Susijusios paieškos tampa nauja paieška, grįžtama naršyklės Atgal. Tab\'ai: DI režimas · Viskas · Rezultatų sąrašas', params: [TABS_PARAM, SUM_PARAM, SERIF_PARAM, SIDE_PARAM, TOP_PARAM, AI_STYLE_PARAM, FILTERS_PARAM, LOADER_PARAM] },
+        { id: 'v4', label: 'V4 · Kaip Google', desc: 'Susijusios paieškos tampa nauja paieška, grįžtama naršyklės Atgal. Tab\'ai: DI režimas · Viskas · Rezultatų sąrašas', params: [TABS_PARAM, SERIF_PARAM, SIDE_PARAM, TOP_PARAM, AI_STYLE_PARAM, FILTERS_PARAM, LOADER_PARAM] },
       ],
       ver: (() => {
         const q = new URLSearchParams(location.search).get('v');

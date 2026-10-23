@@ -20,7 +20,7 @@ Admin'e taip pat yra scenarijai (konkreti situacija, platus klausimas, trumpa fr
 
 Įkėlimo animacijos su DI ikona (taškai susirenka į žvaigždę, žvaigždė nusipiešia, žvaigždė kvėpuoja su kometomis) peržiūrimos [`loaderis.html`](https://richkus.github.io/ai-paieska/loaderis.html), prototipe perjungiamos per Admin → Įkėlimo animacija.
 
-Konkrečią būseną galima atidaryti nuoroda: `?v=4&s=savaitgalis&step=1` (scenarijai: `savaitgalis`, `komandiruote`, `nedaug`, `mazai`, `nera`). Pridėjus `&shot=1` paslepiamas Admin mygtukas, patogu ekranams.
+Konkrečią būseną galima atidaryti nuoroda: `?v=4&s=savaitgalis&step=1` (scenarijai: `savaitgalis`, `komandiruote`, `nedaug`, `mazai`, `nera`; `&sum=quotes` rodo „mintis + citatos“). Pridėjus `&shot=1` paslepiamas Admin mygtukas, patogu ekranams.
 
 ## Struktūra
 

@@ -81,3 +81,21 @@
 /* V4 „Rezultatų sąrašas“: skaičius atskiroje eilutėje, po juo filtrai */
 .fb.is-stack { flex-wrap: wrap; row-gap: 10px; }
 .fb.is-stack .fb-count { flex: 0 0 100%; margin: 0; font-size: 16px; }
+
+/* ---------- Filtrai vienoje eilutėje su horizontaliu slinkimu ---------- */
+.fb-pills { flex: 1 1 auto; min-width: 0; flex-wrap: nowrap; }
+.fb-track-wrap { position: relative; flex: 0 1 auto; min-width: 0; }
+.fb-track { display: flex; align-items: center; gap: 6px; padding: 4px 3px; margin: -4px -3px; overflow-x: auto; scrollbar-width: none; overscroll-behavior-x: contain; scroll-behavior: smooth; }
+.fb-track::-webkit-scrollbar { display: none; }
+.fb-track .fb-item { flex: 0 0 auto; }
+/* Kraštuose šešėlis, kai yra daugiau filtrų už matomos dalies */
+.fb-track-wrap::before, .fb-track-wrap::after { content: ''; position: absolute; top: 0; bottom: 0; z-index: 1; width: 48px; pointer-events: none; opacity: 0; transition: opacity .2s; }
+.fb-track-wrap::before { left: -3px; background: linear-gradient(to right, #fff 30%, rgba(255, 255, 255, 0)); }
+.fb-track-wrap::after { right: -3px; background: linear-gradient(to left, #fff 30%, rgba(255, 255, 255, 0)); }
+.fb-track-wrap.can-l::before, .fb-track-wrap.can-r::after { opacity: 1; }
+.fb-arrow { position: absolute; top: 50%; z-index: 2; display: grid; place-items: center; width: 28px; height: 28px; padding: 0; border: 1px solid var(--ms-line-strong); border-radius: 50%; background: #fff; color: var(--ms-ink); box-shadow: 0 2px 8px rgba(15, 40, 42, .14); transform: translateY(-50%); transition: background .15s; }
+.fb-arrow:hover { background: var(--ms-surface-soft); }
+.fb-arrow.is-l { left: -2px; }
+.fb-arrow.is-r { right: -2px; }
+.fb.is-stack .fb-pills { flex: 1 1 0; }
+@media (max-width: 860px) { .fb-pills { width: 100%; } .fb-arrow { display: none !important; } }

@@ -7,13 +7,13 @@
 <title>AI paieška: prototipas</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400..800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/shell.css?v=1023b">
-<link rel="stylesheet" href="assets/css/search.css?v=1023b">
-<link rel="stylesheet" href="assets/css/filters.css?v=1023b">
-<link rel="stylesheet" href="assets/css/search-v2.css?v=1023b">
-<link rel="stylesheet" href="assets/css/loader.css?v=1023b">
-<link rel="stylesheet" href="assets/css/loader-ai.css?v=1023b">
-<link rel="stylesheet" href="assets/css/admin.css?v=1023b">
+<link rel="stylesheet" href="assets/css/shell.css?v=1023d">
+<link rel="stylesheet" href="assets/css/search.css?v=1023d">
+<link rel="stylesheet" href="assets/css/filters.css?v=1023d">
+<link rel="stylesheet" href="assets/css/search-v2.css?v=1023d">
+<link rel="stylesheet" href="assets/css/loader.css?v=1023d">
+<link rel="stylesheet" href="assets/css/loader-ai.css?v=1023d">
+<link rel="stylesheet" href="assets/css/admin.css?v=1023d">
 <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.14.1/dist/cdn.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
 </head>
@@ -27,7 +27,7 @@
    2. Markup'e pridėk bloką su ver === 'vN'.
    3. params: version-specifiniai admin nustatymai, pasiekiami per p.<key>.
 -->
-<div class="ms-app" x-data="search()" @popstate.window="onPop($event)" @keydown.escape.window="closePanel(); pvClose()" @scroll.window.passive="pv.id && pvClose(); scrolled = scrollY > 4">
+<div class="ms-app" x-data="search()" @popstate.window="onPop($event)" @keydown.escape.window="closePanel(); pvClose()" @scroll.window.passive="pv.id && pvClose(); scrolled = scrollY > 4; popStyle.position && fbPopClose()">
   <aside class="ms-sidebar" data-shell="sidebar"></aside>
 
   <div class="ms-main" :class="{ 'is-topwhite': ver === 'v4' && p.top === 'white', 'is-scrolled': scrolled }">
@@ -330,15 +330,18 @@
           </button>
           <div class="fb-pills" x-show="!fbCollapsible || fbOpen"
                x-transition:enter="fb-anim" x-transition:enter-start="fb-off" x-transition:leave="fb-anim" x-transition:leave-end="fb-off">
+          <!-- Filtrai vienoje eilutėje; jei netelpa, slenkami horizontaliai (kraštuose šešėlis ir rodyklės) -->
+          <div class="fb-track-wrap" :class="{ 'can-l': fbL, 'can-r': fbR }" @resize.window.debounce.100ms="fbEdges()">
+          <div class="fb-track" x-ref="fbTrack" @scroll.passive="fbEdges(); fbPopClose()" x-effect="fbOpen; fbCollapsible; mode; $nextTick(() => fbEdges())">
           <template x-for="k in FKEYS" :key="k">
             <div class="fb-item" @click.outside="pop === k && (pop = '')">
-              <button type="button" class="fb-pill" :class="{ 'is-set': has(k) }" :aria-expanded="pop === k" @click="togglePop(k)" :title="isAi(k) ? 'Pritaikė AI pagal jūsų klausimą' : ''">
+              <button type="button" class="fb-pill" :class="{ 'is-set': has(k) }" :aria-expanded="pop === k" @click="togglePop(k, $el)" :title="isAi(k) ? 'Pritaikė AI pagal jūsų klausimą' : ''">
                 <img x-show="isAi(k)" class="ai-ic is-ai" src="assets/img/ai.svg" width="11" height="19" alt="" aria-hidden="true">
                 <span x-html="pillText(k)"></span>
                 <i class="fb-x" x-show="has(k)" @click.stop="clearKey(k)" role="button" :aria-label="'Nuimti filtrą ' + F[k].label">×</i>
                 <svg x-show="!has(k)" class="is-chev" width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><path d="M2 3.5l3 3 3-3" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
               </button>
-              <div class="fb-pop" x-show="pop === k" x-cloak x-transition.opacity.duration.120ms>
+              <div class="fb-pop" x-show="pop === k" x-cloak x-transition.opacity.duration.120ms :style="pop === k ? popStyle : {}">
                 <label class="fb-pop-search" x-show="F[k].search">
                   <svg width="13" height="13" viewBox="0 0 18 18" aria-hidden="true"><circle cx="7.5" cy="7.5" r="6" stroke="#8aa3a6" stroke-width="1.8" fill="none"/><path d="M12 12l4.5 4.5" stroke="#8aa3a6" stroke-width="1.8" stroke-linecap="round"/></svg>
                   <input type="text" x-model="popQ" :placeholder="'Ieškoti: ' + F[k].label.toLowerCase()">
@@ -361,6 +364,14 @@
               </div>
             </div>
           </template>
+          </div>
+          <button type="button" class="fb-arrow is-l" x-show="fbL" @click="fbScrollBy(-1)" aria-label="Ankstesni filtrai" tabindex="-1">
+            <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3.5 5.5 8l4.5 4.5" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <button type="button" class="fb-arrow is-r" x-show="fbR" @click="fbScrollBy(1)" aria-label="Daugiau filtrų" tabindex="-1">
+            <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          </div>
           <button type="button" class="fb-close" x-show="fbCollapsible" @click="fbOpen = false; pop = ''" aria-label="Suskleisti filtrus" title="Suskleisti filtrus">×</button>
           </div>
           <div class="fb-end">
@@ -637,9 +648,9 @@
   .transition-pn { transition: transform .32s var(--ms-ease); }
   .pn-off { transform: translateX(100%); }
 </style>
-<script src="assets/js/shell.js?v=1023b"></script>
-<script src="assets/js/data.js?v=1023b"></script>
-<script src="assets/js/loader.js?v=1023b"></script>
+<script src="assets/js/shell.js?v=1023d"></script>
+<script src="assets/js/data.js?v=1023d"></script>
+<script src="assets/js/loader.js?v=1023d"></script>
 <script>
   // Admin parametras: filtrai po vienu mygtuku „Filtrai“ arba visada matomi
   const ANSWERS_PARAM = { key: 'answers', label: 'Atsakymai į patikslinimą', type: 'radio', default: 'list', options: [
@@ -852,7 +863,24 @@
       },
       match(id, skip) { return this.FKEYS.every(k => k === skip || !this.has(k) || this.vals(k).some(v => this.matchKey(id, k, v))); },
       optCount(k, v) { return this.baseList.filter(id => this.match(id, k) && this.matchKey(id, k, v)).length * this.scale; },
-      togglePop(k) { this.pop = this.pop === k ? '' : k; this.popQ = ''; },
+      togglePop(k, el) {
+        this.pop = this.pop === k ? '' : k; this.popQ = '';
+        // Filtrų eilutė slenkama, todėl popover'is pozicionuojamas pagal ekraną (kitaip jį nukirptų); mobile lieka apatinis lapas
+        if (this.pop && el && matchMedia('(min-width: 861px)').matches) {
+          const r = el.getBoundingClientRect();
+          this.popStyle = { position: 'fixed', left: Math.min(r.left, innerWidth - 272) + 'px', top: (r.bottom + 6) + 'px' };
+        } else this.popStyle = {};
+      },
+      popStyle: {},
+      fbL: false,
+      fbR: false,
+      fbEdges() {
+        const t = this.$refs.fbTrack; if (!t) return;
+        this.fbL = t.scrollLeft > 2;
+        this.fbR = t.scrollLeft + t.clientWidth < t.scrollWidth - 2;
+      },
+      fbScrollBy(dir) { const t = this.$refs.fbTrack; if (t) t.scrollBy({ left: dir * t.clientWidth * .7, behavior: 'smooth' }); },
+      fbPopClose() { if (this.FKEYS.includes(this.pop)) this.pop = ''; },
       toggle(k, v) {
         this.aiF = this.aiF.filter(x => x !== k + ':' + v);
         if (this.F[k].single) { this.f[k] = this.f[k] === v ? '' : v; this.pop = ''; return; }

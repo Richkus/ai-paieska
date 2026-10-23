@@ -458,3 +458,50 @@ window.calcArt = a => ({
   add() { this.rows.push({ country: 'Latvija', days: 1 }); },
   remove(i) { this.rows.splice(i, 1); },
 });
+
+/* ==========================================================
+   Pokalbio šakos: kiekvienas atsakymo variantas veda į jam tinkantį
+   atsakymą (pvz. „Kokių dokumentų reikia?“ → dokumentai, ne video).
+   goto: kuris scenarijaus žingsnis toliau (99 = scenarijus baigtas).
+   ========================================================== */
+(function chatBranches() {
+  const C = window.CHATS;
+  const END = 99, more = 'Jei dar kažkas neaišku, klauskite toliau.';
+  // Savaitgalis: paskutiniai du klausimai
+  C.savaitgalis[2].branches = {
+    'Kaip pažymėti žiniaraštyje?': { text: 'Apie žymėjimą žiniaraštyje SUFLERYJE rašoma taip:', goto: END,
+      card: { main: 'r3', summary: [{ t: 'Žiniaraštyje pažymima ir dirbta poilsio diena, ir vėliau suteikta laisva diena, kad būtų aišku, už ką ji suteikta.', src: 'r3' }],
+        artifacts: [{ kind: 'file', id: 'f4' }, { kind: 'video', id: 'r4', at: '24:10' }] }, after: more },
+    'Per kiek laiko suteikti dieną?': { text: 'Apie terminą SUFLERYJE rašoma taip:', goto: END,
+      card: { main: 'r2', summary: [{ t: 'Laisvą dieną reikėtų suteikti per protingą laiką. Konkretų terminą verta aptarti su darbuotoju ir nurodyti prašyme.', src: 'r2' }],
+        artifacts: [{ kind: 'file', id: 'r6' }] }, after: more },
+  };
+  // Komandiruotės: pirmas pasirinkimas (tema)
+  const docs = { text: 'Komandiruotei įforminti reikia šių dokumentų:', goto: END,
+    card: { main: 'k6', summary: [{ t: 'Komandiruotė įforminama darbdavio įsakymu, o grįžus pateikiama avansinė apyskaita su kelionės ir nakvynės dokumentais.', src: 'k6' }],
+      artifacts: [{ kind: 'file', id: 'f2' }, { kind: 'file', id: 'f5' }] }, after: more };
+  C.komandiruote[0].branches = {
+    'Kelionės ir nakvynės išlaidos': { text: 'Apie kelionės ir nakvynės išlaidas:', goto: END,
+      card: { main: 'k5', summary: [{ t: 'Kelionės ir nakvynės išlaidos kompensuojamos pagal pateiktus dokumentus: bilietus, sąskaitas už nakvynę ir kitus kelionės dokumentus.', src: 'k5' }],
+        artifacts: [{ kind: 'video', id: 'k5', at: '31:45' }] }, after: more },
+    'Komandiruotė į užsienį': { ...C.komandiruote[2], text: 'Trumpai apie dienpinigius komandiruotėje užsienyje:', goto: 3 },
+    'Įforminimas ir apskaita': docs,
+  };
+  // Komandiruotės: kur vyksta
+  C.komandiruote[1].branches = {
+    'Lietuvoje': { text: 'Apie dienpinigius komandiruotėje Lietuvoje:', goto: 3,
+      card: { main: 'k2', summary: [{ t: 'Vienos dienos komandiruotei Lietuvoje dienpinigiai mokami, jei komandiruotė įforminta įsakymu ir darbuotojas vyko į kitą vietovę.', src: 'k2' }],
+        artifacts: [{ kind: 'calc', rows: [{ country: 'Lietuva', days: 2 }] }] },
+      after: 'Ar dar kažkas neaišku?', options: ['Ar dienpinigiai apmokestinami?', 'Kokių dokumentų reikia?'] },
+    'Keliose šalyse': { ...C.komandiruote[2], goto: 3,
+      card: { ...C.komandiruote[2].card, artifacts: [{ kind: 'calc', rows: [{ country: 'Vokietija', days: 2 }, { country: 'Lenkija', days: 1 }] }, { kind: 'file', id: 'f6' }] },
+      after: 'Skaičiuoklėje įrašiau dvi šalis, pakeiskit pagal savo komandiruotę. Ar dar kažkas neaišku?' },
+  };
+  // Komandiruotės: paskutiniai klausimai
+  const tax = { text: 'Apie apmokestinimą:', goto: END,
+    card: { main: 'k1', summary: [{ t: 'Dienpinigiai neapmokestinami tik neviršijant nustatytų dydžių. Viršijanti dalis laikoma su darbo santykiais susijusiomis pajamomis.', src: 'k1' }] }, after: more };
+  C.komandiruote[2].branches = { 'Ar dienpinigiai apmokestinami?': tax, 'Kokių dokumentų reikia?': docs };
+  C.komandiruote[1].branches['Lietuvoje'].branches = C.komandiruote[2].branches;
+  C.komandiruote[1].branches['Keliose šalyse'].branches = C.komandiruote[2].branches;
+  C.komandiruote[0].branches['Komandiruotė į užsienį'].branches = C.komandiruote[2].branches;
+})();

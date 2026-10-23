@@ -367,3 +367,37 @@ window.CHATS = {
     { text: 'Šia tema SUFLERYJE medžiagos neradau. Galiu perduoti jūsų klausimą ekspertui, jis atsakys asmeniškai.', expert: true },
   ],
 };
+
+/* ==========================================================
+   V4 tab'ai: Testai, Video, Failai atsisiuntimui, Kompetencijų centras.
+   Papildomi pavyzdiniai įrašai (tekstai sugalvoti).
+   ========================================================== */
+(function extraResults() {
+  const add = {
+    t1: { type: 'Testas', date: '2026-08-14', title: 'Darbo laikas ir poilsio dienos', snippet: 'Pasitikrinkite, kaip apskaitomas darbas poilsio dienomis ir kada suteikiama kita poilsio diena. 12 klausimų.' },
+    t2: { type: 'Testas', date: '2026-06-02', title: 'Komandiruotės: dienpinigiai ir dokumentai', snippet: 'Dienpinigių dydžiai, apmokestinimas ir komandiruotės įforminimas. 10 klausimų.' },
+    t3: { type: 'Testas', date: '2026-04-21', title: 'PVM mokėtojo registracija', snippet: 'Kada privaloma registruotis, kaip skaičiuojama apyvartos riba. 8 klausimai.' },
+    v1: { type: 'Renginio įrašas', date: '2026-05-28', title: 'Darbo santykiai 2026: kas pasikeitė', snippet: '1 dalis: darbo laiko apskaita, poilsio dienos ir kompensavimas.', part: '1 val. 12 min.' },
+    v2: { type: 'Renginio įrašas', date: '2026-03-19', title: 'PVM praktikoje: dažniausios klaidos', snippet: 'Seminaro įrašas apie PVM atskaitą, sąskaitas faktūras ir registraciją.', part: '58 min.' },
+    v3: { type: 'Renginio įrašas', date: '2026-02-11', title: 'Komandiruočių išlaidos be klaidų', snippet: 'Dienpinigiai, nakvynė, kelionės dokumentai ir avansinė apyskaita.', part: '1 val. 4 min.' },
+    f1: { type: 'Atmintinė', date: '2026-07-01', title: 'Darbo poilsio dieną kompensavimo atmintinė', snippet: 'Vieno lapo atmintinė: kada mokamas dvigubas atlygis, kada suteikiama kita poilsio diena.', file: 'PDF', kind: 'Atmintinė' },
+    f2: { type: 'Atmintinė', date: '2026-05-12', title: 'Įsakymas dėl komandiruotės (šablonas)', snippet: 'Redaguojamas įsakymo šablonas su visais privalomais rekvizitais.', file: 'DOCX', kind: 'Dokumento šablonas' },
+    f3: { type: 'Atmintinė', date: '2026-04-03', title: 'PVM mokėtojo registracijos žingsniai', snippet: 'Atmintinė: dokumentai, terminai ir dažniausios klaidos registruojantis PVM mokėtoju.', file: 'PDF', kind: 'Atmintinė' },
+    f4: { type: 'Atmintinė', date: '2026-01-15', title: 'Darbo laiko apskaitos žiniaraštis 2026', snippet: 'Excel žiniaraštis su poilsio ir švenčių dienų žymėjimu.', file: 'XLSX', kind: 'Lentelė' },
+    f5: { type: 'Atmintinė', date: '2025-11-20', title: 'Avansinė apyskaita (pavyzdys)', snippet: 'Užpildytas avansinės apyskaitos pavyzdys komandiruotei į užsienį.', file: 'PDF', kind: 'Pavyzdys' },
+  };
+  Object.entries(add).forEach(([id, r]) => {
+    r.rub = r.type === 'Testas' ? 'Testai' : r.type === 'Renginio įrašas' ? 'Seminarai ir vaizdo įrašai' : 'Trumpai';
+    r.fmt = r.type === 'Testas' ? 'Testas' : r.type === 'Renginio įrašas' ? 'Video' : 'Dokumento forma';
+    r.pro = false; r.tema = 'Darbo laikas';
+    window.RESULTS[id] = r;
+  });
+  const r6 = window.RESULTS.r6; r6.file = 'DOCX'; r6.kind = 'Dokumento šablonas';
+})();
+
+/* Kompetencijų centras: trys kompetencijos su moduliais. match = scenarijai, kuriems kompetencija aktuali */
+window.COMPETENCIES = [
+  { id: 'it', title: 'Ilgalaikis turtas', desc: 'Apskaita, nusidėvėjimas, perkainojimas ir nurašymas.', icon: 'building', modules: ['Pripažinimas ir įvertinimas', 'Nusidėvėjimas', 'Perkainojimas', 'Nurašymas ir pardavimas'], match: ['pvm'] },
+  { id: 'ig', title: 'Įmonių grupės', desc: 'Sandoriai tarp susijusių asmenų, kainodara ir konsolidavimas.', icon: 'percent', modules: ['Susiję asmenys', 'Sandorių kainodara', 'Paskolos grupėje', 'Konsolidavimas'], match: [] },
+  { id: 'ds', title: 'Darbo santykiai ir darbo užmokestis', desc: 'Darbo laikas, poilsis, komandiruotės ir darbo užmokesčio skaičiavimas.', icon: 'people', modules: ['Darbo laikas ir poilsis', 'Komandiruotės', 'Darbo užmokestis ir priedai', 'Atostogos'], match: ['savaitgalis', 'komandiruote'] },
+];

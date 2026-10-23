@@ -7,13 +7,13 @@
 <title>AI paieška: prototipas</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400..800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/shell.css?v=1023f">
-<link rel="stylesheet" href="assets/css/search.css?v=1023f">
-<link rel="stylesheet" href="assets/css/filters.css?v=1023f">
-<link rel="stylesheet" href="assets/css/search-v2.css?v=1023f">
-<link rel="stylesheet" href="assets/css/loader.css?v=1023f">
-<link rel="stylesheet" href="assets/css/loader-ai.css?v=1023f">
-<link rel="stylesheet" href="assets/css/admin.css?v=1023f">
+<link rel="stylesheet" href="assets/css/shell.css?v=1023g">
+<link rel="stylesheet" href="assets/css/search.css?v=1023g">
+<link rel="stylesheet" href="assets/css/filters.css?v=1023g">
+<link rel="stylesheet" href="assets/css/search-v2.css?v=1023g">
+<link rel="stylesheet" href="assets/css/loader.css?v=1023g">
+<link rel="stylesheet" href="assets/css/loader-ai.css?v=1023g">
+<link rel="stylesheet" href="assets/css/admin.css?v=1023g">
 <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.14.1/dist/cdn.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
 </head>
@@ -53,26 +53,34 @@
       <div x-show="phase !== 'start'" :class="{ 'v2': true, 'no-side': ver === 'v4' && p.side !== 'show', 'is-classic': mode === 'classic', 'is-loading': phase === 'loading', 'is-busy': !!busy }">
       <div class="v2-main">
 
-        <!-- V4: trys tab'ai kaip Google (DI režimas · Viskas · Rezultatų sąrašas) -->
-        <div class="sr-modes" x-show="ver === 'v4'" role="tablist" aria-label="Paieškos režimas">
-          <button type="button" role="tab" :class="{ 'is-on': mode === 'ai' && aiOnly }" :aria-selected="mode === 'ai' && aiOnly" @click="setMode('ai', true)">
-            <img class="ai-ic" src="assets/img/ai.svg" width="15" height="26" alt="" aria-hidden="true">
-            DI režimas
-          </button>
-          <button type="button" role="tab" :class="{ 'is-on': mode === 'ai' && !aiOnly }" :aria-selected="mode === 'ai' && !aiOnly" @click="setMode('ai')">Viskas</button>
-          <button type="button" role="tab" :class="{ 'is-on': mode === 'classic' }" :aria-selected="mode === 'classic'" @click="setMode('classic')">Rezultatų sąrašas</button>
-          <button type="button" role="tab" :class="{ 'is-on': mode === 'chat' }" :aria-selected="mode === 'chat'" @click="setMode('chat')">
-            <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 4.5a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v4.5a2 2 0 0 1-2 2H7l-3 2.5V11h0a2 2 0 0 1-1.5-2Z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
-            DI chatas
-          </button>
-          <button type="button" role="tab" :class="{ 'is-on': chatFull }" :aria-selected="chatFull" @click="openChatFull()" title="Atsidaro pilname ekrane">
-            <img class="ai-ic" src="assets/img/ai.svg" width="15" height="26" alt="" aria-hidden="true">
-            DI pokalbis
-          </button>
+        <!-- V4: tab'ų juosta kaip Google. Kurie tab'ai rodomi, valdoma Admin'e; netelpantys nukeliauja į „Daugiau ▾“ -->
+        <div class="sr-modes tb" x-show="ver === 'v4'" x-ref="tabsBar" role="tablist" aria-label="Paieškos režimas"
+             x-effect="p.tabs; phase; mode; $nextTick(() => { tabGuard(); tabsMeasure(); })" @resize.window.debounce.80ms="tabsMeasure()">
+          <template x-for="t in tabsRow" :key="t.id">
+            <button type="button" role="tab" :class="{ 'is-on': tabActive(t) }" :aria-selected="tabActive(t)" @click="selectTab(t)">
+              <template x-if="t.icon === 'ai'"><span class="tb-ic"><img class="ai-ic" src="assets/img/ai.svg" width="15" height="26" alt="" aria-hidden="true"></span></template>
+              <template x-if="t.icon === 'chat'"><span class="tb-ic"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 4.5a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v4.5a2 2 0 0 1-2 2H7l-3 2.5V11h0a2 2 0 0 1-1.5-2Z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg></span></template>
+              <span x-text="t.label"></span>
+            </button>
+          </template>
+          <div class="tb-more" x-show="tabsMore.length" @click.outside="tabMoreOpen = false" @keydown.escape="tabMoreOpen = false">
+            <button type="button" :class="{ 'is-on': tabsMore.some(t => tabActive(t)) }" @click="tabMoreOpen = !tabMoreOpen" :aria-expanded="tabMoreOpen">
+              Daugiau <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><path d="M2 3.5l3 3 3-3" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <div class="tb-menu" x-show="tabMoreOpen" x-cloak x-transition.opacity.duration.120ms>
+              <template x-for="t in tabsMore" :key="t.id">
+                <button type="button" :class="{ 'is-on': tabActive(t) }" @click="selectTab(t); tabMoreOpen = false" x-text="t.label"></button>
+              </template>
+            </div>
+          </div>
+          <!-- Matavimui: visi rodomi tab'ai, nematomi -->
+          <div class="tb-measure" x-ref="tabsMeasure" aria-hidden="true">
+            <template x-for="t in tabsShown" :key="t.id"><button type="button" tabindex="-1"><span class="tb-ic" x-show="t.icon"></span><span x-text="t.label"></span></button></template>
+          </div>
         </div>
 
         <!-- V4, plati tema: kryptys pirmos po tab'ais (kaip Google „Refine“), paspaudus perrašomas klausimas lauke -->
-        <div class="rf" x-show="ver === 'v4' && ai.kind === 'directions' && mode !== 'chat'" x-cloak>
+        <div class="rf" x-show="ver === 'v4' && ai.kind === 'directions' && ['ai', 'classic'].includes(mode)" x-cloak>
           <p class="rf-q" x-text="ai.lead || ai.heading"></p>
           <!-- Sąrašas su paieškos ikona, kaip Google pasiūlymai -->
           <ul class="rf-list">
@@ -86,6 +94,63 @@
         </div>
 
         <!-- V4 · DI chatas: simuliatorius kolegoms. DI klausia ir veda prie citatų, išvadų nedaro -->
+        <!-- V4 · Kompetencijų centras (abstrakti versija: 3 kompetencijos su moduliais) -->
+        <section class="cc" x-show="ver === 'v4' && mode === 'comp'" x-cloak>
+          <div class="cc-bar">
+            <div class="cc-chips">
+              <button type="button" :class="{ 'is-on': !ccSel }" @click="ccSel = ''">Visos kompetencijos</button>
+              <template x-for="c in COMP" :key="c.id">
+                <button type="button" :class="{ 'is-on': ccSel === c.id }" @click="ccSel = ccSel === c.id ? '' : c.id" x-text="c.title"></button>
+              </template>
+            </div>
+            <div class="cc-chips is-level">
+              <template x-for="l in ['Visi lygiai', 'Pradedantiesiems', 'Pažengusiems']" :key="l">
+                <button type="button" :class="{ 'is-on': ccLevel === l }" @click="ccLevel = l" x-text="l"></button>
+              </template>
+            </div>
+          </div>
+          <p class="cc-hint" x-show="compMatch.length">
+            Pagal jūsų paiešką aktualiausia: <b x-text="compMatch.map(c => c.title).join(', ')"></b>
+          </p>
+          <div class="cc-grid">
+            <template x-for="c in compList" :key="c.id">
+              <article class="cc-card" :class="{ 'is-match': c.match.includes(sc.id) }">
+                <div class="cc-art">
+                  <span class="cc-badge" x-show="c.match.includes(sc.id)">Atitinka paiešką</span>
+                  <button type="button" class="cc-save" :class="{ 'is-on': ccSaved.includes(c.id) }" @click="ccSaved = ccSaved.includes(c.id) ? ccSaved.filter(x => x !== c.id) : [...ccSaved, c.id]" aria-label="Pasižymėti">
+                    <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-3-4 3Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" :fill="ccSaved.includes(c.id) ? 'currentColor' : 'none'"/></svg>
+                  </button>
+                  <span class="cc-ic" x-html="COMP_ICONS[c.icon]"></span>
+                </div>
+                <h3 x-text="c.title"></h3>
+                <p x-text="c.desc"></p>
+                <small x-text="c.modules.length + ' moduliai'"></small>
+                <button type="button" class="cc-go" @click="ccOpen = ccOpen === c.id ? '' : c.id" x-text="ccOpen === c.id ? 'Suskleisti modulius' : 'Eiti į kompetenciją'"></button>
+                <ol class="cc-mods" x-show="ccOpen === c.id" x-collapse.duration.250ms>
+                  <template x-for="(mo, i) in c.modules" :key="mo"><li><span x-text="(i + 1) + '.'"></span><span x-text="mo"></span><em x-text="i === 0 ? 'Pradėti →' : ''"></em></li></template>
+                </ol>
+              </article>
+            </template>
+          </div>
+        </section>
+
+        <!-- V4 · Testai, Video, Failai atsisiuntimui: paprastas sąrašas -->
+        <div class="tl" x-show="ver === 'v4' && isTyped" x-cloak>
+          <p class="tl-count" x-text="typedCountText"></p>
+          <div class="tl-row" x-show="mode === 'files'">
+            <div class="cc-chips">
+              <template x-for="k in ['Visi', 'Atmintinė', 'Dokumento šablonas', 'Lentelė', 'Pavyzdys']" :key="k">
+                <button type="button" :class="{ 'is-on': fileKind === k }" @click="fileKind = k" x-text="k"></button>
+              </template>
+            </div>
+            <div class="cc-chips is-level">
+              <template x-for="k in ['PDF', 'DOCX', 'XLSX']" :key="k">
+                <button type="button" :class="{ 'is-on': fileFmt.includes(k) }" @click="fileFmt = fileFmt.includes(k) ? fileFmt.filter(x => x !== k) : [...fileFmt, k]" x-text="k"></button>
+              </template>
+            </div>
+          </div>
+        </div>
+
         <!-- Tas pats pokalbis: tab'e „DI chatas“ puslapio viduje, „DI pokalbis“ atidaro jį pilname ekrane -->
         <section class="ch" :class="{ 'is-full': chatFull }" x-ref="chatBox" x-show="ver === 'v4' && (mode === 'chat' || chatFull)" x-cloak
                  x-effect="if (ver === 'v4' && (mode === 'chat' || chatFull) && phase === 'results') chatEnsure()"
@@ -320,7 +385,7 @@
         </template>
 
         <!-- Filtrų juosta: veikia abiem režimais. Su AI dalį filtrų pritaiko pati (✦) -->
-        <div class="fb" :class="{ 'is-stack': fbStack }" x-show="!hideLinks && (baseList.length || anyFilter)" @keydown.escape.stop="pop = ''">
+        <div class="fb" :class="{ 'is-stack': fbStack }" x-show="!hideLinks && !isTyped && mode !== 'comp' && (baseList.length || anyFilter)" @keydown.escape.stop="pop = ''">
           <span class="fb-count" :class="{ 'is-flash': flash }" x-html="busy ? 'Atnaujinam…' : countHtml"></span>
           <!-- V2/V4: filtrai suskleisti po vienu mygtuku (admin parametras) -->
           <button type="button" class="fb-toggle" x-show="fbCollapsible && !fbOpen" @click="fbOpen = true" :aria-expanded="fbOpen">
@@ -393,21 +458,21 @@
           </div>
         </div>
 
-        <ul class="sr-list" x-show="!hideLinks">
+        <ul class="sr-list" x-show="!hideLinks && mode !== 'comp'">
           <template x-for="id in list" :key="id">
             <li class="sr-item">
               <button type="button" @click="openPanel(id)">
                 <div>
                   <h3 x-text="R[id].title"></h3>
                   <p x-text="R[id].snippet"></p>
-                  <div class="sr-meta"><span x-text="R[id].date"></span> | <span x-text="R[id].type"></span><template x-if="R[id].part"><em x-text="' · ' + R[id].part"></em></template></div>
+                  <div class="sr-meta"><span x-text="R[id].date"></span> | <span x-text="R[id].type"></span><template x-if="R[id].part"><em x-text="' · ' + R[id].part"></em></template><template x-if="R[id].file"><em class="sr-file" x-text="R[id].file"></em></template></div>
                 </div>
                 <div class="sr-thumb" x-text="R[id].type"></div>
               </button>
             </li>
           </template>
         </ul>
-        <div class="sr-empty" x-show="!hideLinks && !list.length" x-cloak>
+        <div class="sr-empty" x-show="!hideLinks && mode !== 'comp' && !list.length" x-cloak>
           <p x-text="anyFilter ? 'Pagal pasirinktus filtrus nieko nėra.' : 'Rezultatų nėra.'"></p>
           <button type="button" class="a2-chip" x-show="anyFilter" @click="clearAll()">Išvalyti filtrus</button>
         </div>
@@ -626,6 +691,13 @@
               </template>
             </div>
           </template>
+          <template x-if="g.type === 'checks'">
+            <div>
+              <template x-for="o in g.options" :key="o.id">
+                <label class="ms-admin-opt"><input type="checkbox" :checked="(p[g.key] || []).includes(o.id)" @change="p[g.key] = $event.target.checked ? g.options.map(x => x.id).filter(id => id === o.id || (p[g.key] || []).includes(id)) : p[g.key].filter(x => x !== o.id)"><span x-text="o.label"></span></label>
+              </template>
+            </div>
+          </template>
           <template x-if="g.type === 'check'">
             <label class="ms-admin-opt"><input type="checkbox" :checked="p[g.key]" @change="p[g.key] = $event.target.checked"><span x-text="g.text"></span></label>
           </template>
@@ -648,15 +720,29 @@
   .transition-pn { transition: transform .32s var(--ms-ease); }
   .pn-off { transform: translateX(100%); }
 </style>
-<script src="assets/js/shell.js?v=1023f"></script>
-<script src="assets/js/data.js?v=1023f"></script>
-<script src="assets/js/loader.js?v=1023f"></script>
+<script src="assets/js/shell.js?v=1023g"></script>
+<script src="assets/js/data.js?v=1023g"></script>
+<script src="assets/js/loader.js?v=1023g"></script>
 <script>
   // Admin parametras: filtrai po vienu mygtuku „Filtrai“ arba visada matomi
   const ANSWERS_PARAM = { key: 'answers', label: 'Atsakymai į patikslinimą', type: 'radio', default: 'list', options: [
     { id: 'list', label: 'Sąrašas ↳ (kaip Perplexity)' },
     { id: 'chips', label: 'Chip\'ai' },
   ] };
+  // V4 tab'ai. icon: ai | chat. Kurie rodomi, valdoma Admin'e (TABS_PARAM)
+  const TABS = [
+    { id: 'di', label: 'DI režimas', icon: 'ai' },
+    { id: 'all', label: 'Visi rezultatai' },
+    { id: 'list', label: 'Sąrašas' },
+    { id: 'comp', label: 'Kompetencijų centras' },
+    { id: 'tests', label: 'Testai' },
+    { id: 'video', label: 'Video' },
+    { id: 'files', label: 'Failai atsisiuntimui' },
+    { id: 'chat', label: 'DI chatas', icon: 'chat' },
+    { id: 'full', label: 'DI pokalbis', icon: 'ai' },
+  ];
+  const TABS_PARAM = { key: 'tabs', label: 'Tab\'ai juostoje', type: 'checks', default: ['di', 'all', 'list', 'comp', 'tests', 'video', 'files', 'chat'],
+    options: TABS.map(t => ({ id: t.id, label: t.label })) };
   // Admin parametras (V4): dešinė kolona (šaltiniai, ankstesnės paieškos)
   const SIDE_PARAM = { key: 'side', label: 'Dešinė kolona', type: 'radio', default: 'hide', options: [
     { id: 'hide', label: 'Paslėpta' },
@@ -715,6 +801,73 @@
       vote: 0,
       rewriteFlash: false, // V4: klausimas lauke pasikeitė (trumpai paryškinam)
       chat: { key: '', msgs: [], step: 0, typing: false, draft: '' },   // V4 · DI chatas
+      // ---------- V4 tab'ai ----------
+      TABS,
+      tabFit: 99,
+      tabMoreOpen: false,
+      get tabsShown() { return TABS.filter(t => (this.p.tabs || []).includes(t.id)); },
+      get tabsRow() {
+        const s = this.tabsShown; let row = s.slice(0, this.tabFit);
+        const act = s.find(t => this.tabActive(t));
+        if (act && !row.includes(act) && row.length) row = [...row.slice(0, -1), act];
+        return row;
+      },
+      get tabsMore() { const row = this.tabsRow; return this.tabsShown.filter(t => !row.includes(t)); },
+      tabActive(t) {
+        switch (t.id) {
+          case 'di': return this.mode === 'ai' && this.aiOnly;
+          case 'all': return this.mode === 'ai' && !this.aiOnly;
+          case 'list': return this.mode === 'classic';
+          case 'full': return this.chatFull;
+          default: return this.mode === t.id;
+        }
+      },
+      selectTab(t) {
+        if (t.id === 'full') return this.openChatFull();
+        const m = { di: 'ai', all: 'ai', list: 'classic' }[t.id] || t.id;
+        this.setMode(m, t.id === 'di');
+      },
+      // Kiek tab'ų telpa į juostą; likę rodomi „Daugiau ▾“ meniu
+      tabsMeasure() {
+        const bar = this.$refs.tabsBar, meas = this.$refs.tabsMeasure;
+        if (!bar || !meas || !bar.offsetParent) return;
+        const ws = [...meas.querySelectorAll('button')].map(b => b.offsetWidth);
+        const gap = 28, more = 96, avail = bar.clientWidth - 4;
+        let used = 0, fit = 0;
+        for (let i = 0; i < ws.length; i++) {
+          const need = used + (i ? gap : 0) + ws[i] + (i < ws.length - 1 ? gap + more : 0);
+          if (need > avail) break;
+          used += (i ? gap : 0) + ws[i]; fit = i + 1;
+        }
+        this.tabFit = Math.max(1, fit);
+      },
+      // ---------- Kompetencijų centras, Testai, Video, Failai ----------
+      COMP: window.COMPETENCIES,
+      COMP_ICONS: {
+        building: '<svg width="96" height="80" viewBox="0 0 96 80" fill="none" aria-hidden="true"><rect x="22" y="12" width="34" height="56" rx="2" fill="#cfe3e4" stroke="#6aa8ad" stroke-width="1.5"/><g fill="#fff"><rect x="28" y="20" width="7" height="7"/><rect x="40" y="20" width="7" height="7"/><rect x="28" y="32" width="7" height="7"/><rect x="40" y="32" width="7" height="7"/><rect x="28" y="44" width="7" height="7"/></g><rect x="34" y="56" width="10" height="12" fill="#9fc9cc"/><path d="M14 68h52" stroke="#6aa8ad" stroke-width="1.5"/><rect x="50" y="34" width="28" height="24" rx="3" fill="#fff" stroke="#6aa8ad" stroke-width="1.5"/><path d="M50 41h28" stroke="#6aa8ad" stroke-width="1.5"/><rect x="50" y="34" width="28" height="7" rx="3" fill="#f6e3ef"/><g fill="#cfe3e4"><rect x="55" y="45" width="4" height="3"/><rect x="62" y="45" width="4" height="3"/><rect x="69" y="45" width="4" height="3"/><rect x="55" y="51" width="4" height="3"/><rect x="62" y="51" width="4" height="3"/></g></svg>',
+        percent: '<svg width="96" height="80" viewBox="0 0 96 80" fill="none" aria-hidden="true"><path d="M36 8h26l12 12v44a3 3 0 0 1-3 3H36a3 3 0 0 1-3-3V11a3 3 0 0 1 3-3Z" fill="#fff" stroke="#6aa8ad" stroke-width="1.5"/><path d="M62 8v12h12" fill="#f6e3ef" stroke="#6aa8ad" stroke-width="1.5"/><text x="40" y="34" font-family="Open Sans, sans-serif" font-size="16" font-weight="700" fill="#9fc9cc">%</text><path d="M50 44h16M50 50h16M42 56h24" stroke="#cfe3e4" stroke-width="2" stroke-linecap="round"/><circle cx="34" cy="56" r="14" fill="#cfe3e4" stroke="#6aa8ad" stroke-width="1.5"/><path d="M20 56h28M34 42c-5 4-5 24 0 28M34 42c5 4 5 24 0 28M22 49h24M22 63h24" stroke="#6aa8ad" stroke-width="1.2"/></svg>',
+        people: '<svg width="96" height="80" viewBox="0 0 96 80" fill="none" aria-hidden="true"><rect x="16" y="20" width="44" height="46" rx="3" fill="#fff" stroke="#6aa8ad" stroke-width="1.5"/><circle cx="38" cy="36" r="8" fill="#cfe3e4" stroke="#6aa8ad" stroke-width="1.5"/><path d="M24 60c2-8 8-12 14-12s12 4 14 12" fill="#cfe3e4" stroke="#6aa8ad" stroke-width="1.5"/><circle cx="66" cy="46" r="15" fill="#fff" stroke="#6aa8ad" stroke-width="1.5"/><path d="M66 38v8l6 4" stroke="#6aa8ad" stroke-width="1.5" stroke-linecap="round"/><rect x="58" y="10" width="22" height="14" rx="3" fill="#f6e3ef" stroke="#6aa8ad" stroke-width="1.2"/><path d="M63 17h12" stroke="#6aa8ad" stroke-width="1.2" stroke-linecap="round"/></svg>',
+      },
+      ccSel: '', ccLevel: 'Visi lygiai', ccOpen: '', ccSaved: [],
+      get compMatch() { return this.COMP.filter(c => c.match.includes(this.sc.id)); },
+      get compList() {
+        const l = this.COMP.filter(c => !this.ccSel || c.id === this.ccSel);
+        return [...l.filter(c => c.match.includes(this.sc.id)), ...l.filter(c => !c.match.includes(this.sc.id))];
+      },
+      fileKind: 'Visi', fileFmt: [],
+      get isTyped() { return ['tests', 'video', 'files'].includes(this.mode); },
+      get typedList() {
+        const test = { tests: r => r.type === 'Testas', video: r => r.type === 'Renginio įrašas', files: r => !!r.file }[this.mode];
+        if (!test) return [];
+        const mine = new Set(this.sc.steps.flatMap(s => s.results));
+        let ids = Object.keys(this.R).filter(id => test(this.R[id]));
+        if (this.mode === 'files') ids = ids.filter(id => (this.fileKind === 'Visi' || this.R[id].kind === this.fileKind) && (!this.fileFmt.length || this.fileFmt.includes(this.R[id].file)));
+        return ids.sort((a, b) => (mine.has(b) - mine.has(a)) || this.R[b].date.localeCompare(this.R[a].date));
+      },
+      get typedCountText() {
+        const n = this.typedList.length;
+        return n + ' ' + ({ tests: ['testas', 'testai', 'testų'], video: ['vaizdo įrašas', 'vaizdo įrašai', 'vaizdo įrašų'], files: ['failas', 'failai', 'failų'] }[this.mode] || ['', '', ''])[(d => d === 0 || (n % 100 > 10 && n % 100 < 20) ? 2 : d === 1 ? 0 : 1)(n % 10)];
+      },
       scrolled: false,   // puslapis paslinktas (baltai viršutinei juostai rodom šešėlį)
       chatFull: false,   // V4 · DI pokalbis pilname ekrane
       pMode: 'item',
@@ -723,7 +876,7 @@
       // ---------- Versijos ----------
       VERSIONS: [
         { id: 'v2', label: 'V2 · Dešinė kolona', desc: 'Vienas laukas, „Kita…“ atsakymas, dešinėje eiga, šaltiniai, istorija', params: [ANSWERS_PARAM, FILTERS_PARAM, LOADER_PARAM, DOTS_PARAM] },
-        { id: 'v4', label: 'V4 · Kaip Google', desc: 'Susijusios paieškos tampa nauja paieška, grįžtama naršyklės Atgal. Tab\'ai: DI režimas · Viskas · Rezultatų sąrašas', params: [SIDE_PARAM, TOP_PARAM, AI_STYLE_PARAM, FILTERS_PARAM, LOADER_PARAM, DOTS_PARAM] },
+        { id: 'v4', label: 'V4 · Kaip Google', desc: 'Susijusios paieškos tampa nauja paieška, grįžtama naršyklės Atgal. Tab\'ai: DI režimas · Viskas · Rezultatų sąrašas', params: [TABS_PARAM, SIDE_PARAM, TOP_PARAM, AI_STYLE_PARAM, FILTERS_PARAM, LOADER_PARAM, DOTS_PARAM] },
       ],
       ver: (() => {
         const q = new URLSearchParams(location.search).get('v');
@@ -744,7 +897,8 @@
         if (v !== 'v4') { this.aiOnly = false; if (this.mode === 'chat') this.mode = 'ai'; }
         if (this.phase === 'results') { if (v === 'v4') this.query = this.activeQuery = this.queryFor(this.step); else this.query = this.activeQuery = this.origQuery; }
       },
-      initParams() { this.p = Object.fromEntries(this.verParams.map(g => [g.key, g.default])); },
+      tabGuard() { if (this.ver === 'v4' && this.p.tabs && !this.tabsShown.some(t => this.tabActive(t))) { const t = this.tabsShown[0]; if (t && t.id !== 'full') this.selectTab(t); } },
+      initParams() { this.p = Object.fromEntries(this.verParams.map(g => [g.key, Array.isArray(g.default) ? [...g.default] : g.default])); },
 
       mode: store.get('ai-paieska-mode') === 'classic' ? 'classic' : 'ai',
       aiOnly: false,     // V4 tab'as „Su AI“: tik AI atsakymas, be nuorodų
@@ -826,6 +980,7 @@
       },
       get baseCount() { return this.mode === 'ai' ? this.sc.steps[this.step].count : this.sc.classicCount; },
       get list() {
+        if (this.isTyped) return this.typedList;
         const l = this.baseList.filter(id => this.match(id));
         return this.sort === 'new' ? [...l].sort((a, b) => this.R[b].date.localeCompare(this.R[a].date)) : l;
       },

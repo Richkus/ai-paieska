@@ -415,3 +415,54 @@ body.is-chatfull { overflow: hidden; }
 
 /* V4, admin „Dešinė kolona: paslėpta“: lieka tik pagrindinė kolona */
 .v2.no-side, .v2.no-side.is-classic { grid-template-columns: minmax(0, 760px); max-width: calc(760px + var(--ms-gutter) * 2); }
+
+/* ==========================================================
+   V4 tab'ų juosta: matavimas ir „Daugiau ▾“ meniu (kaip Google)
+   ========================================================== */
+.tb { position: relative; flex-wrap: nowrap; white-space: nowrap; }
+.tb > button { flex: 0 0 auto; }
+.tb-ic { display: inline-flex; align-items: center; }
+.tb-measure { position: absolute; left: 0; top: 0; display: flex; gap: 28px; visibility: hidden; pointer-events: none; }
+.tb-measure button { flex: 0 0 auto; display: flex; align-items: center; gap: 6px; padding: 10px 0 12px; border: 0; background: none; font-size: 15px; font-weight: 600; }
+.tb-measure .tb-ic { width: 12px; }
+.tb-more { position: relative; flex: 0 0 auto; }
+.tb-more > button svg { color: var(--ms-muted); }
+.tb-menu { position: absolute; top: calc(100% + 4px); left: -8px; z-index: 40; display: grid; min-width: 220px; padding: 6px; border: 1px solid var(--ms-line); border-radius: 12px; background: #fff; box-shadow: 0 12px 32px rgba(15, 40, 42, .14); }
+.sr-modes .tb-menu button { justify-content: flex-start; padding: 9px 12px; border-radius: 8px; color: var(--ms-ink-soft); font-size: 14.5px; font-weight: 400; }
+.sr-modes .tb-menu button::after { display: none; }
+.sr-modes .tb-menu button:hover { background: var(--ms-surface-soft); color: var(--ms-ink); }
+.sr-modes .tb-menu button.is-on { color: var(--ms-ink); font-weight: 600; background: var(--ms-topbar); }
+
+/* Bendri pasirinkimo chip'ai (kompetencijos, failų tipai) */
+.cc-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.cc-chips button { height: 32px; padding: 0 13px; border: 1px solid var(--ms-line-strong); border-radius: 8px; background: #fff; color: var(--ms-sub); font-size: 13.5px; transition: background .15s, border-color .15s, color .15s; }
+.cc-chips button:hover { border-color: var(--ms-sidebar); color: var(--ms-ink); }
+.cc-chips button.is-on { border-color: var(--ms-teal-dark); background: var(--ms-teal-dark); color: #fff; }
+.cc-chips.is-level button.is-on { border-color: var(--ms-sidebar); background: var(--ms-topbar); color: var(--ms-teal-dark); font-weight: 600; }
+
+/* V4 · Kompetencijų centras */
+.cc-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; margin-bottom: 14px; }
+.cc-hint { margin: 0 0 18px; color: var(--ms-sub); font-size: 14px; }
+.cc-hint b { color: var(--ms-ink); font-weight: 600; }
+.cc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 18px; margin-bottom: 40px; }
+.cc-card { display: flex; flex-direction: column; align-items: center; padding: 8px 8px 22px; border: 1px solid var(--ms-line); border-radius: 12px; background: #fff; text-align: center; transition: box-shadow .2s, border-color .2s; }
+.cc-card:hover { border-color: var(--ms-line-strong); box-shadow: 0 8px 24px rgba(15, 40, 42, .08); }
+.cc-card.is-match { border-color: var(--ms-sidebar); }
+.cc-art { position: relative; display: grid; place-items: center; align-self: stretch; height: 150px; margin-bottom: 18px; border-radius: 8px; background-color: #f3f7f7; background-image: linear-gradient(#e3ecec 1px, transparent 1px), linear-gradient(90deg, #e3ecec 1px, transparent 1px); background-size: 46px 46px; background-position: -1px -1px; }
+.cc-badge { position: absolute; top: 10px; left: 10px; padding: 3px 8px; border-radius: 6px; background: #fff; color: var(--ms-teal-dark); font-size: 11.5px; font-weight: 600; box-shadow: 0 1px 3px rgba(15, 40, 42, .1); }
+.cc-save { position: absolute; top: 10px; right: 10px; display: grid; place-items: center; width: 30px; height: 30px; padding: 0; border: 1px solid var(--ms-line-strong); border-radius: 6px; background: #fff; color: var(--ms-teal-dark); }
+.cc-card h3 { margin: 0 14px 6px; color: var(--ms-ink); font-size: 17px; font-weight: 700; line-height: 1.35; }
+.cc-card p { margin: 0 14px 6px; color: var(--ms-sub); font-size: 13.5px; line-height: 1.55; }
+.cc-card small { margin-bottom: 16px; color: var(--ms-muted); font-size: 12.5px; }
+.cc-go { height: 40px; padding: 0 22px; border: 0; border-radius: 6px; background: #53a9b1; color: #fff; font-size: 14px; font-weight: 600; transition: background .15s; }
+.cc-go:hover { background: var(--ms-teal-dark); }
+.cc-mods { align-self: stretch; margin: 14px 8px 0; padding: 0; list-style: none; text-align: left; }
+.cc-mods li { display: flex; gap: 8px; padding: 9px 6px; border-top: 1px solid var(--ms-line); color: var(--ms-ink); font-size: 14px; }
+.cc-mods li span:first-child { color: var(--ms-muted); }
+.cc-mods li em { margin-left: auto; color: var(--ms-link); font-style: normal; font-size: 13px; }
+
+/* V4 · Testai, Video, Failai: antraštė virš sąrašo */
+.tl { display: grid; gap: 12px; padding-bottom: 14px; border-bottom: 1px solid var(--ms-line); }
+.tl-count { margin: 0; color: var(--ms-ink); font-size: 16px; font-weight: 600; }
+.tl-row { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 16px; }
+.sr-file { margin-left: 6px; padding: 1px 6px; border-radius: 4px; background: var(--ms-pill); color: var(--ms-sub); font-style: normal; font-size: 11px; font-weight: 700; letter-spacing: .03em; }

@@ -765,8 +765,9 @@
     { id: 'list', label: 'Tekstas' },
     { id: 'tests', label: 'Testai' },
     { id: 'files', label: 'Failai atsisiuntimui' },
+    { id: 'plain', label: 'Tik rezultatai' },
   ];
-  const TABS_PARAM = { key: 'tabs', label: 'Tab\'ai juostoje', type: 'checks', default: ['chat', 'all', 'comp', 'video', 'list', 'tests', 'files'],
+  const TABS_PARAM = { key: 'tabs', label: 'Tab\'ai juostoje', type: 'checks', default: ['chat', 'all', 'comp', 'video', 'list', 'tests', 'files', 'plain'],
     options: TABS.map(t => ({ id: t.id, label: t.label })) };
   // Admin parametras (V4): dešinė kolona (šaltiniai, ankstesnės paieškos)
   const SIDE_PARAM = { key: 'side', label: 'Dešinė kolona', type: 'radio', default: 'hide', options: [
@@ -937,7 +938,7 @@
       fbOpen: false,
       get fbCollapsible() { return this.p.filters === 'collapsed' && !this.fbStack; },
       // V4 „Rezultatų sąrašas“: filtrai visada išskleisti, po rezultatų skaičiumi
-      get fbStack() { return this.ver === 'v4' && this.mode === 'classic'; },
+      get fbStack() { return ['classic', 'plain'].includes(this.mode); },
       get activeFilterCount() { return this.FKEYS.reduce((n, k) => n + this.vals(k).length, 0); },
       get verParams() { return (this.VERSIONS.find(v => v.id === this.ver) || {}).params || []; },
       setVer(v) {
@@ -1030,10 +1031,10 @@
         if (this.mode === 'ai') return this.sc.steps[this.step].results;
         const all = [...new Set(this.sc.steps.flatMap(s => s.results))];
         // V4 „Tekstas“: tik tekstinė medžiaga (situacijos, konsultacijos, naujienos), be video, testų ir failų
-        if (this.ver === 'v4') return all.filter(id => this.R[id].fmt === 'Tekstas');
+        if (this.mode === 'classic') return all.filter(id => this.R[id].fmt === 'Tekstas');
         return all.sort((a, b) => (this.R[b].type === 'Testas') - (this.R[a].type === 'Testas'));
       },
-      get baseCount() { return this.mode === 'ai' ? this.sc.steps[this.step].count : this.ver === 'v4' ? Math.round(this.sc.classicCount * .6) : this.sc.classicCount; },
+      get baseCount() { return this.mode === 'ai' ? this.sc.steps[this.step].count : this.mode === 'classic' ? Math.round(this.sc.classicCount * .6) : this.sc.classicCount; },
       get list() {
         if (this.isTyped) return this.typedList;
         if (this.mode === 'comp') return this.compResults;

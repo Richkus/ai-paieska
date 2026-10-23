@@ -7,12 +7,12 @@
 <title>AI paieška: prototipas</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400..800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/shell.css?v=1024b">
-<link rel="stylesheet" href="assets/css/search.css?v=1024b">
-<link rel="stylesheet" href="assets/css/filters.css?v=1024b">
-<link rel="stylesheet" href="assets/css/search-v2.css?v=1024b">
-<link rel="stylesheet" href="assets/css/loader-ai.css?v=1024b">
-<link rel="stylesheet" href="assets/css/admin.css?v=1024b">
+<link rel="stylesheet" href="assets/css/shell.css?v=1024c">
+<link rel="stylesheet" href="assets/css/search.css?v=1024c">
+<link rel="stylesheet" href="assets/css/filters.css?v=1024c">
+<link rel="stylesheet" href="assets/css/search-v2.css?v=1024c">
+<link rel="stylesheet" href="assets/css/loader-ai.css?v=1024c">
+<link rel="stylesheet" href="assets/css/admin.css?v=1024c">
 <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.14.1/dist/cdn.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
 </head>
@@ -173,7 +173,7 @@
                         <template x-if="m.card.summary">
                           <div class="a2-sum">
                 <template x-for="(x, i) in m.card.summary" :key="i">
-                  <p><span x-text="x.t"></span> <button type="button" class="a2-cite is-src" :class="{ 'is-pro': R[x.src].pro }" @click="pvClose(); openPanel(x.src, true)" @mouseenter="pvEnter(x.src, $el)" @mouseleave="pvLeave()" @focus="pvEnter(x.src, $el)" @blur="pvLeave()" :aria-label="'Šaltinis: ' + R[x.src].title"><svg width="12" height="12" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg><span x-text="R[x.src].type + ' · ' + R[x.src].date"></span></button></p>
+                  <p><span x-text="x.t"></span> <button type="button" class="cite-n" :class="{ 'is-pro': R[x.src].pro }" @click="pvClose(); openPanel(x.src, true)" @mouseenter="pvEnter(x.src, $el)" @mouseleave="pvLeave()" @focus="pvEnter(x.src, $el)" @blur="pvLeave()" :aria-label="'Šaltinis: ' + R[x.src].title"><span x-text="citeNo(m.card.summary, x.src)"></span></button></p>
                 </template>
               </div>
                         </template>
@@ -321,7 +321,7 @@
             <template x-if="ai.kind === 'quotes' && ai.summary">
               <div class="a2-sum">
                 <template x-for="(x, i) in ai.summary" :key="i">
-                  <p><span x-text="x.t"></span> <button type="button" class="a2-cite is-src" :class="{ 'is-pro': R[x.src].pro }" @click="pvClose(); openPanel(x.src, true)" @mouseenter="pvEnter(x.src, $el)" @mouseleave="pvLeave()" @focus="pvEnter(x.src, $el)" @blur="pvLeave()" :aria-label="'Šaltinis: ' + R[x.src].title"><svg width="12" height="12" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg><span x-text="R[x.src].type + ' · ' + R[x.src].date"></span></button></p>
+                  <p><span x-text="x.t"></span> <button type="button" class="cite-n" :class="{ 'is-pro': R[x.src].pro }" @click="pvClose(); openPanel(x.src, true)" @mouseenter="pvEnter(x.src, $el)" @mouseleave="pvLeave()" @focus="pvEnter(x.src, $el)" @blur="pvLeave()" :aria-label="'Šaltinis: ' + R[x.src].title"><span x-text="citeNo(ai.summary, x.src)"></span></button></p>
                 </template>
               </div>
             </template>
@@ -750,9 +750,9 @@
   .transition-pn { transition: transform .32s var(--ms-ease); }
   .pn-off { transform: translateX(100%); }
 </style>
-<script src="assets/js/shell.js?v=1024b"></script>
-<script src="assets/js/data.js?v=1024b"></script>
-<script src="assets/js/loader.js?v=1024b"></script>
+<script src="assets/js/shell.js?v=1024c"></script>
+<script src="assets/js/data.js?v=1024c"></script>
+<script src="assets/js/loader.js?v=1024c"></script>
 <script>
   // Admin parametras: filtrai po vienu mygtuku „Filtrai“ arba visada matomi
   // V4 tab'ai. icon: ai | chat. Kurie rodomi, valdoma Admin'e (TABS_PARAM)
@@ -1285,6 +1285,8 @@
           if (last && last.getBoundingClientRect().bottom > innerHeight - 130) last.scrollIntoView({ behavior: 'smooth', block: 'end' });
         });
       },
+      // Šaltinio numeris apibendrinime (tas pats šaltinis = tas pats numeris)
+      citeNo(list, src) { return [...new Set(list.map(x => x.src))].indexOf(src) + 1; },
       openFromAsk(id) { this.openPanel(id); this.pBack = true; },
       backToAsk() { this.pBack = false; this.pMode = 'ask'; },
       askAdd(label) {

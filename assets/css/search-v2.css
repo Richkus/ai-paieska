@@ -583,3 +583,10 @@ body.is-chatfull { overflow: hidden; }
 .home-new { display: inline-block; margin-right: 6px; padding: 2px 7px; border-radius: 5px; background: linear-gradient(90deg, #ff7f7d, #b85399); color: #fff; font-size: 11px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; vertical-align: 2px; }
 .home-tip .home-new { color: #fff; }
 .ch-body > .ch-after { margin-top: 20px; }
+
+/* Šaltinio nuoroda apibendrinime: mažas numeris (kaip ChatGPT / Perplexity), užvedus pelę peržiūra, paspaudus citata */
+.cite-n { display: inline-grid; place-items: center; min-width: 18px; height: 18px; margin-left: 3px; padding: 0 5px; border: 0; border-radius: 9px; background: var(--ms-pill); color: var(--ms-sub); font-size: 11px; font-weight: 700; line-height: 1; vertical-align: 2px; font-variant-numeric: tabular-nums; transition: background .15s, color .15s; }
+.cite-n:hover, .cite-n:focus-visible { background: var(--ms-teal-dark); color: #fff; outline: none; }
+.cite-n.is-pro { background: #f6e3ef; color: var(--ms-pro); }
+.a2.is-card .cite-n { background: #fff; box-shadow: inset 0 0 0 1px var(--ms-line-strong); }
+.a2.is-card .cite-n:hover { background: var(--ms-teal-dark); box-shadow: none; }

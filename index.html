@@ -777,6 +777,7 @@
   ] };
   // V4 tab'ai. icon: ai | chat. Kurie rodomi, valdoma Admin'e (TABS_PARAM)
   const TABS = [
+    { id: 'chat', label: 'Atsakymas su DI', icon: 'ai' },
     { id: 'di', label: 'DI režimas', icon: 'ai' },
     { id: 'all', label: 'Visi rezultatai' },
     { id: 'comp', label: 'Kompetencijų centras' },
@@ -784,10 +785,9 @@
     { id: 'list', label: 'Tekstas' },
     { id: 'tests', label: 'Testai' },
     { id: 'files', label: 'Failai atsisiuntimui' },
-    { id: 'chat', label: 'DI chatas', icon: 'chat' },
     { id: 'full', label: 'DI pokalbis', icon: 'ai' },
   ];
-  const TABS_PARAM = { key: 'tabs', label: 'Tab\'ai juostoje', type: 'checks', default: ['di', 'all', 'comp', 'video', 'list', 'tests', 'files'],
+  const TABS_PARAM = { key: 'tabs', label: 'Tab\'ai juostoje', type: 'checks', default: ['chat', 'all', 'comp', 'video', 'list', 'tests', 'files'],
     options: TABS.map(t => ({ id: t.id, label: t.label })) };
   // Admin parametras (V4): dešinė kolona (šaltiniai, ankstesnės paieškos)
   const SIDE_PARAM = { key: 'side', label: 'Dešinė kolona', type: 'radio', default: 'hide', options: [

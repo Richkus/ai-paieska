@@ -8,7 +8,8 @@
    `query`, `submitSearch()`, `suggestOpen`, `showSuggest`, `suggestions`,
    `rewriteFlash` (paryškina lauką, kai klausimas pakeičiamas pasirinkus kryptį),
    `searchNote` (užuomina po lauku, pvz. kad nauja paieška pradės naują pokalbį),
-   `searchGlow` (kartą po įkėlimo aplink lauką prabėga DI spalvų gradientas).
+   `searchGlow` (kartą po įkėlimo aplink lauką prabėga DI spalvų gradientas),
+   `recentSearches` (ankstesnės paieškos dropdown'e).
    ========================================================== */
 (function () {
   const IMG = new URL('../img/', document.currentScript.src).href;
@@ -62,6 +63,16 @@
           <button type="button" @click="query = s; suggestOpen = false; $refs.search.blur(); submitSearch()">
             ${img('ic-padidke.svg', 13, 13)}<span x-text="s"></span>
           </button>
+        </template>
+        <template x-if="recentSearches && recentSearches.length">
+          <div class="ms-suggest-group">
+            <p>Ankstesnės paieškos</p>
+            <template x-for="s in recentSearches" :key="s">
+              <button type="button" @click="query = s; suggestOpen = false; $refs.search.blur(); submitSearch()">
+                <svg class="ms-suggest-ic" width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.2" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 4.6V8l2.4 1.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span x-text="s"></span>
+              </button>
+            </template>
+          </div>
         </template>
       </div>
     </form>

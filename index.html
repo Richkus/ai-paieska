@@ -7,12 +7,12 @@
 <title>AI paieška: prototipas</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400..800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/shell.css?v=1024d">
-<link rel="stylesheet" href="assets/css/search.css?v=1024d">
-<link rel="stylesheet" href="assets/css/filters.css?v=1024d">
-<link rel="stylesheet" href="assets/css/search-v2.css?v=1024d">
-<link rel="stylesheet" href="assets/css/loader-ai.css?v=1024d">
-<link rel="stylesheet" href="assets/css/admin.css?v=1024d">
+<link rel="stylesheet" href="assets/css/shell.css?v=1024e">
+<link rel="stylesheet" href="assets/css/search.css?v=1024e">
+<link rel="stylesheet" href="assets/css/filters.css?v=1024e">
+<link rel="stylesheet" href="assets/css/search-v2.css?v=1024e">
+<link rel="stylesheet" href="assets/css/loader-ai.css?v=1024e">
+<link rel="stylesheet" href="assets/css/admin.css?v=1024e">
 <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.14.1/dist/cdn.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
 </head>
@@ -765,9 +765,9 @@
   .transition-pn { transition: transform .32s var(--ms-ease); }
   .pn-off { transform: translateX(100%); }
 </style>
-<script src="assets/js/shell.js?v=1024d"></script>
-<script src="assets/js/data.js?v=1024d"></script>
-<script src="assets/js/loader.js?v=1024d"></script>
+<script src="assets/js/shell.js?v=1024e"></script>
+<script src="assets/js/data.js?v=1024e"></script>
+<script src="assets/js/loader.js?v=1024e"></script>
 <script>
   // Admin parametras: filtrai po vienu mygtuku „Filtrai“ arba visada matomi
   // V4 tab'ai. icon: ai | chat. Kurie rodomi, valdoma Admin'e (TABS_PARAM)
@@ -1012,6 +1012,11 @@
         return (this.ai.chips || []).map(label => ({ label }));
       },
       get related() { return this.ai.kind === 'empty' ? (this.ai.chips || []) : (this.sc.steps[this.step].related || []); },
+      // Ankstesnės paieškos dropdown'e: tikros šios sesijos paieškos, papildytos pavyzdinėmis
+      get recentSearches() {
+        const real = this.history.map(h => h.query).filter(q => q && !this.suggestions.includes(q));
+        return [...new Set([...real, 'Atostoginių skaičiavimas 2026', 'GPM deklaracija už 2025 metus', 'Ilgalaikio turto nusidėvėjimas', 'pvm sąskaita faktūra'])].slice(0, 4);
+      },
       get suggestions() { return this.S.filter(s => !['nera', 'mazai'].includes(s.id)).map(s => s.query); },
       get showSuggest() { return this.phase === 'start' || !this.query.trim(); },
       get lastAnswer() {

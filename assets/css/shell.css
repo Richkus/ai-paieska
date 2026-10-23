@@ -154,3 +154,5 @@ img { display: block; }
 .ms-search-go:hover { filter: brightness(1.05); box-shadow: 0 3px 10px rgba(184, 83, 153, .4); transform: scale(1.04); }
 .ms-search-go:active { transform: scale(.96); }
 .ms-search-clear { margin-right: 6px; }
+.ms-suggest-group { margin-top: 4px; padding-top: 4px; border-top: 1px solid var(--ms-line); }
+.ms-suggest-ic { flex: 0 0 auto; color: #8aa3a6; }

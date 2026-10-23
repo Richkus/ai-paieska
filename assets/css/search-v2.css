@@ -670,3 +670,4 @@ body.is-chatfull { overflow: hidden; }
 .ak-info p { margin: 0; color: var(--ms-ink); font-size: 15px; line-height: 1.55; }
 .ak-info b { font-weight: 700; }
 .ak-foot { justify-content: flex-end; }
+.tb-more { margin-left: auto; } /* ⋯ visada dešiniajame krašte */

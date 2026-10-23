@@ -118,8 +118,14 @@
 .home-card { display: flex; flex-direction: column; gap: 6px; padding: 0 0 18px; border: 1px solid var(--ms-line); border-radius: 12px; overflow: hidden; background: #fff; color: inherit; text-decoration: none; transition: border-color .18s var(--ms-ease), box-shadow .18s var(--ms-ease), transform .18s var(--ms-ease); }
 .home-card:hover { border-color: var(--ms-line-strong); box-shadow: 0 6px 18px rgba(15, 83, 84, .08); transform: translateY(-2px); }
 .hc-img { display: block; margin-bottom: 10px; aspect-ratio: 16 / 9; overflow: hidden; border-bottom: 1px solid var(--ms-line); }
-.hc-img svg { display: block; width: 100%; height: 100%; transition: transform .35s var(--ms-ease); }
-.home-card:hover .hc-img svg { transform: scale(1.03); }
+.hc-img { background-size: 140% 140%; background-position: 0% 0%; transition: background-position .6s var(--ms-ease); }
+.home-card:hover .hc-img { background-position: 100% 100%; }
+.hc-g1 { background-image: radial-gradient(circle at 20% 25%, #f6dfe9 0, transparent 55%), radial-gradient(circle at 85% 80%, #cfe6e6 0, transparent 60%), linear-gradient(135deg, #f4f1f3, #e4eef0); }
+.hc-g2 { background-image: radial-gradient(circle at 80% 20%, #bcd8d6 0, transparent 55%), radial-gradient(circle at 15% 85%, #e6d9ec 0, transparent 60%), linear-gradient(135deg, #a9c7c5, #d5e6e4); }
+.hc-g3 { background-image: radial-gradient(circle at 25% 75%, #fde3d8 0, transparent 55%), radial-gradient(circle at 80% 25%, #d6ecec 0, transparent 60%), linear-gradient(135deg, #f7efe9, #e2efef); }
+.hc-g4 { background-image: radial-gradient(circle at 75% 70%, #9fc6c3 0, transparent 55%), radial-gradient(circle at 20% 20%, #dcefee 0, transparent 60%), linear-gradient(135deg, #c6dedc, #8fb7b4); }
+.hc-g5 { background-image: radial-gradient(circle at 30% 30%, #e9e2f3 0, transparent 55%), radial-gradient(circle at 80% 80%, #f4dbe6 0, transparent 60%), linear-gradient(135deg, #eef0f7, #f3e8ee); }
+.hc-g6 { background-image: radial-gradient(circle at 70% 25%, #ffd9d4 0, transparent 50%), radial-gradient(circle at 20% 80%, #c4e0de 0, transparent 60%), linear-gradient(135deg, #e3efee, #f5e6e3); }
 .hc-meta { padding: 0 18px; color: var(--ms-muted); font-size: 12.5px; letter-spacing: .3px; text-transform: uppercase; }
 .hc-title { padding: 0 18px; color: var(--ms-ink); font-size: 16px; font-weight: 600; line-height: 1.4; transition: color .15s; }
 .home-card:hover .hc-title { color: var(--ms-link); }

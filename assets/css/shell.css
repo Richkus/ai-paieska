@@ -169,3 +169,9 @@ img { display: block; }
 .ms-tip-act button:hover { background: rgba(255, 255, 255, .2); }
 .ms-tip-act .is-main { background: #fff; color: #1f3336; }
 .ms-tip-act .is-main:hover { background: #eef5f5; }
+
+/* × išvalymo mygtukas matomas tik užvedus pelę ant lauko arba jame rašant; liečiamuose ekranuose visada */
+@media (hover: hover) {
+  .ms-search-clear { opacity: 0; transition: opacity .15s, background .15s; }
+  .ms-search:hover .ms-search-clear, .ms-search:focus-within .ms-search-clear { opacity: 1; }
+}

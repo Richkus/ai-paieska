@@ -197,3 +197,4 @@ img { display: block; }
 .ms-search:not(:focus-within) .ms-search-go.is-calm svg path:last-of-type { fill: #c98aa8; }
 .ms-search:not(:focus-within) .ms-search-go.is-calm:hover { filter: none; transform: none; }
 .ms-search:not(:focus-within) .ms-search-go.is-calm:hover::before { background: #dfe7e7; }
+.ms-nav--main svg { flex: 0 0 auto; color: var(--ms-teal-ink); }

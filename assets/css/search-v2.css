@@ -662,3 +662,4 @@ body.is-chatfull { overflow: hidden; }
 .sr-modes .tb-more > .tb-dots:hover, .sr-modes .tb-more > .tb-dots[aria-expanded="true"] { background: var(--ms-surface-soft); color: var(--ms-ink); }
 .tb-more { align-self: center; }
 .tb-menu { left: auto; right: -4px; }
+.a2-gist + .a2-gist { margin-top: -6px; }

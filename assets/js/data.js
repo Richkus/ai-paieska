@@ -394,7 +394,10 @@ window.COMPETENCIES = [
   // Bendra mintis vienu-dviem sakiniais (Admin variantas „Santrauka + citatos“)
   const gist = {
     savaitgalis: [
-      'Taip, darbuotojo prašymu vietoj padidinto apmokėjimo už darbą poilsio dieną galima suteikti kitą poilsio dieną. Svarbiausia prašymą įforminti raštu ir abi dienas pažymėti žiniaraštyje.',
+      'Taip, darbuotojo prašymu vietoj padidinto apmokėjimo už darbą poilsio dieną galima suteikti kitą poilsio dieną. Svarbiausia prašymą įforminti raštu ir abi dienas pažymėti žiniaraštyje.\n\n' +
+      'Pirmiausia verta pasitikrinti, ar šeštadienis nebuvo numatytas darbuotojo darbo grafike. Jei grafike jo nebuvo, tai darbas poilsio dieną, už kurį darbuotojas gali rinktis: padidintą apmokėjimą arba kitą poilsio dieną. Jei taikoma suminė darbo laiko apskaita ir šeštadienis buvo grafike, tai įprasta darbo diena ir papildomos kompensacijos nereikia.\n\n' +
+      'Laisvą dieną reikėtų suteikti per protingą laiką, dažniausiai artimiausiais mėnesiais. Prašyme nurodoma, kurią dieną dirbta ir kada norima laisvos dienos, o darbdavys tai patvirtina įsakymu ar kitu vidiniu dokumentu.\n\n' +
+      'Dažniausia klaida: laisva diena suteikiama, bet žiniaraštyje nepažymima, už kurią poilsio dieną ji suteikta. Tikrinimo metu tada sunku įrodyti, kad darbas poilsio dieną buvo kompensuotas.',
       'Kai šeštadienis nebuvo grafike, darbuotojas renkasi tarp padidinto apmokėjimo ir laisvos dienos. Prašyme nurodomos abi datos, o žiniaraštyje abi dienos pažymimos.',
       'Žiniaraštyje pažymimos abi dienos: dirbta poilsio diena ir vėliau suteikta laisva diena.',
     ],

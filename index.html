@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="assets/css/filters.css?v=1025k">
 <link rel="stylesheet" href="assets/css/search-v2.css?v=1025v">
 <link rel="stylesheet" href="assets/css/loader-ai.css?v=1025k">
-<link rel="stylesheet" href="assets/css/admin.css?v=1025v">
+<link rel="stylesheet" href="assets/css/admin.css?v=1025w">
 <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.14.1/dist/cdn.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
 </head>
@@ -891,8 +891,8 @@
   </aside>
 
   <!-- Prototipo admin (tik prototipui) -->
-  <div class="ms-admin" @keydown.escape.window="adminOpen = false">
-    <div class="ms-admin-panel" x-show="adminOpen" x-cloak x-transition.opacity.scale.95.origin.bottom.left.duration.150ms @click.outside="adminOpen = false">
+  <div class="ms-admin" @keydown.escape.window="adminSub ? adminSub = null : adminOpen = false" @click.outside="adminOpen = false; adminSub = null" x-effect="if (!adminOpen) adminSub = null">
+    <div class="ms-admin-panel" x-show="adminOpen" x-cloak x-transition.opacity.scale.95.origin.bottom.left.duration.150ms @scroll="adminSub = null">
       <div class="ms-admin-title">Prototipo nustatymai</div>
       <!-- Scenarijus: ką paieška rado. „Konkreti situacija“ turi du santraukos rodymo būdus -->
       <div class="ms-admin-group">Scenarijus</div>
@@ -903,23 +903,15 @@
       <template x-for="v in VERSIONS.length > 1 ? VERSIONS : []" :key="v.id">
         <label class="ms-admin-opt" :title="v.desc"><input type="radio" name="ms-ver" :checked="ver === v.id" @change="setVer(v.id)"><span x-text="v.label"></span></label>
       </template>
-      <!-- Tik aktyvios versijos parametrai -->
+      <!-- Tik aktyvios versijos parametrai: kiekvienas punktas atidaro antro lygio meniu į šoną -->
+      <div class="ms-admin-group" x-show="verParams.length">Nustatymai</div>
       <template x-for="g in verParams" :key="g.key">
         <div>
-          <div class="ms-admin-group" x-text="g.label"></div>
-          <template x-if="g.type === 'radio'">
-            <div>
-              <template x-for="o in g.options" :key="o.id">
-                <label class="ms-admin-opt"><input type="radio" :name="'ms-p-' + g.key" :checked="p[g.key] === o.id" @change="p[g.key] = o.id"><span x-text="o.label"></span></label>
-              </template>
-            </div>
-          </template>
-          <template x-if="g.type === 'checks'">
-            <div>
-              <template x-for="o in g.options" :key="o.id">
-                <label class="ms-admin-opt"><input type="checkbox" :checked="(p[g.key] || []).includes(o.id)" @change="p[g.key] = $event.target.checked ? g.options.map(x => x.id).filter(id => id === o.id || (p[g.key] || []).includes(id)) : p[g.key].filter(x => x !== o.id)"><span x-text="o.label"></span></label>
-              </template>
-            </div>
+          <template x-if="g.type !== 'check'">
+            <button type="button" class="ms-admin-row" :class="{ 'is-open': adminSub && adminSub.key === g.key }" @click="adminSubToggle(g, $el)">
+              <span x-text="g.label"></span><small x-text="adminSummary(g)"></small>
+              <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><path d="M3.5 2 6.5 5l-3 3" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
           </template>
           <template x-if="g.type === 'check'">
             <label class="ms-admin-opt"><input type="checkbox" :checked="p[g.key]" @change="p[g.key] = $event.target.checked"><span x-text="g.text"></span></label>
@@ -928,6 +920,25 @@
       </template>
       <button type="button" class="ms-admin-reset" @click="resetDemo()">Atstatyti ir grįžti į pradžią</button>
     </div>
+    <template x-for="g in (adminOpen && adminSub ? verParams.filter(x => x.key === adminSub.key) : [])" :key="g.key">
+      <div class="ms-admin-sub" :style="`top:${adminSub.top}px; left:${adminSub.left}px`">
+        <div class="ms-admin-title" x-text="g.label"></div>
+        <template x-if="g.type === 'radio'">
+          <div>
+            <template x-for="o in g.options" :key="o.id">
+              <label class="ms-admin-opt"><input type="radio" :name="'ms-p-' + g.key" :checked="p[g.key] === o.id" @change="p[g.key] = o.id"><span x-text="o.label"></span></label>
+            </template>
+          </div>
+        </template>
+        <template x-if="g.type === 'checks'">
+          <div>
+            <template x-for="o in g.options" :key="o.id">
+              <label class="ms-admin-opt"><input type="checkbox" :checked="(p[g.key] || []).includes(o.id)" @change="p[g.key] = $event.target.checked ? g.options.map(x => x.id).filter(id => id === o.id || (p[g.key] || []).includes(id)) : p[g.key].filter(x => x !== o.id)"><span x-text="o.label"></span></label>
+            </template>
+          </div>
+        </template>
+      </div>
+    </template>
     <button type="button" class="ms-admin-btn" @click="adminOpen = !adminOpen" :aria-expanded="adminOpen" aria-label="Prototipo nustatymai">
       <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M2 4h7M13 4h1M2 12h1M7 12h7"/><circle cx="11" cy="4" r="2"/><circle cx="5" cy="12" r="2"/></svg>
       <span>Admin</span>
@@ -1180,6 +1191,19 @@
       // V4 „Rezultatų sąrašas“: filtrai visada išskleisti, po rezultatų skaičiumi
       get fbStack() { return ['classic', 'plain'].includes(this.mode); },
       get activeFilterCount() { return this.FKEYS.reduce((n, k) => n + this.vals(k).length, 0); },
+      adminSub: null,
+      adminSubToggle(g, el) {
+        if (this.adminSub && this.adminSub.key === g.key) { this.adminSub = null; return; }
+        const r = el.getBoundingClientRect(), panel = el.closest('.ms-admin-panel').getBoundingClientRect();
+        const h = 40 + (g.options || []).length * 28;
+        this.adminSub = { key: g.key, left: panel.right + 6, top: Math.max(12, Math.min(r.top - 6, innerHeight - h - 12)) };
+      },
+      adminSummary(g) {
+        const v = this.p[g.key];
+        if (g.type === 'checks') return (v || []).length + ' iš ' + g.options.length;
+        const o = g.options.find(x => x.id === v);
+        return o ? o.label.replace(/\s*\(.*\)$/, '') : '';
+      },
       get verParams() { return (this.VERSIONS.find(v => v.id === this.ver) || {}).params || []; },
       setVer(v) {
         this.ver = v; store.set('ai-paieska-ver', v);

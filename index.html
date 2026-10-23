@@ -416,7 +416,7 @@
           <!-- Filtrai vienoje eilutėje; jei netelpa, slenkami horizontaliai (kraštuose šešėlis ir rodyklės) -->
           <div class="fb-track-wrap" :class="{ 'can-l': fbL, 'can-r': fbR }" @resize.window.debounce.100ms="fbEdges()">
           <div class="fb-track" x-ref="fbTrack" @scroll.passive="fbEdges(); fbPopClose()" x-effect="fbOpen; fbCollapsible; mode; $nextTick(() => fbEdges())">
-          <template x-for="k in FKEYS" :key="k">
+          <template x-for="k in fbKeys" :key="k">
             <div class="fb-item" @click.outside="pop === k && (pop = '')">
               <button type="button" class="fb-pill" :class="{ 'is-set': has(k) }" :aria-expanded="pop === k" @click="togglePop(k, $el)" :title="isAi(k) ? 'Pritaikė AI pagal jūsų klausimą' : ''">
                 <img x-show="isAi(k)" class="ai-ic is-ai" src="assets/img/ai.svg" width="11" height="19" alt="" aria-hidden="true">
@@ -1047,6 +1047,8 @@
       // ---------- Filtrai ----------
       F: window.FILTERS,
       FKEYS: ['rub', 'tema', 'data', 'fmt'],
+      // „Tekstas“ tab'e formato filtro nereikia (ten tik tekstinė medžiaga)
+      get fbKeys() { return this.mode === 'classic' ? this.FKEYS.filter(k => k !== 'fmt') : this.FKEYS; },
       f: { rub: [], tema: [], fmt: [], data: '' },
       aiF: [],           // AI pritaikyti filtrai: 'tema:Komandiruotės'
       pop: '',
@@ -1133,7 +1135,7 @@
         if (this.ver === 'v4') history.pushState({ ph: 'start' }, '');
         window.scrollTo({ top: 0, behavior: 'smooth' });
       },
-      setMode(m, aiOnly = false) { this.mode = m; this.aiOnly = aiOnly; store.set('ai-paieska-mode', m); this.applyAi(); },
+      setMode(m, aiOnly = false) { this.mode = m; this.aiOnly = aiOnly; if (m === 'classic') this.f.fmt = []; store.set('ai-paieska-mode', m); this.applyAi(); },
       loadScenario(i) {
         this.scIdx = i; this.step = 0; this.trail = []; this.vote = 0; this.own = '';
         this.query = this.activeQuery = this.origQuery = this.sc.query; this.closePanel(); this.other = false;

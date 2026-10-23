@@ -816,3 +816,16 @@ body.is-chatmodal { overflow: hidden; }
 .a2-vote.is-on { background: none; }
 .a2-vote.is-calm, .a2-vote.is-calm:hover { background: none; transition: background .4s, color .4s; }
 .a2-vote.is-calm:not(.is-on) { color: var(--ms-muted); }
+
+/* Išoriniai šaltiniai: kitos spalvos numeriai ir neryški šaltinių juosta po santrauka */
+.cite-n.is-ext { background: #f6e2dd; color: #b0564c; }
+.cite-n.is-ext:hover, .cite-n.is-ext:focus-visible { background: #c4675c; color: #fff; }
+.src-pills { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 0; }
+.src-pill { display: inline-flex; align-items: center; gap: 7px; height: 30px; padding: 0 11px; border: 1px solid var(--ms-line); border-radius: 8px; background: #fff; color: var(--ms-sub); font-size: 13px; text-decoration: none; transition: border-color .15s, color .15s; }
+.src-pill i { width: 7px; height: 7px; border-radius: 50%; background: var(--ms-teal); }
+.src-pill.is-ext i { background: #d9796e; }
+.src-pill svg { color: var(--ms-muted); }
+a.src-pill[href]:hover { border-color: var(--ms-line-strong); color: var(--ms-ink); }
+a.src-pill:not([href]) { cursor: default; }
+.pv-mini-meta.is-ext { color: #b0564c; font-weight: 600; text-transform: none; }
+.pv-ext-dot { width: 6px; height: 6px; border-radius: 50%; background: #d9796e; }

@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="assets/css/shell.css?v=1025s">
 <link rel="stylesheet" href="assets/css/search.css?v=1025k">
 <link rel="stylesheet" href="assets/css/filters.css?v=1025k">
-<link rel="stylesheet" href="assets/css/search-v2.css?v=1025v">
+<link rel="stylesheet" href="assets/css/search-v2.css?v=1025x">
 <link rel="stylesheet" href="assets/css/loader-ai.css?v=1025k">
 <link rel="stylesheet" href="assets/css/admin.css?v=1025w">
 <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.14.1/dist/cdn.min.js"></script>
@@ -225,7 +225,7 @@
                           <div class="a2-gistq">
                             <p class="a2-gist" x-text="m.card.summary.map(x => x.t).join(' ')"></p>
                             <ul class="a2-quotes">
-                              <template x-for="id in [...new Set(m.card.summary.map(x => x.src))].filter(id => R[id].quote)" :key="id">
+                              <template x-for="id in [...new Set(sumOf(m.card.summary).map(x => x.src))].filter(id => R[id].quote)" :key="id">
                                 <li class="a2-quote"><p><span x-text="'„' + R[id].quote + '“'"></span>
                                   <button type="button" class="a2-cite" :class="{ 'is-pro': R[id].pro }" @click="pvClose(); openPanel(id, true)" @mouseenter="pvEnter(id, $el)" @mouseleave="pvLeave()" x-text="R[id].type"></button>
                                 </p></li>
@@ -235,10 +235,12 @@
                         </template>
                         <template x-if="m.card.summary && sumMode !== 'quotes'">
                           <div class="a2-sum">
-                <template x-for="(x, i) in m.card.summary" :key="i">
-                  <p><span x-text="x.t.replace(/\s*\S+$/, '')"></span> <span class="cite-nw"><span x-text="(x.t.match(/\S+$/) || [''])[0]"></span><button type="button" class="cite-n" :class="{ 'is-pro': R[x.src].pro }" @click="pvClose(); openPanel(x.src, true)" @mouseenter="pvEnter(x.src, $el, true)" @mouseleave="pvLeave()" @focus="pvEnter(x.src, $el, true)" @blur="pvLeave()" :aria-label="'Šaltinis: ' + R[x.src].title"><span x-text="citeNo(m.card.summary, x.src)"></span></button></span></p>
+                <template x-for="(x, i) in sumOf(m.card.summary)" :key="i">
+                  <p><span x-text="x.t.replace(/\s*\S+$/, '')"></span> <span class="cite-nw"><span x-text="(x.t.match(/\S+$/) || [''])[0]"></span><button type="button" class="cite-n" :class="{ 'is-pro': R[x.src].pro, 'is-ext': R[x.src].ext }" @click="pvClose(); openCite(x.src)" @mouseenter="pvEnter(x.src, $el, true)" @mouseleave="pvLeave()" @focus="pvEnter(x.src, $el, true)" @blur="pvLeave()" :aria-label="'Šaltinis: ' + R[x.src].title"><span x-text="citeNo(sumOf(m.card.summary), x.src)"></span></button></span></p>
                 </template>
+              <template x-if="p.ext === 'pills'"><div class="src-pills"><template x-for="d in srcDomains(m.card.summary)" :key="d.k"><a class="src-pill" :class="d.ext ? 'is-ext' : ''" :href="d.url || null" :target="d.url ? '_blank' : null" rel="noopener" @click="!d.url && $event.preventDefault()"><i></i><span x-text="d.k"></span><svg x-show="d.url" width="11" height="11" viewBox="0 0 12 12" aria-hidden="true"><path d="M7 2h3v3M10 2 5.5 6.5M9 7.5V10H2V3h2.5" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></template></div></template>
               </div>
+              
                         </template>
                         <template x-if="m.card.list">
                           <div class="ch-list">
@@ -420,10 +422,12 @@
             </template>
             <template x-if="ai.kind === 'quotes' && ai.summary && sumMode !== 'quotes'">
               <div class="a2-sum">
-                <template x-for="(x, i) in ai.summary" :key="i">
-                  <p><span x-text="x.t.replace(/\s*\S+$/, '')"></span> <span class="cite-nw"><span x-text="(x.t.match(/\S+$/) || [''])[0]"></span><button type="button" class="cite-n" :class="{ 'is-pro': R[x.src].pro }" @click="pvClose(); openPanel(x.src, true)" @mouseenter="pvEnter(x.src, $el, true)" @mouseleave="pvLeave()" @focus="pvEnter(x.src, $el, true)" @blur="pvLeave()" :aria-label="'Šaltinis: ' + R[x.src].title"><span x-text="citeNo(ai.summary, x.src)"></span></button></span></p>
+                <template x-for="(x, i) in sumOf(ai.summary)" :key="i">
+                  <p><span x-text="x.t.replace(/\s*\S+$/, '')"></span> <span class="cite-nw"><span x-text="(x.t.match(/\S+$/) || [''])[0]"></span><button type="button" class="cite-n" :class="{ 'is-pro': R[x.src].pro, 'is-ext': R[x.src].ext }" @click="pvClose(); openCite(x.src)" @mouseenter="pvEnter(x.src, $el, true)" @mouseleave="pvLeave()" @focus="pvEnter(x.src, $el, true)" @blur="pvLeave()" :aria-label="'Šaltinis: ' + R[x.src].title"><span x-text="citeNo(sumOf(ai.summary), x.src)"></span></button></span></p>
                 </template>
+              <template x-if="p.ext === 'pills'"><div class="src-pills"><template x-for="d in srcDomains(ai.summary)" :key="d.k"><a class="src-pill" :class="d.ext ? 'is-ext' : ''" :href="d.url || null" :target="d.url ? '_blank' : null" rel="noopener" @click="!d.url && $event.preventDefault()"><i></i><span x-text="d.k"></span><svg x-show="d.url" width="11" height="11" viewBox="0 0 12 12" aria-hidden="true"><path d="M7 2h3v3M10 2 5.5 6.5M9 7.5V10H2V3h2.5" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></template></div></template>
               </div>
+              
             </template>
             <template x-if="ai.kind === 'quotes' && ai.summary">
               <div>
@@ -804,8 +808,8 @@
        @mouseenter="pvKeep()" @mouseleave="pvLeave()">
     <!-- Citatos numeriui: vos vos matoma mini kortelė -->
     <template x-if="pv.id && pv.mini">
-      <button type="button" class="pv-mini" @click="openPanel(pv.id, true); pvClose()">
-        <span class="pv-mini-meta"><i class="a2-pro" x-show="R[pv.id].pro">PRO</i><span x-text="R[pv.id].type + ' · ' + R[pv.id].date"></span></span>
+      <button type="button" class="pv-mini" @click="openCite(pv.id); pvClose()">
+        <span class="pv-mini-meta" :class="R[pv.id].ext && 'is-ext'"><i class="a2-pro" x-show="R[pv.id].pro">PRO</i><i class="pv-ext-dot" x-show="R[pv.id].ext"></i><span x-text="R[pv.id].ext ? R[pv.id].ext + ' · išorinis šaltinis' : R[pv.id].type + ' · ' + R[pv.id].date"></span></span>
         <span class="pv-mini-t" x-text="R[pv.id].title"></span>
       </button>
     </template>
@@ -951,7 +955,7 @@
   .pn-off { transform: translateX(100%); }
 </style>
 <script src="assets/js/shell.js?v=1025k"></script>
-<script src="assets/js/data.js?v=1025k"></script>
+<script src="assets/js/data.js?v=1025x"></script>
 <script src="assets/js/loader.js?v=1025k"></script>
 <script>
   // Admin parametras: filtrai po vienu mygtuku „Filtrai“ arba visada matomi
@@ -987,6 +991,12 @@
   const TOP_PARAM = { key: 'top', label: 'Viršutinė juosta', type: 'radio', default: 'tint', options: [
     { id: 'tint', label: 'Žalsva, atskira (kaip dabar)' },
     { id: 'white', label: 'Balta, viena su rezultatais (kaip Google)' },
+  ] };
+  // Admin parametras (V4): išoriniai šaltiniai DI santraukoje (VMI, VDI…)
+  const EXT_PARAM = { key: 'ext', label: 'Išoriniai šaltiniai', type: 'radio', default: 'pills', options: [
+    { id: 'pills', label: 'Kitos spalvos numeriai + šaltinių juosta' },
+    { id: 'mark', label: 'Tik kitos spalvos numeriai' },
+    { id: 'off', label: 'Išjungti (tik SUFLERIO medžiaga)' },
   ] };
   // Admin parametras (V4): subtilus indikatorius eksperto klausimo formoje, ar užtenka konteksto
   const QMETER_PARAM = { key: 'qmeter', label: 'Klausimo konteksto indikatorius', type: 'radio', default: 'dot', options: [
@@ -1178,7 +1188,7 @@
       ask: { q: '', sent: false, edit: false, attach: [], me: { vardas: 'Laurynas', pavarde: 'Petrauskas', imone: 'UAB Įmonita', pareigos: 'Vyr. buhalteris', miestas: 'Vilnius', tel: '+370 600 00000' } },
       // ---------- Versijos ----------
       VERSIONS: [
-        { id: 'v4', label: 'V4 · Kaip Google', desc: 'Susijusios paieškos tampa nauja paieška, grįžtama naršyklės Atgal. Tab\'ai: DI režimas · Viskas · Rezultatų sąrašas', params: [TABS_PARAM, CHAT_VIEW_PARAM, SERIF_PARAM, SIDE_PARAM, TOP_PARAM, AI_STYLE_PARAM, FILTERS_PARAM, QMETER_PARAM, LOADER_PARAM] },
+        { id: 'v4', label: 'V4 · Kaip Google', desc: 'Susijusios paieškos tampa nauja paieška, grįžtama naršyklės Atgal. Tab\'ai: DI režimas · Viskas · Rezultatų sąrašas', params: [TABS_PARAM, CHAT_VIEW_PARAM, SERIF_PARAM, SIDE_PARAM, TOP_PARAM, AI_STYLE_PARAM, FILTERS_PARAM, EXT_PARAM, QMETER_PARAM, LOADER_PARAM] },
       ],
       ver: (() => {
         const q = new URLSearchParams(location.search).get('v');
@@ -1651,6 +1661,15 @@
         });
       },
       // Šaltinio numeris apibendrinime (tas pats šaltinis = tas pats numeris)
+      // Išoriniai šaltiniai (VMI, VDI…): Admin gali juos išjungti arba rodyti su šaltinių juosta
+      sumOf(list) { return this.p.ext === 'off' ? (list || []).filter(x => !this.R[x.src].ext) : (list || []); },
+      openCite(id) { const r = this.R[id]; if (r.ext) window.open(r.url, '_blank', 'noopener'); else this.openPanel(id, true); },
+      srcDomains(list) {
+        const ids = [...new Set(this.sumOf(list).map(x => x.src))];
+        const out = ids.some(id => !this.R[id].ext) ? [{ k: 'SUFLERIS', ext: false }] : [];
+        ids.filter(id => this.R[id].ext).forEach(id => { const r = this.R[id]; if (!out.some(d => d.k === r.ext)) out.push({ k: r.ext, ext: true, url: r.url }); });
+        return out;
+      },
       citeNo(list, src) { return [...new Set(list.map(x => x.src))].indexOf(src) + 1; },
       openFromAsk(id) { this.openPanel(id); this.pBack = true; },
       backToAsk() { this.pBack = false; this.pMode = 'ask'; },
@@ -1685,8 +1704,8 @@
       artsOpen: false,
       artOn: '',
       get ARTS() {
-        const S1 = [{ t: 'Jei darbuotojas dirbo poilsio dieną, kuri nebuvo numatyta grafike, jo prašymu vietoj padidinto apmokėjimo galima suteikti kitą poilsio dieną.', src: 'r1' }, { t: 'Prašymas turi būti įformintas raštu.', src: 'r2' }];
-        const S2 = [{ t: 'Dienpinigiai užsienyje mokami pagal šalies normą už kiekvieną komandiruotės dieną.', src: 'k1' }, { t: 'Vienos dienos komandiruotei Lietuvoje jie mokami, jei vykta į kitą vietovę.', src: 'k2' }];
+        const S1 = [{ t: 'Jei darbuotojas dirbo poilsio dieną, kuri nebuvo numatyta grafike, jo prašymu vietoj padidinto apmokėjimo galima suteikti kitą poilsio dieną.', src: 'r1' }, { t: 'Prašymas turi būti įformintas raštu.', src: 'r2' }, { t: 'Darbo inspekcija primena, kad už darbą poilsio dieną mokamas ne mažesnis kaip dvigubas užmokestis, jei nesuteikiama kita poilsio diena.', src: 'e1' }];
+        const S2 = [{ t: 'Dienpinigiai užsienyje mokami pagal šalies normą už kiekvieną komandiruotės dieną.', src: 'k1' }, { t: 'Vienos dienos komandiruotei Lietuvoje jie mokami, jei vykta į kitą vietovę.', src: 'k2' }, { t: 'VMI nurodo, kad neapmokestinamas tik dienpinigių dydis, neviršijantis Vyriausybės nustatytų normų.', src: 'e2' }];
         const chat = (id, label, q, msg, extra = {}) => ({ id, label, where: 'DI režimas', chat: { q, msg }, ...extra });
         const scen = (id, label, sid, sum) => ({ id, label, where: 'Visi rezultatai', scen: { sid, sum } });
         return [

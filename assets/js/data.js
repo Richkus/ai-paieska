@@ -390,6 +390,13 @@ window.COMPETENCIES = [
        { t: 'Neapmokestinama tik dalis iki nustatyto dydžio, likusi apmokestinama kaip darbo pajamos.', src: 'k1' }],
     ],
   };
+  // Išoriniai šaltiniai: oficialūs puslapiai (VDI, VMI), cituojami greta SUFLERIO medžiagos
+  Object.assign(window.RESULTS, {
+    e1: { type: 'VDI', ext: 'vdi.lt', url: 'https://www.vdi.lt', date: '2026-02-10', title: 'Darbas poilsio ir švenčių dienomis: apmokėjimas', snippet: 'Valstybinės darbo inspekcijos paaiškinimas apie darbą poilsio dienomis.', quote: 'Už darbą poilsio dieną, kuri nenustatyta pagal darbo grafiką, mokamas ne mažesnis kaip dvigubas darbo užmokestis arba darbuotojo prašymu suteikiama kita poilsio diena.' },
+    e2: { type: 'VMI', ext: 'vmi.lt', url: 'https://www.vmi.lt', date: '2026-01-05', title: 'Dienpinigių apmokestinimas GPM', snippet: 'VMI paaiškinimas apie dienpinigių neapmokestinamąjį dydį.', quote: 'Neapmokestinamosioms pajamoms priskiriami dienpinigiai, neviršijantys Vyriausybės nustatytų dydžių.' },
+  });
+  sum.savaitgalis[0].push({ t: 'Darbo inspekcija primena, kad be kitos poilsio dienos už tokį darbą mokamas ne mažesnis kaip dvigubas užmokestis.', src: 'e1' });
+  sum.komandiruote[1].push({ t: 'VMI nurodo, kad neapmokestinamas tik dienpinigių dydis, neviršijantis Vyriausybės nustatytų normų.', src: 'e2' });
   Object.entries(sum).forEach(([id, list]) => list.forEach((x, i) => { if (x) S[id].steps[i].ai.summary = x; }));
   // Bendra mintis vienu-dviem sakiniais (Admin variantas „Santrauka + citatos“)
   const gist = {

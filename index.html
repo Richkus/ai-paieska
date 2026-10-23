@@ -779,15 +779,15 @@
   const TABS = [
     { id: 'di', label: 'DI režimas', icon: 'ai' },
     { id: 'all', label: 'Visi rezultatai' },
-    { id: 'list', label: 'Sąrašas' },
     { id: 'comp', label: 'Kompetencijų centras' },
-    { id: 'tests', label: 'Testai' },
     { id: 'video', label: 'Video' },
+    { id: 'list', label: 'Tekstas' },
+    { id: 'tests', label: 'Testai' },
     { id: 'files', label: 'Failai atsisiuntimui' },
     { id: 'chat', label: 'DI chatas', icon: 'chat' },
     { id: 'full', label: 'DI pokalbis', icon: 'ai' },
   ];
-  const TABS_PARAM = { key: 'tabs', label: 'Tab\'ai juostoje', type: 'checks', default: ['di', 'all', 'list', 'comp', 'tests', 'video', 'files'],
+  const TABS_PARAM = { key: 'tabs', label: 'Tab\'ai juostoje', type: 'checks', default: ['di', 'all', 'comp', 'video', 'list', 'tests', 'files'],
     options: TABS.map(t => ({ id: t.id, label: t.label })) };
   // Admin parametras (V4): dešinė kolona (šaltiniai, ankstesnės paieškos)
   const SIDE_PARAM = { key: 'side', label: 'Dešinė kolona', type: 'radio', default: 'hide', options: [
@@ -1042,9 +1042,11 @@
       get baseList() {
         if (this.mode === 'ai') return this.sc.steps[this.step].results;
         const all = [...new Set(this.sc.steps.flatMap(s => s.results))];
+        // V4 „Tekstas“: tik tekstinė medžiaga (situacijos, konsultacijos, naujienos), be video, testų ir failų
+        if (this.ver === 'v4') return all.filter(id => this.R[id].fmt === 'Tekstas');
         return all.sort((a, b) => (this.R[b].type === 'Testas') - (this.R[a].type === 'Testas'));
       },
-      get baseCount() { return this.mode === 'ai' ? this.sc.steps[this.step].count : this.sc.classicCount; },
+      get baseCount() { return this.mode === 'ai' ? this.sc.steps[this.step].count : this.ver === 'v4' ? Math.round(this.sc.classicCount * .6) : this.sc.classicCount; },
       get list() {
         if (this.isTyped) return this.typedList;
         const l = this.baseList.filter(id => this.match(id));

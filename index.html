@@ -7,12 +7,12 @@
 <title>AI paieška: prototipas</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400..800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/shell.css?v=1024c">
-<link rel="stylesheet" href="assets/css/search.css?v=1024c">
-<link rel="stylesheet" href="assets/css/filters.css?v=1024c">
-<link rel="stylesheet" href="assets/css/search-v2.css?v=1024c">
-<link rel="stylesheet" href="assets/css/loader-ai.css?v=1024c">
-<link rel="stylesheet" href="assets/css/admin.css?v=1024c">
+<link rel="stylesheet" href="assets/css/shell.css?v=1024d">
+<link rel="stylesheet" href="assets/css/search.css?v=1024d">
+<link rel="stylesheet" href="assets/css/filters.css?v=1024d">
+<link rel="stylesheet" href="assets/css/search-v2.css?v=1024d">
+<link rel="stylesheet" href="assets/css/loader-ai.css?v=1024d">
+<link rel="stylesheet" href="assets/css/admin.css?v=1024d">
 <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.14.1/dist/cdn.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
 </head>
@@ -255,13 +255,20 @@
                       </div>
                     </template>
                     <p class="ch-after" x-show="m.after" x-text="m.after"></p>
+                    <template x-if="m.recover">
+                      <ul class="a2-list ch-opts" x-show="i === chat.msgs.length - 1">
+                        <template x-for="r in m.recover" :key="r">
+                          <li><button type="button" class="a2-row" @click="recoverPick(r)"><i aria-hidden="true" x-text="r === '__wide' ? '⌕' : '↳'"></i><span x-text="r === '__wide' ? 'Paieškoti plačiau visuose rezultatuose' : r"></span></button></li>
+                        </template>
+                      </ul>
+                    </template>
                     <template x-if="m.newSearch">
                     <div class="ch-newq" x-show="i === chat.msgs.length - 1">
                       <button type="button" class="ex-btn" @click="query = m.newSearch; submitSearch()" x-text="'Ieškoti: „' + m.newSearch + '“'"></button>
                       <button type="button" class="lowc-btn" @click="chat.msgs.push({ who: 'ai', text: 'Gerai, tęsiam. Ką dar norit sužinoti apie pradinį klausimą?' }); chatScroll()">Tęsti šį pokalbį</button>
                     </div>
                     </template>
-                    <button type="button" class="ex-btn ch-ex" x-show="m.expert" @click="openAsk(chatQuestion)">Klausti eksperto</button>
+                    <button type="button" class="ex-btn ch-ex" x-show="m.expert" @click="openAsk(chatQuestion, sources)">Klausti eksperto</button>
                     <!-- Atsakymo variantai sąrašu su ↳, kaip „Tęskit temą“ -->
                     <ul class="a2-list ch-opts" x-show="m.options && i === chat.msgs.length - 1 && !chat.typing">
                       <template x-for="o in m.options || []" :key="o">
@@ -284,6 +291,8 @@
 
           <!-- Laukas prilipęs apačioje, kaip įprastuose chat'uose -->
           <form class="ch-compose" @submit.prevent="chatSend(chat.draft)">
+            <!-- Kai DI jau nerado atsakymo, ekspertas visada pasiekiamas, bet nebešaukia -->
+            <p class="ch-exlink" x-show="chat.misses > 0 || chat.expertShown">Neradot? <button type="button" @click="openAsk(chatQuestion, sources)">Klausti eksperto</button></p>
             <div class="ch-field">
               <textarea rows="1" x-ref="chatIn" x-model="chat.draft" placeholder="Klauskite toliau…" aria-label="Žinutė"
                         @input="$el.style.height = 'auto'; $el.style.height = Math.min($el.scrollHeight, 160) + 'px'"
@@ -654,6 +663,12 @@
               <textarea id="ak-q" x-ref="askQ" rows="7" x-model="ask.q" placeholder="Įrašykite klausimą"></textarea>
               <p class="ak-warn" x-show="(ask.q.match(/\?/g) || []).length > 1" x-cloak>Atrodo, čia keli klausimai. Ekspertas atsakys į vieną, kitus geriau užduoti atskirai.</p>
 
+              <div class="ak-att" x-show="ask.attach && ask.attach.length">
+                <small>Pridėsim šaltinius, kuriuos DI jums rodė, kad ekspertas nekartotų:</small>
+                <template x-for="id in ask.attach || []" :key="id">
+                  <span class="ak-att-i"><b x-text="R[id].type"></b><span x-text="R[id].title"></span><button type="button" @click="ask.attach = ask.attach.filter(x => x !== id)" aria-label="Nepridėti">×</button></span>
+                </template>
+              </div>
               <div class="ak-foot">
                 <span class="ak-privacy">
                   <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6l7-3Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -750,9 +765,9 @@
   .transition-pn { transition: transform .32s var(--ms-ease); }
   .pn-off { transform: translateX(100%); }
 </style>
-<script src="assets/js/shell.js?v=1024c"></script>
-<script src="assets/js/data.js?v=1024c"></script>
-<script src="assets/js/loader.js?v=1024c"></script>
+<script src="assets/js/shell.js?v=1024d"></script>
+<script src="assets/js/data.js?v=1024d"></script>
+<script src="assets/js/loader.js?v=1024d"></script>
 <script>
   // Admin parametras: filtrai po vienu mygtuku „Filtrai“ arba visada matomi
   // V4 tab'ai. icon: ai | chat. Kurie rodomi, valdoma Admin'e (TABS_PARAM)
@@ -819,7 +834,7 @@
       activeQuery: '',   // užklausa, su kuria padaryta dabartinė paieška
       vote: 0,
       rewriteFlash: false, // V4: klausimas lauke pasikeitė (trumpai paryškinam)
-      chat: { key: '', msgs: [], step: 0, typing: false, draft: '' },   // V4 · DI chatas
+      chat: { key: '', msgs: [], step: 0, typing: false, draft: '', misses: 0, expertShown: false },   // V4 · DI chatas
       // ---------- V4 tab'ai ----------
       TABS,
       tabFit: 99,
@@ -923,7 +938,7 @@
       scrolled: false,   // puslapis paslinktas (baltai viršutinei juostai rodom šešėlį)
       pMode: 'item',
       pBack: false,      // medžiaga atidaryta iš klausimo ekspertui formos     // panel'is: medžiaga (item) arba klausimas ekspertui (ask)
-      ask: { q: '', sent: false, edit: false, me: { vardas: 'Laurynas', pavarde: 'Petrauskas', imone: 'UAB Įmonita', pareigos: 'Vyr. buhalteris', miestas: 'Vilnius', tel: '+370 600 00000' } },
+      ask: { q: '', sent: false, edit: false, attach: [], me: { vardas: 'Laurynas', pavarde: 'Petrauskas', imone: 'UAB Įmonita', pareigos: 'Vyr. buhalteris', miestas: 'Vilnius', tel: '+370 600 00000' } },
       // ---------- Versijos ----------
       VERSIONS: [
         { id: 'v4', label: 'V4 · Kaip Google', desc: 'Susijusios paieškos tampa nauja paieška, grįžtama naršyklės Atgal. Tab\'ai: DI režimas · Viskas · Rezultatų sąrašas', params: [TABS_PARAM, SIDE_PARAM, TOP_PARAM, AI_STYLE_PARAM, FILTERS_PARAM, LOADER_PARAM] },
@@ -1238,26 +1253,44 @@
       panelStep(d) { const id = this.list[this.pIndex + d]; if (id) this.openPanel(id); },
       closePanel() { this.panelOpen = false; },
       // Klausimas ekspertui: atidarom panel'į su jau įrašytu paieškos klausimu
-      openAsk(text) {
+      openAsk(text, attach = []) {
         this.pvClose();
         const q = text || this.activeQuery;
-        if (!this.ask.sent || this.ask.q !== q) this.ask = { ...this.ask, q, sent: false, edit: false };
+        if (!this.ask.sent || this.ask.q !== q) this.ask = { ...this.ask, q, sent: false, edit: false, attach: [...attach] };
         this.pMode = 'ask'; this.panelOpen = true;
         this.$nextTick(() => setTimeout(() => { const t = this.$refs.askQ; if (t) { t.focus(); t.setSelectionRange(t.value.length, t.value.length); } }, 320));
       },
       // ---------- V4 · DI chatas ----------
       get chatScript() { return (window.CHATS || {})[this.sc.id] || []; },
-      get chatQuestion() { return this.chat.msgs.filter(m => m.who === 'user').map(m => m.text).join('\n'); },
+      // Ekspertui ne visas pokalbis, o santrauka: situacija, patikslinimai ir neatsakytas klausimas
+      get chatQuestion() {
+        const u = this.chat.msgs.filter(m => m.who === 'user').map(m => m.text);
+        if (u.length < 2) return u[0] || this.activeQuery;
+        const mid = u.slice(1, -1), last = u[u.length - 1];
+        return `Situacija: ${u[0]}` + (mid.length ? `\nPatikslinimai: ${mid.join('; ').replace(/[.?!]?$/, m => m || '.')}` : '') + `\nKlausimas: ${last}`;
+      },
+      recoverPick(r) {
+        if (r === '__wide') { this.setMode('ai'); window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
+        this.query = r; this.submitSearch();
+      },
       chatEnsure() {
         const key = this.scIdx + '|' + this.activeQuery;
         if (this.chat.key === key) return;
         clearTimeout(this._ct);
-        this.chat = { key, msgs: [{ who: 'user', text: this.activeQuery }], step: 0, typing: false, draft: '' };
+        this.chat = { key, msgs: [{ who: 'user', text: this.activeQuery }], step: 0, typing: false, draft: '', misses: 0, expertShown: false };
         this.chatReply();
       },
       chatReply() {
         this.chat.typing = true; this.chatScroll();
-        const turn = this.chatScript[this.chat.step] || { text: 'Šiam klausimui tikslios medžiagos SUFLERYJE neradau. Galiu perduoti jį ekspertui, jis atsakys asmeniškai.', expert: true };
+        let turn = this.chatScript[this.chat.step];
+        // Neradus atsakymo ekspertas nesiūlomas iškart: pirma DI bando pats, didelis mygtukas rodomas daugiausia kartą
+        if (!turn) {
+          this.chat.misses++;
+          if (this.chat.misses === 1) turn = { text: 'Tiksliai neradau. Gal turit omeny vieną iš šių?', recover: [...(this.sc.steps[0].related || []).slice(0, 2), '__wide'] };
+          else if (!this.chat.expertShown) turn = { text: 'Ir šiam klausimui tikslios medžiagos SUFLERYJE neradau. Galiu perduoti jį ekspertui: pridėsiu pokalbio santrauką ir šaltinius, kuriuos jau peržiūrėjot.', expert: true };
+          else turn = { text: 'Šiam klausimui tikslios medžiagos SUFLERYJE neradau. Pabandykit paklausti kitaip arba spauskit „Klausti eksperto“ apačioje.' };
+        }
+        if (turn.expert) this.chat.expertShown = true;
         clearTimeout(this._ct);
         this._ct = setTimeout(() => { this.chat.typing = false; this.chat.msgs.push({ who: 'ai', ...turn }); this.chatScroll(); }, 1400);
       },

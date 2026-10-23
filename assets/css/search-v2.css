@@ -590,3 +590,15 @@ body.is-chatfull { overflow: hidden; }
 .cite-n.is-pro { background: #f6e3ef; color: var(--ms-pro); }
 .a2.is-card .cite-n { background: #fff; box-shadow: inset 0 0 0 1px var(--ms-line-strong); }
 .a2.is-card .cite-n:hover { background: var(--ms-teal-dark); box-shadow: none; }
+
+/* Ekspertas: maža nuoroda virš pokalbio lauko, prisegti šaltiniai formoje */
+.ch-exlink { margin: 0 4px 6px; color: var(--ms-muted); font-size: 13px; text-align: right; }
+.ch-exlink button { padding: 0; border: 0; background: none; color: var(--ms-link); font-size: 13px; }
+.ch-exlink button:hover { text-decoration: underline; text-underline-offset: 3px; }
+.ak-att { display: grid; gap: 6px; margin-top: 4px; padding: 12px 14px; border: 1px dashed var(--ms-line-strong); border-radius: 10px; }
+.ak-att small { color: var(--ms-sub); font-size: 13px; }
+.ak-att-i { display: flex; align-items: baseline; gap: 8px; color: var(--ms-ink); font-size: 14px; }
+.ak-att-i b { flex: 0 0 auto; color: var(--ms-muted); font-size: 12px; font-weight: 600; }
+.ak-att-i span { flex: 1; min-width: 0; }
+.ak-att-i button { flex: 0 0 auto; width: 22px; height: 22px; padding: 0; border: 0; border-radius: 50%; background: none; color: var(--ms-muted); font-size: 15px; }
+.ak-att-i button:hover { background: var(--ms-pill); color: var(--ms-ink); }

@@ -297,7 +297,7 @@ window.CHATS = {
       options: ['Kaip pažymėti žiniaraštyje?', 'Per kiek laiko suteikti dieną?'] },
     { text: 'Apie žymėjimą žiniaraštyje SUFLERYJE rašoma taip:',
       card: { main: 'r3', quotes: ['r3', 'r2'] },
-      after: 'Jei vis dar ne tai, galiu perduoti klausimą ekspertui.', expert: true },
+      after: 'Jei dar kažkas neaišku, klauskite toliau.' },
   ],
   komandiruote: [
     { text: 'Komandiruočių išlaidų tema plati. Kas jums šiuo metu aktualiausia?',
@@ -310,7 +310,7 @@ window.CHATS = {
       options: ['Ar dienpinigiai apmokestinami?', 'Kokių dokumentų reikia?'] },
     { text: 'Apie apmokestinimą:',
       card: { main: 'k1', quotes: ['k1'] },
-      after: 'Jei vis dar ne tai, galiu perduoti klausimą ekspertui.', expert: true },
+      after: 'Jei dar kažkas neaišku, klauskite toliau.' },
   ],
   mazai: [
     { text: 'Tiksliai tokios situacijos SUFLERYJE neradau, bet yra artimų temų. Kad parinkčiau tinkamiausią: tortas skirtas įmonės šventei ar dovana konkrečiam darbuotojui?',

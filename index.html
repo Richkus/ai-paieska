@@ -1004,10 +1004,6 @@
     { id: 'card', label: 'Kortelė su fonu' },
     { id: 'plain', label: 'Baltas fonas, ryškus skirtukas' },
   ] };
-  const FILTERS_PARAM = { key: 'filters', label: 'Filtrai', type: 'radio', default: 'collapsed', options: [
-    { id: 'collapsed', label: 'Suskleisti po mygtuku „Filtrai“' },
-    { id: 'open', label: 'Visada matomi' },
-  ] };
   // Admin parametras: įkėlimo animacija (visoms versijoms)
   const LOADER_PARAM = { key: 'loader', label: 'Įkėlimo animacija', type: 'radio', default: 'morph', options: [
     { id: 'morph', label: 'Abstrakti: taškai susidėlioja į S' },
@@ -1175,7 +1171,7 @@
       ask: { q: '', sent: false, edit: false, attach: [], me: { vardas: 'Laurynas', pavarde: 'Petrauskas', imone: 'UAB Įmonita', pareigos: 'Vyr. buhalteris', miestas: 'Vilnius', tel: '+370 600 00000' } },
       // ---------- Versijos ----------
       VERSIONS: [
-        { id: 'v4', label: 'V4 · Kaip Google', desc: 'Susijusios paieškos tampa nauja paieška, grįžtama naršyklės Atgal. Tab\'ai: DI režimas · Viskas · Rezultatų sąrašas', params: [TABS_PARAM, CHAT_VIEW_PARAM, SERIF_PARAM, SIDE_PARAM, TOP_PARAM, AI_STYLE_PARAM, FILTERS_PARAM, EXT_PARAM, QMETER_PARAM, LOADER_PARAM] },
+        { id: 'v4', label: 'V4 · Kaip Google', desc: 'Susijusios paieškos tampa nauja paieška, grįžtama naršyklės Atgal. Tab\'ai: DI režimas · Viskas · Rezultatų sąrašas', params: [TABS_PARAM, CHAT_VIEW_PARAM, SERIF_PARAM, SIDE_PARAM, TOP_PARAM, AI_STYLE_PARAM, EXT_PARAM, QMETER_PARAM, LOADER_PARAM] },
       ],
       ver: (() => {
         const q = new URLSearchParams(location.search).get('v');
@@ -1184,7 +1180,7 @@
       })(),
       p: {},             // aktyvios versijos admin parametrai
       fbOpen: false,
-      get fbCollapsible() { return this.p.filters === 'collapsed' && !this.fbStack; },
+      get fbCollapsible() { return !this.fbStack; },   // filtrai suskleisti po mygtuku „Filtrai“
       // V4 „Rezultatų sąrašas“: filtrai visada išskleisti, po rezultatų skaičiumi
       get fbStack() { return ['classic', 'plain'].includes(this.mode); },
       get activeFilterCount() { return this.FKEYS.reduce((n, k) => n + this.vals(k).length, 0); },

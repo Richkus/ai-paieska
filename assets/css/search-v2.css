@@ -608,3 +608,20 @@ body.is-chatfull { overflow: hidden; }
 @media (max-width: 860px) { .ask-pill { left: 50%; bottom: 16px; } }
 .rf-ov { margin-bottom: 18px; }
 .ms-main.is-topwhite .ms-search-go { width: 34px; height: 34px; margin-top: 4px; } /* apvalus mygtukas sucentruotas 44 px lauke */
+
+/* ==========================================================
+   Admin „Antraščių šriftas: Source Serif“. Serifinis tik antraštėms
+   ir akcentams, tekstas, mygtukai ir navigacija lieka Open Sans.
+   ========================================================== */
+.is-serif .home h1, .is-serif .a2-label, .is-serif .rf-q, .is-serif .few, .is-serif .sr-item h3, .is-serif .pl h3 button,
+.is-serif .pn-art h1, .is-serif .ak h1, .is-serif .ak-done h1, .is-serif .ch-main b, .is-serif .home-tip strong, .is-serif .a2-rel-h, .is-serif .cc-h {
+  font-family: 'Source Serif 4', Georgia, 'Times New Roman', serif; font-optical-sizing: auto; letter-spacing: -.005em;
+}
+.is-serif .a2-label { font-size: 21px; font-weight: 600; }
+.is-serif .rf-q { font-size: 19px; font-weight: 600; }
+.is-serif .few { font-size: 18px; }
+.is-serif .sr-item h3, .is-serif .pl h3 button { font-size: 20px; font-weight: 600; line-height: 1.3; }
+.is-serif .home h1, .is-serif .pn-art h1, .is-serif .ak h1, .is-serif .ak-done h1 { font-weight: 600; letter-spacing: -.01em; }
+.is-serif .ch-main b { font-size: 17px; }
+.is-serif .a2-rel-h { font-size: 16.5px; }
+.is-serif .home-tip strong { font-size: 16px; }

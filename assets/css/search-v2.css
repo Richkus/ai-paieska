@@ -493,3 +493,4 @@ body.is-chatfull { overflow: hidden; }
 .pl-eps button:hover { color: var(--ms-link); }
 .pl-eps button i { display: grid; place-items: center; width: 26px; height: 18px; border-radius: 4px; background: var(--ms-sidebar-active); color: var(--ms-teal-dark); }
 @media (max-width: 640px) { .pl-head { grid-template-columns: minmax(0, 1fr) auto; } .pl-thumb { grid-column: 1 / -1; grid-row: 1; } }
+.tb-menu button.is-on::before { content: '✓'; margin-right: 8px; color: var(--ms-teal-dark); }

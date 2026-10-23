@@ -493,7 +493,8 @@
         </template>
 
         <!-- Nedaug ir tikslu: be apibendrinimo, vienas sakinys ir iškart rezultatai -->
-        <p class="few" x-show="mode === 'ai' && ai.kind === 'few'" x-cloak><img class="ai-ic" src="assets/img/ai.svg" width="11" height="19" alt="" aria-hidden="true"><span x-text="ai.heading + '.'"></span></p>
+        <!-- Mažai, bet tikslių rezultatų: DI nieko negeneruoja, todėl be DI ikonos, tik paprastas paaiškinimas -->
+        <p class="few" x-show="mode === 'ai' && ai.kind === 'few'" x-cloak><span x-text="ai.heading + '.'"></span></p>
 
         <!-- V4, mažas panašumas: DI bloko nerodom, tik paaiškinimą ir kelią į ekspertą -->
         <template x-if="mode === 'ai' && ver === 'v4' && ai.kind === 'low'">

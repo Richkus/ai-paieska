@@ -396,6 +396,10 @@ window.CHATS = {
     r.pro = false; r.tema = 'Darbo laikas';
     window.RESULTS[id] = r;
   });
+  // Testų tipai kaip SUFLERIO „Testai“ skiltyje
+  const R = window.RESULTS;
+  R.t4 = { type: 'Testas', date: '2026-01-05', title: 'Pradinis testas: darbo užmokestis', snippet: 'Bazinės žinios apie darbo užmokesčio skaičiavimą ir mokesčius. 15 klausimų.', rub: 'Testai', fmt: 'Testas', pro: false, tema: 'Darbo užmokestis' };
+  Object.entries({ t1: 'Mėnesio iššūkiai', t2: 'Teminiai', t3: 'Pradinis', t4: 'Pradinis', r5: 'Teminiai', p1: 'Teminiai', p2: 'Mokesčių naujienų' }).forEach(([id, c]) => { R[id].cat = c; });
   const r6 = window.RESULTS.r6; r6.file = 'DOCX'; r6.kind = 'Dokumento šablonas';
 })();
 

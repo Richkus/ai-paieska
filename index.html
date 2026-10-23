@@ -511,7 +511,7 @@
                 <div>
                   <h3 x-text="R[id].title"></h3>
                   <p x-text="R[id].snippet"></p>
-                  <div class="sr-meta"><span x-text="R[id].date"></span> | <span x-text="R[id].type"></span><template x-if="R[id].part"><em x-text="' · ' + R[id].part"></em></template><template x-if="R[id].file"><em class="sr-file" x-text="R[id].file"></em></template></div>
+                  <div class="sr-meta"><span x-text="R[id].date"></span> | <span x-text="R[id].type"></span><template x-if="R[id].part"><em x-text="' · ' + R[id].part"></em></template><template x-if="R[id].file"><em class="sr-file" x-text="R[id].file"></em></template><template x-if="mode === 'tests' && R[id].cat"><em x-text="' · ' + R[id].cat"></em></template></div>
                 </div>
                 <div class="sr-thumb" x-text="R[id].type"></div>
               </button>
@@ -889,11 +889,12 @@
       },
       ccOpen: '', ccSaved: [],
       // Papildomi filtrai (Kompetencijų centras, Failai) tuo pačiu stiliumi kaip rezultatų filtrai
-      xf: { 'c-comp': '', 'c-level': '', 'f-kind': '', 'f-fmt': [] },
+      xf: { 'c-comp': '', 'c-level': '', 'f-kind': '', 'f-fmt': [], 't-cat': '' },
       get XF() {
         return {
           comp: [{ key: 'c-comp', label: 'Kompetencija', single: true, options: this.COMP.map(c => c.title) },
                  { key: 'c-level', label: 'Lygis', single: true, options: ['Pradedantiesiems', 'Pažengusiems'] }],
+          tests: [{ key: 't-cat', label: 'Tipas', single: true, options: ['Pradinis', 'Teminiai', 'Mėnesio iššūkiai', 'Mokesčių naujienų'] }],
           files: [{ key: 'f-kind', label: 'Tipas', single: true, options: ['Atmintinė', 'Dokumento šablonas', 'Lentelė', 'Pavyzdys'] },
                   { key: 'f-fmt', label: 'Formatas', options: ['PDF', 'DOCX', 'XLSX'] }],
         };
@@ -908,6 +909,7 @@
       },
       xfClear(g) { this.xf[g.key] = Array.isArray(this.xf[g.key]) ? [] : ''; this.pop = ''; },
       xfCount(g, o) {
+        if (g.key === 't-cat') return Object.values(this.R).filter(r => r.type === 'Testas' && r.cat === o).length;
         if (g.key === 'f-kind') return this.filesBy(o, this.xf['f-fmt']).length;
         if (g.key === 'f-fmt') return this.filesBy(this.xf['f-kind'], [o]).length;
         return '';
@@ -924,6 +926,7 @@
         if (!test) return [];
         const mine = new Set(this.sc.steps.flatMap(s => s.results));
         let ids = Object.keys(this.R).filter(id => test(this.R[id]));
+        if (this.mode === 'tests' && this.xf['t-cat']) ids = ids.filter(id => this.R[id].cat === this.xf['t-cat']);
         if (this.mode === 'files') { const ok = new Set(this.filesBy(this.xf['f-kind'], this.xf['f-fmt'])); ids = ids.filter(id => ok.has(id)); }
         return ids.sort((a, b) => (mine.has(b) - mine.has(a)) || this.R[b].date.localeCompare(this.R[a].date));
       },

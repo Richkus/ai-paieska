@@ -141,3 +141,9 @@ img { display: block; }
 .ms-search > .ms-suggest, .ms-search > .ms-search-note { position: absolute; z-index: 51; }
 .ms-search-go { width: 28px; height: 28px; margin-top: .5px; }
 @media (prefers-reduced-motion: reduce) { .ms-search.is-glow::before, .ms-search.is-glow { animation: none; } }
+
+/* Paieškos laukas aukštesnis (40 px vietoj 31 px) */
+.ms-search { min-height: 40px; margin-top: 7px; border-radius: 20px; padding-left: 18px; }
+.ms-search textarea { height: 38px; max-height: 158px; padding: 9px 0; font-size: 15.5px; }
+.ms-search-clear { margin-top: 7px; }
+.ms-search-go { margin-top: 5px; }

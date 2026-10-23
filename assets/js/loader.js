@@ -32,9 +32,11 @@
 
   window.LOADER = (kind, size = 18) => {
     const id = 'ldg' + (++uid);
-    if (kind === 'morph') {   // S iš taškų: spalvos nuo ikonos koralinės iki violetinės
+    if (kind === 'morph') {
+      // Taškai sukasi ir susidėlioja į S (koordinatės 20×20, CSS loader.css), įdėti į DI ikonos rėmą,
+      // kad radus DI atsakymą LOADER_RESOLVE galėtų juos sklandžiai paversti DI žvaigžde
       const n = 7, dots = Array.from({ length: n }, (_, i) => `<circle r="1.75" style="fill:${mix(i / (n - 1))}"/>`).join('');
-      return `<span class="ld ld-morph" data-n="${n}"><svg width="${size}" height="${size}" viewBox="0 0 20 20" aria-hidden="true"><g>${dots}</g></svg></span>`;
+      return box(size, `${grad(id)}<path class="ld-ai-line" d="${LINE_A}" stroke="#F0CFE3" pathLength="1"/><path class="ld-ai-line is-b" d="${LINE_B}" stroke="#F0CFE3" pathLength="1"/><path class="ld-ai-star" d="${STAR}" stroke="url(#${id})" pathLength="1"/><g transform="translate(1.5 18) scale(1.9)"><g class="ld-morph" data-n="${n}">${dots}</g></g>`, 'ld-ai ld-mo');
     }
     if (kind !== 'ai-draw' && kind !== 'ai-pulse') {   // numatytoji: ai-dots
       const N = 12, a = ringPts(N), b = starPts(N);
@@ -48,4 +50,35 @@
       return box(size, `${grad(id)}<path class="ld-ai-line" d="${LINE_A}" stroke="url(#${id})" pathLength="1"/><path class="ld-ai-line is-b" d="${LINE_B}" stroke="url(#${id})" pathLength="1"/><path class="ld-ai-star" d="${STAR}" stroke="url(#${id})"/>`, 'ld-ai ld-ai-pulse');
     }
   };
+
+  // Radus atsakymą: taškai iš dabartinės vietos nuskrenda į DI žvaigždės kontūrą, žvaigždė nusipiešia,
+  // taškai joje ištirpsta, galiausiai nusipiešia kometos. toAi = false: taškai tiesiog ramiai išnyksta.
+  window.LOADER_RESOLVE = (root, toAi = true) => new Promise(done => {
+    const svg = root && root.querySelector('svg'), spin = svg && svg.querySelector('.ld-morph');
+    if (!spin || root.dataset.resolved) return done();
+    root.dataset.resolved = '1';
+    const ease = 'cubic-bezier(.65, 0, .35, 1)';
+    const outer = svg.querySelector('g'), circles = [...spin.querySelectorAll('circle')];
+    // Dabartinė kiekvieno taško vieta ekrane (įskaitant sukimą) perskaičiuojama į DI ikonos koordinates
+    const toIcon = svg.getScreenCTM().inverse();
+    const pts = circles.map(c => { const r = c.getBoundingClientRect(); return new DOMPoint(r.x + r.width / 2, r.y + r.height / 2).matrixTransform(toIcon); });
+    const layer = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    circles.forEach((c, i) => { c.style.animation = 'none'; c.setAttribute('r', '3.3'); c.style.transform = `translate(${pts[i].x}px, ${pts[i].y}px)`; layer.appendChild(c); });
+    outer.replaceWith(layer);
+    if (!toAi) {
+      circles.forEach((c, i) => c.animate([{ opacity: 1, transform: c.style.transform }, { opacity: 0, transform: c.style.transform + ' scale(.2)' }], { duration: 260, delay: i * 20, easing: 'ease-out', fill: 'forwards' }));
+      return setTimeout(done, 420);
+    }
+    const star = svg.querySelector('.ld-ai-star'), lines = [...svg.querySelectorAll('.ld-ai-line')];
+    const L = star.getTotalLength(), N = circles.length;
+    circles.forEach((c, i) => {
+      const t = star.getPointAtLength(L * i / N);
+      c.animate([{ transform: c.style.transform }, { transform: `translate(${t.x}px, ${t.y}px) scale(.62)` }], { duration: 460, delay: i * 25, easing: ease, fill: 'forwards' });
+      c.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 260, delay: 640 + i * 15, easing: 'ease-in', fill: 'forwards' });
+    });
+    star.style.strokeDasharray = 1;
+    star.animate([{ opacity: 1, strokeDashoffset: 1 }, { opacity: 1, strokeDashoffset: 0 }], { duration: 440, delay: 420, easing: ease, fill: 'forwards' });
+    lines.forEach((l, i) => { l.style.strokeDasharray = 1; l.style.opacity = 1; l.animate([{ strokeDashoffset: 1 }, { strokeDashoffset: 0 }], { duration: 260, delay: 780 + i * 70, easing: 'ease-out', fill: 'both' }); });
+    setTimeout(done, 1120);
+  });
 })();

@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="assets/css/filters.css?v=1025k">
 <link rel="stylesheet" href="assets/css/search-v2.css?v=1026c">
 <link rel="stylesheet" href="assets/css/loader.css?v=1025z">
-<link rel="stylesheet" href="assets/css/loader-ai.css?v=1025k">
+<link rel="stylesheet" href="assets/css/loader-ai.css?v=1026e">
 <link rel="stylesheet" href="assets/css/admin.css?v=1025w">
 <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.14.1/dist/cdn.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
@@ -344,7 +344,7 @@
           </template>
           <div class="ch-msg is-ai" x-show="chat.typing">
             <!-- Kol DI ieško, animuojasi pati avataro ikona; atėjus atsakymui jos vietoje lieka nejudanti ikona -->
-            <div class="ch-ai"><i class="ch-av is-busy" aria-hidden="true" x-html="LOADER(p.loader || 'morph', 20)"></i><p class="ch-typing">Ieškoma rezultatų…</p></div>
+            <div class="ch-ai"><i class="ch-av is-busy" aria-hidden="true" x-html="chat.typing ? LOADER(p.loader || 'morph', 17.4) : ''"></i><p class="ch-typing">Ieškoma rezultatų…</p></div>
           </div>
 
           <!-- Laukas prilipęs apačioje, kaip įprastuose chat'uose -->
@@ -384,7 +384,7 @@
 
         <!-- Įkėlimas po paieškos -->
         <div class="sk" :class="{ 'is-card': ver === 'v4' && mode === 'ai' && p.aiStyle !== 'plain', 'is-only': ver === 'v4' && aiOnly }" x-show="phase === 'loading'" x-cloak aria-live="polite">
-          <p class="sk-label"><span class="sk-ic" x-html="LOADER(p.loader || 'morph', 21)"></span> Ieškoma rezultatų…</p>
+          <p class="sk-label"><span class="sk-ic" x-html="phase === 'loading' ? LOADER(p.loader || 'morph', 21) : ''"></span> Ieškoma rezultatų…</p>
           <i style="width:55%;height:20px"></i><i style="width:92%"></i><i style="width:80%"></i><i style="width:88%"></i><i style="width:40%"></i>
         </div>
 
@@ -952,7 +952,7 @@
 </style>
 <script src="assets/js/shell.js?v=1025k"></script>
 <script src="assets/js/data.js?v=1026b"></script>
-<script src="assets/js/loader.js?v=1025z"></script>
+<script src="assets/js/loader.js?v=1026e"></script>
 <script>
   // Admin parametras: filtrai po vienu mygtuku „Filtrai“ arba visada matomi
   // V4 tab'ai. icon: ai | chat. Kurie rodomi, valdoma Admin'e (TABS_PARAM)
@@ -1462,7 +1462,7 @@
         this.loadScenario(idx);
         this.query = this.activeQuery = this.origQuery = typed;
         this.phase = 'loading'; window.scrollTo({ top: 0 });
-        clearTimeout(this._t); this._t = setTimeout(() => { this.phase = 'results'; }, 1800);
+        clearTimeout(this._t); this._t = setTimeout(() => this.loadDone(), 1300);
         this.push();
       },
       // ---------- V4: kaip Google. Susijusi paieška = nauja paieška, Atgal per naršyklę ----------
@@ -1476,7 +1476,7 @@
         this.query = this.activeQuery = this.origQuery = q;
         this.rewriteFlash = false; this.$nextTick(() => { this.rewriteFlash = true; clearTimeout(this._rw); this._rw = setTimeout(() => { this.rewriteFlash = false; }, 1500); });
         this.phase = 'loading'; window.scrollTo({ top: 0 });
-        clearTimeout(this._t); this._t = setTimeout(() => { this.phase = 'results'; }, 1800);
+        clearTimeout(this._t); this._t = setTimeout(() => this.loadDone(), 1300);
         this.push();
       },
       onPop(e) {
@@ -1585,6 +1585,19 @@
         this.chat = { key, msgs: [{ who: 'user', text: this.activeQuery }], step: 0, typing: false, draft: '', misses: 0, expertShown: false };
         this.chatReply();
       },
+      // Įkėlimo pabaiga: S iš taškų virsta DI ikona (jei ateina DI turinys) arba tiesiog išnyksta
+      ldFinish(sel, toAi) {
+        const el = [...document.querySelectorAll(sel + ' .ld')].find(e => e.offsetParent);
+        return el && window.LOADER_RESOLVE ? LOADER_RESOLVE(el, toAi) : Promise.resolve();
+      },
+      loadDone() {
+        const toAi = this.mode === 'chat' || (this.mode === 'ai' && ['quotes', 'directions'].includes(this.ai.kind));
+        this.ldFinish('.sk-label', toAi).then(() => { if (this.phase === 'loading') this.phase = 'results'; });
+      },
+      typingDone(push) {
+        const key = this.chat.key;
+        this.ldFinish('.ch-av.is-busy', true).then(() => { if (this.chat.key !== key || !this.chat.typing) return; this.chat.typing = false; push(); });
+      },
       chatReply(forced) {
         this.chat.typing = true; this.chatScroll();
         let turn = forced || this.chatScript[this.chat.step];
@@ -1597,7 +1610,7 @@
         }
         if (turn.expert) this.chat.expertShown = true;
         clearTimeout(this._ct);
-        this._ct = setTimeout(() => { this.chat.typing = false; this.chatPush(turn); }, 1400);
+        this._ct = setTimeout(() => this.typingDone(() => this.chatPush(turn)), 1000);
       },
       // DI atsakymas „auga“: tekstas raidė po raidės, tada kortelė (santrauka ir artefaktai įsikrauna palaipsniui), tada tęsinys ir pasiūlymai
       chatPush(turn) {
@@ -1633,7 +1646,7 @@
           const name = { savaitgalis: 'poilsio dieną', nedaug: 'poilsio dieną', komandiruote: 'komandiruotes', mazai: 'reprezentacines sąnaudas' }[this.sc.id] || 'pradinę temą';
           const msg = `Tai jau kita kryptis: kalbėjom apie ${name}, o dabar klausiat apie visai kitą temą. Kad atsakymas būtų tikslus, siūlau pradėti naują paiešką. Šis pokalbis liks „Ankstesnėse paieškose“, galėsit grįžti.`;
           const tip = 'Jei abi temos susijusios (pvz. darbas poilsio dieną komandiruotės metu), parašykit jas viename klausime, tada ieškosiu abiejų kartu.';
-          this._ct = setTimeout(() => { this.chat.typing = false; this.chatPush({ text: msg, tip, newSearch: text, topic: name }); }, 900);
+          this._ct = setTimeout(() => this.typingDone(() => this.chatPush({ text: msg, tip, newSearch: text, topic: name })), 600);
           return;
         }
         // Pasirinkus variantą, kuris turi savo atsakymą (branches), DI atsako būtent į jį, o ne pagal bendrą eiliškumą

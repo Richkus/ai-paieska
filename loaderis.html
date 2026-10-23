@@ -7,8 +7,8 @@
 <title>AI paieška: įkėlimo animacija</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400..700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/loader.css">
-<link rel="stylesheet" href="assets/css/loader-ai.css">
+<link rel="stylesheet" href="assets/css/loader.css?v=2">
+<link rel="stylesheet" href="assets/css/loader-ai.css?v=2">
 <style>
   :root { --ink: #2f4347; --sub: #5f7a7e; --line: #e3ecec; }
   * { box-sizing: border-box; }
@@ -22,6 +22,14 @@
   .card h2 { margin: 0; font-size: 14px; font-weight: 600; text-align: center; }
   .card small { color: var(--sub); font-size: 12.5px; text-align: center; line-height: 1.5; }
   .inline { display: flex; align-items: center; gap: 6px; color: var(--sub); font-size: 14px; }
+  .demo { margin: 0 0 32px; padding: 24px; border: 1px solid #99cccc; border-radius: 14px; background: #f6fafa; }
+  .demo h2 { margin: 0 0 6px; font-size: 16px; }
+  .demo p { margin: 0 0 20px; color: var(--sub); font-size: 14px; line-height: 1.6; }
+  .demo-row { display: flex; align-items: center; gap: 48px; min-height: 130px; }
+  .demo-inline { display: flex; align-items: center; gap: 8px; color: var(--sub); font-size: 14px; }
+  .demo-btns { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+  .demo-btns button { height: 36px; padding: 0 16px; border: 0; border-radius: 8px; background: #4c9095; color: #fff; font: 600 14px 'Open Sans', sans-serif; cursor: pointer; }
+  .demo-btns button.is-ghost { border: 1px solid #c9d6d7; background: #fff; color: var(--ink); }
   @media (max-width: 640px) { .grid { grid-template-columns: minmax(0, 1fr); } }
 </style>
 </head>
@@ -29,9 +37,22 @@
 <main>
   <h1>Įkėlimo animacija</h1>
   <p class="lead">Kol DI ieško atsakymo, animuojasi pati DI ikona. Kortelėje viršuje padidinta, apačioje tikru dydžiu, kaip prototipe. Prototipe perjungiama per Admin → Įkėlimo animacija.</p>
+  <section class="demo">
+    <h2>Nuo paieškos iki DI atsakymo</h2>
+    <p>Kol ieškoma, taškai sukasi ir susidėlioja į S. Radus DI atsakymą, tie patys taškai nuskrenda į DI žvaigždės kontūrą, žvaigždė nusipiešia, taškai joje ištirpsta. Jei rezultatas be DI, taškai tiesiog išnyksta.</p>
+    <div class="demo-row">
+      <div class="demo-big" id="big"></div>
+      <div class="demo-inline"><span id="small"></span><span id="lbl">Ieškoma rezultatų…</span></div>
+    </div>
+    <div class="demo-btns">
+      <button type="button" data-k="ai">Rastas DI atsakymas</button>
+      <button type="button" data-k="plain">Rasti tik rezultatai</button>
+      <button type="button" data-k="reset" class="is-ghost">Iš naujo</button>
+    </div>
+  </section>
   <div class="grid" id="ai"></div>
 </main>
-<script src="assets/js/loader.js"></script>
+<script src="assets/js/loader.js?v=2"></script>
 <script>
   const items = [
     ['morph', 'Taškai susidėlioja į S', 'Numatytoji: abstrakti, kol ieškoma', true],
@@ -46,6 +67,17 @@
       <small>${note}</small>
       <div class="inline">${LOADER(k, 21)} Ieškoma rezultatų…</div>
     </div>`).join('');
+
+  // Demonstracija: paieška → DI atsakymas arba tik rezultatai
+  const big = document.getElementById('big'), small = document.getElementById('small'), lbl = document.getElementById('lbl');
+  const reset = () => { big.innerHTML = LOADER('morph', 72); small.innerHTML = LOADER('morph', 21); lbl.textContent = 'Ieškoma rezultatų…'; };
+  reset();
+  document.querySelectorAll('.demo-btns button').forEach(b => b.addEventListener('click', () => {
+    if (b.dataset.k === 'reset') return reset();
+    const ai = b.dataset.k === 'ai';
+    lbl.textContent = ai ? 'SUFLERIO DI santrauka' : 'Rasti rezultatai';
+    LOADER_RESOLVE(big.firstElementChild, ai); LOADER_RESOLVE(small.firstElementChild, ai);
+  }));
 </script>
 </body>
 </html>

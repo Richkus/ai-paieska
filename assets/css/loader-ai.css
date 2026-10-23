@@ -43,3 +43,7 @@
   .ld-ai .ld-ai-star { opacity: 1 !important; stroke-dashoffset: 0 !important; }
   .ld-ai-dots circle { display: none; }
 }
+
+/* S iš taškų DI ikonos rėme: kol ieškoma, žvaigždės ir kometų nesimato (jas atskleidžia LOADER_RESOLVE) */
+.ld-mo .ld-ai-star { opacity: 0; }
+.ld-mo g.ld-morph { transform-origin: 10px 10px; animation: ld-spin 2.6s cubic-bezier(.65,0,.35,1) infinite; }

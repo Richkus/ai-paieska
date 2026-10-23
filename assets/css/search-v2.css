@@ -927,7 +927,6 @@ a.src-pill:not([href]) { cursor: default; }
 @media (max-width: 640px) { .ch.is-modal.is-v5 { top: 8px; height: calc(100vh - 16px); } .ch.is-modal.is-v5 .chf-wrap { padding: 0 16px; } }
 
 /* V5 perėjimas paieška ⇄ DI: tas pats fonas, be įėjimo animacijų, modalas tik pakeičia aukštį */
-body.is-swap-chat .ch.is-modal, body.is-swap-k5 .k5 { animation: none !important; }
 .ch.is-modal.is-v5 { animation: k5-in .2s var(--ms-ease); }
 .v2.is-v5 .ch-bd { display: none !important; }   /* V5 naudoja bendrą .k5-bd */
 .k5, .ch.is-modal.is-v5 { overflow: hidden; }

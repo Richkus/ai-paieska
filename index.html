@@ -1658,7 +1658,7 @@
         if (!skipEnsure) this.chatEnsure();
         this.$nextTick(() => setTimeout(() => this.$refs.chatIn && this.$refs.chatIn.focus({ preventScroll: true }), 250));
       },
-      closeChatModal() { this.chatModal = false; document.body.classList.remove('is-chatmodal'); },
+      closeChatModal() { this.chatModal = false; document.body.classList.remove('is-chatmodal'); const c = this.$refs.chatBox; if (c) c.style.animation = ''; },
       chatFromResults() {
         const sum = this.ai.summary;
         if (this.p.chatView === 'modal') this.openChatModal(true); else { this.setMode('chat'); window.scrollTo({ top: 0 }); }
@@ -1861,7 +1861,7 @@
         clearTimeout(this._ct); clearTimeout(this._st);
         if (this.ver === 'v5') this.activeQuery = a.chat.q;   // V5 modalo antraštėje rodomas klausimas
         this.chat = { key: this.scIdx + '|' + this.activeQuery, msgs: [{ who: 'user', text: a.chat.q }, { who: 'ai', stage: 'done', ...a.chat.msg }], step: 99, typing: false, draft: '', misses: 0, expertShown: false };
-        if (this.ver === 'v5' && this.k5.open) return this.v5Swap('chat', () => this.openChatModal(true), () => { this.k5.open = false; });
+        if (this.ver === 'v5' && this.k5.open) return this.v5Swap('chat', () => this.openChatModal(true), () => this.k5Close());
         this.k5.open = false;
         if (this.p.chatView === 'modal' || this.ver === 'v5') this.openChatModal(true); else { this.setMode('chat'); window.scrollTo({ top: 0 }); }
       },
@@ -1872,10 +1872,10 @@
         if (q) { this.k5.q = q; this.k5Run(); }
         this.$nextTick(() => setTimeout(() => (tab === 'search' ? this.$refs.k5In : this.$refs.k5Ask)?.focus(), 60));
       },
-      k5Close() { this.k5.open = false; },
+      k5Close() { this.k5.open = false; const k = document.querySelector('.k5'); if (k) k.style.animation = ''; },
       k5Tab(t) {
         // Jei pokalbis apie šį klausimą jau vyksta, „Klausti DI“ jį tęsia
-        if (t === 'ask' && this.chat.msgs.length && this.phase === 'results') return this.v5Swap('chat', () => this.openChatModal(), () => { this.k5.open = false; });
+        if (t === 'ask' && this.chat.msgs.length && this.phase === 'results') return this.v5Swap('chat', () => this.openChatModal(), () => this.k5Close());
         this.k5.tab = t;
         if (t === 'ask' && !this.k5.askQ) this.k5.askQ = this.k5.q;
         this.$nextTick(() => (t === 'search' ? this.$refs.k5In : this.$refs.k5Ask)?.focus());
@@ -1916,7 +1916,7 @@
         this.loadScenario(idx);
         this.query = this.activeQuery = this.origQuery = q;
         this.k5.askQ = '';
-        this.v5Swap('chat', () => this.openChatModal(), () => { this.k5.open = false; });
+        this.v5Swap('chat', () => this.openChatModal(), () => this.k5Close());
       },
       // Perėjimas tarp paieškos ir DI pokalbio: atrodo kaip vienas modalas. Naujas parodomas po senuoju,
       // senasis paslepiamas tik jam atsiradus (Alpine x-show rodo kitame kadre), tada aukštis sklandžiai pasikeičia
@@ -1924,8 +1924,9 @@
         const vis = e => e.getClientRects().length > 0;   // modalai fixed, todėl offsetParent netinka
         const from = [...document.querySelectorAll('.k5, .ch.is-modal')].find(vis);
         const h = from ? from.getBoundingClientRect().height : 0;
-        const cls = 'is-swap-' + to;
-        document.body.classList.add(cls);
+        // Naujam modalui įėjimo animacijos nereikia (jis „perima“ senojo vietą); grąžinama uždarant
+        const target = document.querySelector(to === 'chat' ? '.ch' : '.k5');
+        if (target) target.style.animation = 'none';
         show();
         const frame = () => new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
         frame().then(() => {
@@ -1936,7 +1937,6 @@
             el.animate([{ height: h + 'px' }, { height: nh + 'px' }], { duration: 300, easing: ease });
             [...el.children].forEach(c => c.animate([{ opacity: 0, transform: 'translateY(4px)' }, { opacity: 1, transform: 'none' }], { duration: 240, delay: 60, easing: ease, fill: 'backwards' }));
           }
-          setTimeout(() => document.body.classList.remove(cls), 360);
         });
       },
       // ---------- Greita peržiūra ----------

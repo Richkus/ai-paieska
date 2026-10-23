@@ -156,3 +156,14 @@ img { display: block; }
 .ms-search-clear { margin-right: 6px; }
 .ms-suggest-group { margin-top: 4px; padding-top: 4px; border-top: 1px solid var(--ms-line); }
 .ms-suggest-ic { flex: 0 0 auto; color: #8aa3a6; }
+
+/* Pirmo karto užuomina po paieškos lauku (kaip Notion tip'ai) */
+.ms-search > .ms-tip { position: absolute; top: calc(100% + 12px); left: 12px; z-index: 52; display: grid; gap: 4px; width: 330px; padding: 14px 16px 12px; border-radius: 12px; background: #1f3336; color: #fff; box-shadow: 0 12px 32px rgba(15, 40, 42, .28); }
+.ms-tip::before { content: ''; position: absolute; top: -6px; left: 28px; width: 12px; height: 12px; border-radius: 2px; background: #1f3336; transform: rotate(45deg); }
+.ms-tip b { font-size: 14px; font-weight: 700; }
+.ms-tip span { color: rgba(255, 255, 255, .82); font-size: 13.5px; line-height: 1.5; }
+.ms-tip-act { display: flex; gap: 6px; margin-top: 8px; }
+.ms-tip-act button { height: 30px; padding: 0 12px; border: 0; border-radius: 7px; background: rgba(255, 255, 255, .12); color: #fff; font-size: 13px; font-weight: 600; cursor: pointer; }
+.ms-tip-act button:hover { background: rgba(255, 255, 255, .2); }
+.ms-tip-act .is-main { background: #fff; color: #1f3336; }
+.ms-tip-act .is-main:hover { background: #eef5f5; }

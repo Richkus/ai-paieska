@@ -9,7 +9,8 @@
    `rewriteFlash` (paryškina lauką, kai klausimas pakeičiamas pasirinkus kryptį),
    `searchNote` (užuomina po lauku, pvz. kad nauja paieška pradės naują pokalbį),
    `searchGlow` (kartą po įkėlimo aplink lauką prabėga DI spalvų gradientas),
-   `recentSearches` (ankstesnės paieškos dropdown'e).
+   `recentSearches` (ankstesnės paieškos dropdown'e),
+   `searchTip`, `tipClose()`, `tipTry()` (pirmo karto užuomina po lauku).
    ========================================================== */
 (function () {
   const IMG = new URL('../img/', document.currentScript.src).href;
@@ -48,14 +49,19 @@
   const topbar = `
     <form class="ms-search" role="search" :class="{ 'is-rewrite': rewriteFlash, 'is-glow': searchGlow }" @submit.prevent="submitSearch()">
       <!-- Laukas auga žemyn, kai tekstas netelpa vienoje eilutėje; atitraukus fokusą vėl viena eilutė -->
-      <textarea rows="1" x-model="query" x-ref="search" placeholder="Ieškokit frazės arba užduokit klausimą" aria-label="Paieška" autocomplete="off" spellcheck="false"
+      <textarea rows="1" x-model="query" x-ref="search" placeholder="Pvz. Ar galiu duoti laisvą dieną už šeštadienį?" aria-label="Paieška" autocomplete="off" spellcheck="false"
              x-effect="query; $nextTick(() => { if (document.activeElement === $el) { $el.style.height = 'auto'; $el.style.height = $el.scrollHeight + 'px'; } })"
-             @focus="suggestOpen = true; $el.style.height = 'auto'; $el.style.height = $el.scrollHeight + 'px'"
+             @focus="suggestOpen = true; searchTip && tipClose(); $el.style.height = 'auto'; $el.style.height = $el.scrollHeight + 'px'"
              @blur="suggestOpen = false; $el.style.height = ''; $el.scrollTop = 0"
              @keydown.enter="if (!$event.shiftKey) { $event.preventDefault(); suggestOpen = false; $el.blur(); $el.form.requestSubmit(); }"
              @keydown.escape="suggestOpen = false; $el.blur()"></textarea>
       <button type="button" class="ms-search-clear" x-show="query" x-cloak @click="query = ''; $el.previousElementSibling.focus()" aria-label="Išvalyti">×</button>
       <button type="submit" class="ms-search-go" aria-label="Ieškoti su DI"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="11" r="6.4" fill="none" stroke="#fff" stroke-width="2.4"/><path d="M15 16l4.8 4.8" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/><path d="M19.2 1.8c.22 1.7 1.42 2.88 3.05 3.05-1.63.22-2.83 1.4-3.05 3.05-.22-1.65-1.42-2.83-3.05-3.05 1.63-.17 2.83-1.35 3.05-3.05Z" fill="#fff" transform="translate(19 5) scale(1.45) translate(-19.2 -4.85)"/></svg></button>
+      <div class="ms-tip" x-show="searchTip" x-cloak x-transition.opacity.duration.200ms role="status" @mousedown.prevent>
+        <b>Nauja: DI paieška</b>
+        <span>Dabar galit klausti savais žodžiais, DI priartins jus prie atsakymo.</span>
+        <div class="ms-tip-act"><button type="button" class="is-main" @click="tipTry()">Išbandyti</button><button type="button" @click="tipClose()">Supratau</button></div>
+      </div>
       <p class="ms-search-note" x-show="suggestOpen && searchNote" x-cloak x-text="searchNote"></p>
       <div class="ms-suggest" x-show="suggestOpen && showSuggest" x-cloak x-transition.opacity.duration.120ms @mousedown.prevent>
         <p>Pabandykit paklausti savais žodžiais</p>

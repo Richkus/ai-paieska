@@ -671,3 +671,7 @@ body.is-chatfull { overflow: hidden; }
 .ak-info b { font-weight: 700; }
 .ak-foot { justify-content: flex-end; }
 .tb-more { margin-left: auto; } /* ⋯ visada dešiniajame krašte */
+/* „DI trumpai“ antraštė 15 px, kaip „Tęskit temą“ */
+.a2-head.is-label:not(.is-ask) .a2-label { font-size: 15px; }
+.is-serif .a2-head.is-label:not(.is-ask) .a2-label { font-size: 17px; }
+.a2-head.is-label:not(.is-ask) > .ai-ic { height: 26px; margin: -5px -2px -5px -4px; }

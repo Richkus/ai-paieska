@@ -383,3 +383,11 @@ body.is-chatfull { overflow: hidden; }
 .rf-row:hover { background: var(--ms-surface-soft); color: var(--ms-teal-dark); }
 .rf-row:hover svg { color: var(--ai-accent); }
 .rf-q { margin-bottom: 6px; }
+
+/* DI ikona (assets/img/ai.svg) vietoj žvaigždutės */
+.ai-ic { flex: 0 0 auto; display: inline-block; vertical-align: middle; }
+.a2-head > .ai-ic { margin-top: -2px; }
+.a2-head.is-label > .ai-ic { display: none; }
+.sr-modes button .ai-ic { margin: -6px 0 -6px -3px; }
+.ch-av .ai-ic, .chf-brand .ai-ic { margin: -6px 0; }
+.fb-pill .ai-ic { margin: -4px -2px; }

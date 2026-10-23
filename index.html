@@ -7,12 +7,12 @@
 <title>AI paieška: prototipas</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400..800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/shell.css?v=1022v">
-<link rel="stylesheet" href="assets/css/search.css?v=1022v">
-<link rel="stylesheet" href="assets/css/filters.css?v=1022v">
-<link rel="stylesheet" href="assets/css/search-v2.css?v=1022v">
-<link rel="stylesheet" href="assets/css/loader.css?v=1022v">
-<link rel="stylesheet" href="assets/css/admin.css?v=1022v">
+<link rel="stylesheet" href="assets/css/shell.css?v=1022w">
+<link rel="stylesheet" href="assets/css/search.css?v=1022w">
+<link rel="stylesheet" href="assets/css/filters.css?v=1022w">
+<link rel="stylesheet" href="assets/css/search-v2.css?v=1022w">
+<link rel="stylesheet" href="assets/css/loader.css?v=1022w">
+<link rel="stylesheet" href="assets/css/admin.css?v=1022w">
 <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.14.1/dist/cdn.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
 </head>
@@ -36,7 +36,7 @@
       <!-- Pradinė būsena: žmogus dar nieko neieškojo (low-fi „Naujausi“) -->
       <div class="home" x-show="phase === 'start'">
         <div class="home-tip">
-          <svg width="18" height="18" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5c.4 3.3 3.2 6.1 6.5 6.5-3.3.4-6.1 3.2-6.5 6.5-.4-3.3-3.2-6.1-6.5-6.5 3.3-.4 6.1-3.2 6.5-6.5Z" fill="currentColor"/></svg>
+          <img class="ai-ic" src="assets/img/ai.svg" width="17" height="29" alt="" aria-hidden="true">
           <div>
             <strong>Paieškoje galit klausti savais žodžiais</strong>
             <span>Pvz. „Darbuotojas dirbo šeštadienį, ar galiu jam duoti laisvą dieną?“ Padėsim rasti tinkamą medžiagą.</span>
@@ -55,7 +55,7 @@
         <!-- V4: trys tab'ai kaip Google (DI režimas · Viskas · Rezultatų sąrašas) -->
         <div class="sr-modes" x-show="ver === 'v4'" role="tablist" aria-label="Paieškos režimas">
           <button type="button" role="tab" :class="{ 'is-on': mode === 'ai' && aiOnly }" :aria-selected="mode === 'ai' && aiOnly" @click="setMode('ai', true)">
-            <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5c.4 3.3 3.2 6.1 6.5 6.5-3.3.4-6.1 3.2-6.5 6.5-.4-3.3-3.2-6.1-6.5-6.5 3.3-.4 6.1-3.2 6.5-6.5Z" fill="currentColor"/></svg>
+            <img class="ai-ic" src="assets/img/ai.svg" width="15" height="26" alt="" aria-hidden="true">
             DI režimas
           </button>
           <button type="button" role="tab" :class="{ 'is-on': mode === 'ai' && !aiOnly }" :aria-selected="mode === 'ai' && !aiOnly" @click="setMode('ai')">Viskas</button>
@@ -65,7 +65,7 @@
             DI chatas
           </button>
           <button type="button" role="tab" :class="{ 'is-on': chatFull }" :aria-selected="chatFull" @click="openChatFull()" title="Atsidaro pilname ekrane">
-            <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5c.4 3.3 3.2 6.1 6.5 6.5-3.3.4-6.1 3.2-6.5 6.5-.4-3.3-3.2-6.1-6.5-6.5 3.3-.4 6.1-3.2 6.5-6.5Z" fill="currentColor"/></svg>
+            <img class="ai-ic" src="assets/img/ai.svg" width="15" height="26" alt="" aria-hidden="true">
             DI pokalbis
             <svg class="is-ext" width="12" height="12" viewBox="0 0 16 16" aria-hidden="true"><path d="M9 3h4v4M13 3 7.5 8.5M12 9.5V13H3V4h3.5" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </button>
@@ -91,7 +91,7 @@
                  x-effect="if (ver === 'v4' && (mode === 'chat' || chatFull) && phase === 'results') chatEnsure()"
                  @keydown.escape.window="chatFull && !panelOpen && closeChatFull()">
           <header class="chf-bar" x-show="chatFull">
-            <span class="chf-brand"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5c.4 3.3 3.2 6.1 6.5 6.5-3.3.4-6.1 3.2-6.5 6.5-.4-3.3-3.2-6.1-6.5-6.5 3.3-.4 6.1-3.2 6.5-6.5Z" fill="currentColor"/></svg> DI pokalbis</span>
+            <span class="chf-brand"><img class="ai-ic" src="assets/img/ai.svg" width="15" height="26" alt="" aria-hidden="true"> DI pokalbis</span>
             <span class="chf-q" x-text="chat.msgs.length ? chat.msgs[0].text : ''"></span>
             <button type="button" class="chf-new" @click="chatRestart()">Naujas pokalbis</button>
             <button type="button" class="pn-btn" @click="closeChatFull()" aria-label="Uždaryti" title="Uždaryti (Esc)">
@@ -105,7 +105,7 @@
               <template x-if="m.who === 'user'"><p class="ch-bubble" x-text="m.text"></p></template>
               <template x-if="m.who === 'ai'">
                 <div class="ch-ai">
-                  <i class="ch-av" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5c.4 3.3 3.2 6.1 6.5 6.5-3.3.4-6.1 3.2-6.5 6.5-.4-3.3-3.2-6.1-6.5-6.5 3.3-.4 6.1-3.2 6.5-6.5Z" fill="currentColor"/></svg></i>
+                  <i class="ch-av" aria-hidden="true"><img class="ai-ic" src="assets/img/ai.svg" width="15" height="26" alt="" aria-hidden="true"></i>
                   <div class="ch-body">
                     <p x-text="m.text"></p>
                     <template x-if="m.card">
@@ -153,7 +153,7 @@
             </div>
           </template>
           <div class="ch-msg is-ai" x-show="chat.typing">
-            <div class="ch-ai"><i class="ch-av" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5c.4 3.3 3.2 6.1 6.5 6.5-3.3.4-6.1 3.2-6.5 6.5-.4-3.3-3.2-6.1-6.5-6.5 3.3-.4 6.1-3.2 6.5-6.5Z" fill="currentColor"/></svg></i><p class="ch-typing"><span x-html="LOADER(p.loader || 'morph', 16, +(p.dots || 7))"></span> Ieškau SUFLERIO medžiagoje…</p></div>
+            <div class="ch-ai"><i class="ch-av" aria-hidden="true"><img class="ai-ic" src="assets/img/ai.svg" width="15" height="26" alt="" aria-hidden="true"></i><p class="ch-typing"><span x-html="LOADER(p.loader || 'morph', 16, +(p.dots || 7))"></span> Ieškau SUFLERIO medžiagoje…</p></div>
           </div>
 
           <!-- Laukas prilipęs apačioje, kaip įprastuose chat'uose -->
@@ -186,7 +186,7 @@
         <!-- Režimai (V2) -->
         <div class="sr-modes" x-show="ver === 'v2'" role="tablist" aria-label="Paieškos režimas">
           <button type="button" role="tab" :class="{ 'is-on': mode === 'ai' }" :aria-selected="mode === 'ai'" @click="setMode('ai')">
-            <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5c.4 3.3 3.2 6.1 6.5 6.5-3.3.4-6.1 3.2-6.5 6.5-.4-3.3-3.2-6.1-6.5-6.5 3.3-.4 6.1-3.2 6.5-6.5Z" fill="currentColor"/></svg>
+            <img class="ai-ic" src="assets/img/ai.svg" width="15" height="26" alt="" aria-hidden="true">
             Atsakymas su AI
           </button>
           <button type="button" role="tab" :class="{ 'is-on': mode === 'classic' }" :aria-selected="mode === 'classic'" @click="setMode('classic')">Tik rezultatai</button>
@@ -218,7 +218,7 @@
 
             <div x-show="!busy" x-effect="sc.id; step; $el.classList.remove('ai-swap'); void $el.offsetWidth; $el.classList.add('ai-swap')">
             <div class="a2-head" :class="{ 'is-label': ver === 'v4', 'is-ask': ver === 'v4' && ai.kind !== 'quotes' }">
-              <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5c.4 3.3 3.2 6.1 6.5 6.5-3.3.4-6.1 3.2-6.5 6.5-.4-3.3-3.2-6.1-6.5-6.5 3.3-.4 6.1-3.2 6.5-6.5Z" fill="currentColor"/></svg>
+              <img class="ai-ic" src="assets/img/ai.svg" width="15" height="26" alt="" aria-hidden="true">
               <h2 x-show="ver !== 'v4'" x-text="ai.heading"></h2>
               <span class="a2-label" x-show="ver === 'v4'" x-text="ai.kind === 'quotes' ? 'DI atrinktos ištraukos iš panašių situacijų' : ai.heading"></span>
               <button type="button" class="a2-info" @mouseenter="tip = true" @mouseleave="tip = false" @focus="tip = true" @blur="tip = false" aria-label="Kaip tai veikia">
@@ -332,7 +332,7 @@
           <template x-for="k in FKEYS" :key="k">
             <div class="fb-item" @click.outside="pop === k && (pop = '')">
               <button type="button" class="fb-pill" :class="{ 'is-set': has(k) }" :aria-expanded="pop === k" @click="togglePop(k)" :title="isAi(k) ? 'Pritaikė AI pagal jūsų klausimą' : ''">
-                <svg x-show="isAi(k)" class="is-ai" width="12" height="12" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5c.4 3.3 3.2 6.1 6.5 6.5-3.3.4-6.1 3.2-6.5 6.5-.4-3.3-3.2-6.1-6.5-6.5 3.3-.4 6.1-3.2 6.5-6.5Z" fill="currentColor"/></svg>
+                <img x-show="isAi(k)" class="ai-ic is-ai" src="assets/img/ai.svg" width="11" height="19" alt="" aria-hidden="true">
                 <span x-html="pillText(k)"></span>
                 <i class="fb-x" x-show="has(k)" @click.stop="clearKey(k)" role="button" :aria-label="'Nuimti filtrą ' + F[k].label">×</i>
                 <svg x-show="!has(k)" class="is-chev" width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><path d="M2 3.5l3 3 3-3" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -636,9 +636,9 @@
   .transition-pn { transition: transform .32s var(--ms-ease); }
   .pn-off { transform: translateX(100%); }
 </style>
-<script src="assets/js/shell.js?v=1022v"></script>
-<script src="assets/js/data.js?v=1022v"></script>
-<script src="assets/js/loader.js?v=1022v"></script>
+<script src="assets/js/shell.js?v=1022w"></script>
+<script src="assets/js/data.js?v=1022w"></script>
+<script src="assets/js/loader.js?v=1022w"></script>
 <script>
   // Admin parametras: filtrai po vienu mygtuku „Filtrai“ arba visada matomi
   const ANSWERS_PARAM = { key: 'answers', label: 'Atsakymai į patikslinimą', type: 'radio', default: 'list', options: [

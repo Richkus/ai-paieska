@@ -531,3 +531,5 @@ body.is-chatfull { overflow: hidden; }
 .cc-tag.is-ig b { background: #f6eef6; color: #8a3c7a; }
 /* Chat'e atsakymo variantai sąrašu (ne pill'ai) */
 .ch .a2-list.ch-opts { display: block; padding-top: 4px; }
+.ch .ch-opts .a2-row { height: auto; padding: 10px 8px 10px 4px; border: 0; border-radius: 8px; background: none; color: var(--ms-ink); font-size: 15px; }
+.ch .ch-opts .a2-row:hover { background: var(--ms-surface-soft); color: var(--ms-teal-dark); border-color: transparent; }

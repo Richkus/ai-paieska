@@ -935,3 +935,6 @@ a.src-pill:not([href]) { cursor: default; }
 .ch.is-modal.is-v5 { z-index: 57; }
 .k5 { z-index: 58; }
 .pv { z-index: 59; }
+
+/* Pradinis puslapis: kol kas dabartinio SUFLERIO puslapio paveikslėlis */
+.home-shot { display: block; width: 100%; max-width: 1000px; height: auto; }

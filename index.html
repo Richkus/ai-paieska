@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="assets/css/shell.css?v=1026g">
 <link rel="stylesheet" href="assets/css/search.css?v=1025k">
 <link rel="stylesheet" href="assets/css/filters.css?v=1025k">
-<link rel="stylesheet" href="assets/css/search-v2.css?v=1026h">
+<link rel="stylesheet" href="assets/css/search-v2.css?v=1026j">
 <link rel="stylesheet" href="assets/css/loader.css?v=1025z">
 <link rel="stylesheet" href="assets/css/loader-ai.css?v=1026e">
 <link rel="stylesheet" href="assets/css/admin.css?v=1025w">
@@ -36,51 +36,8 @@
     <main class="ms-content">
       <!-- Pradinė būsena: žmogus dar nieko neieškojo (low-fi „Naujausi“) -->
       <div class="home" x-show="phase === 'start' || ver === 'v5'">
-        <h1>Naujausi</h1>
-        <div class="home-grid">
-          <!-- 1. Praktinė situacija (PRO): pilkas fonas, taškų raštas, linijinė iliustracija -->
-          <a class="home-card" href="#" @click.prevent="query = 'Dienpinigiai, kai komandiruotė apima savaitgalį'; submitSearch()">
-            <span class="hc-img hc-g1"></span>
-            <span class="hc-meta">Praktinė situacija · 2026-10-20</span>
-            <span class="hc-title">Dienpinigiai, kai komandiruotė apima savaitgalį</span>
-          </a>
-
-          <!-- 2. Atmintinė atsisiuntimui: teal gradientas, serif antraštė, popieriaus lapai + koralinis mygtukas -->
-          <a class="home-card" href="#" @click.prevent="query = 'Dienpinigiai Lietuvoje ir užsienyje'; submitSearch()">
-            <span class="hc-img hc-g2"></span>
-            <span class="hc-meta">Atmintinė · 2026-10-16</span>
-            <span class="hc-title">Dienpinigiai Lietuvoje ir užsienyje: kas keičiasi nuo spalio</span>
-          </a>
-
-          <!-- 3. Skaičiuoklė: šviesus fonas, kalkuliatoriaus ikona + formos lapas -->
-          <a class="home-card" href="#" @click.prevent="query = 'Automobilio pajamų natūra skaičiuoklė'; submitSearch()">
-            <span class="hc-img hc-g3"></span>
-            <span class="hc-meta">Skaičiuoklė · 2026-10-09</span>
-            <span class="hc-title">Automobilio pajamų natūra skaičiuoklė</span>
-          </a>
-
-          <!-- 4. Testas: teal tinklelis, pakreiptas „Žinių testo“ lapas -->
-          <a class="home-card" href="#" @click.prevent="query = 'Dienpinigiai testas'; submitSearch()">
-            <span class="hc-img hc-g4"></span>
-            <span class="hc-meta">Testas · 2026-10-14</span>
-            <span class="hc-title">Dienpinigiai (III)</span>
-            <span class="hc-prog"><span>5 / 7</span><i><b style="width:71%"></b></i></span>
-          </a>
-
-          <!-- 5. Vedlys: šviesus fonas, šakų ikona + klausimų kortelė -->
-          <a class="home-card" href="#" @click.prevent="query = 'Ar reikia skaičiuoti pajamas natūra už automobilį'; submitSearch()">
-            <span class="hc-img hc-g5"></span>
-            <span class="hc-meta">Vedlys · 2026-09-28</span>
-            <span class="hc-title">Ar skaičiuoti pajamas natūra už įmonės automobilį?</span>
-          </a>
-
-          <!-- 6. Vaizdo įrašas: šviesus teal, vaizdo kadrai su play + raudonas ženkliukas -->
-          <a class="home-card" href="#" @click.prevent="query = 'Darbo užmokesčio pokyčiai vaizdo įrašas'; submitSearch()">
-            <span class="hc-img hc-g6"></span>
-            <span class="hc-meta">Vaizdo įrašas · 2026-09-24</span>
-            <span class="hc-title">Darbo užmokesčio pokyčiai 2027 m.: ką pasiruošti jau dabar</span>
-          </a>
-        </div>
+        <!-- Kol kas dabartinio SUFLERIO pradinio puslapio imitacija (paveikslėlis) -->
+        <img class="home-shot" src="assets/img/home-imitacija.jpg" width="1616" height="1172" alt="SUFLERIO pradinis puslapis: metų top temos, savaitės apžvalga, žinių testas, kitos praktinės situacijos">
       </div>
 
       <div x-show="ver === 'v5' ? chatModal : phase !== 'start'" :class="{ 'v2': true, 'is-v5': ver === 'v5', 'no-side': ver === 'v4' && p.side !== 'show', 'is-classic': mode === 'classic', 'is-loading': phase === 'loading', 'is-busy': !!busy }">

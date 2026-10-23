@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="assets/css/shell.css?v=1026r">
 <link rel="stylesheet" href="assets/css/search.css?v=1025k">
 <link rel="stylesheet" href="assets/css/filters.css?v=1025k">
-<link rel="stylesheet" href="assets/css/search-v2.css?v=1026t">
+<link rel="stylesheet" href="assets/css/search-v2.css?v=1026u">
 <link rel="stylesheet" href="assets/css/loader.css?v=1025z">
 <link rel="stylesheet" href="assets/css/loader-ai.css?v=1026e">
 <link rel="stylesheet" href="assets/css/admin.css?v=1025w">
@@ -138,7 +138,7 @@
         <!-- Tas pats pokalbis: tab'e „DI chatas“ puslapio viduje, „DI pokalbis“ atidaro jį pilname ekrane -->
         <!-- Admin „DI režimas: peržiūra“ = modalas: tamsus fonas, pokalbis dideliame lange -->
         <div class="ch-bd" x-show="chatModal" x-cloak x-transition.opacity.duration.200ms @click="closeChatModal()"></div>
-        <section class="ch" :class="{ 'is-modal': chatModal, 'is-v5': ver === 'v5', 'is-rail': ver === 'v4' && p.chatView === 'rail' && !chatModal, 'is-fill': chatFill, 'is-filltop': chatFillTop }" x-ref="chatBox" x-show="mode === 'chat' || chatModal" x-cloak
+        <section class="ch" :class="{ 'is-modal': chatModal, 'is-v5': ver === 'v5', 'is-rail': ver === 'v4' && p.chatView === 'rail' && !chatModal, 'is-fill': chatFill, 'is-filltop': chatFillTop }" x-ref="chatBox" x-show="mode === 'chat' || chatModal" x-cloak @scroll.passive="chatQCheck()"
                  x-effect="document.body.classList.toggle('is-chatfill', chatFill); if ((mode === 'chat' || chatModal) && phase === 'results') chatEnsure()"
                  @keydown.escape.window="if (chatModal && !panelOpen) closeChatModal(); else if (chatFill && !panelOpen) setMode('ai')">
           <header class="chm-bar" x-show="chatModal || chatFill">
@@ -154,7 +154,8 @@
               <button type="button" @click="v5Swap('k5', () => openK5('search', activeQuery), () => closeChatModal())"><svg width="13" height="13" viewBox="0 0 18 18" aria-hidden="true"><circle cx="7.5" cy="7.5" r="6" stroke="currentColor" stroke-width="1.8" fill="none"/><path d="M12 12l4.5 4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Paieška</button>
               <button type="button" class="is-on"><img class="ai-ic" src="assets/img/ai.svg" width="8" height="14" alt="" aria-hidden="true">Klausti DI</button>
             </div>
-            <span class="chm-q" x-text="activeQuery"></span>
+            <!-- Kaip Perplexity: klausimas antraštėje atsiranda tik nuslinkus žemiau už jį pokalbyje -->
+            <span class="chm-q" :class="{ 'is-on': chatQShow }" x-effect="chat.key; chatModal; mode; $nextTick(() => chatQCheck())" x-text="activeQuery" :title="activeQuery"></span>
             <button type="button" class="pn-btn" x-show="!chatFill" @click="closeChatModal()" aria-label="Uždaryti" title="Uždaryti (Esc)">
               <svg width="18" height="18" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
             </button>
@@ -1470,6 +1471,12 @@
       clearKey(k) { this.f[k] = this.F[k].single ? '' : []; this.aiF = this.aiF.filter(x => !x.startsWith(k + ':')); this.pop = ''; },
       // V4 „Visi rezultatai“: filtrų nerodom, lieka tik rezultatų skaičius ir rikiavimas
       // V4 „Per visą turinio langą“: DI režimas užima visą baltą sritį po viršutine juosta
+      // Antraštės klausimas: rodomas tik kai pirmas klausimo burbulas pokalbyje paslinktas už antraštės
+      chatQShow: false,
+      chatQCheck() {
+        const box = this.$refs.chatBox, b = box && box.querySelector('.ch-msg.is-user .ch-bubble'), bar = box && box.querySelector('.chm-bar');
+        this.chatQShow = !!(b && bar && b.getBoundingClientRect().bottom < bar.getBoundingClientRect().bottom + 4);
+      },
       get chatFill() { return this.ver === 'v4' && ['fill', 'filltop'].includes(this.p.chatView) && this.mode === 'chat' && !this.chatModal; },
       get chatFillTop() { return this.chatFill && this.p.chatView === 'filltop'; },
       get noFilters() { return this.ver === 'v4' && this.mode === 'ai'; },

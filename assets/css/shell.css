@@ -126,3 +126,18 @@ img { display: block; }
   .ms-footer-cols { grid-template-columns: minmax(0, 1fr); }
   .ms-footer-bottom { flex-wrap: wrap; height: auto; padding: 16px 16px 16px 0; }
 }
+
+/* ==========================================================
+   DI paieška: kartą po įkėlimo aplink lauką prabėga DI spalvų
+   gradientas (#FF7F7D → #B85399), kad būtų pastebėta naujovė.
+   ========================================================== */
+@property --ms-ang { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
+.ms-search::before { content: ''; position: absolute; inset: -2px; z-index: 0; padding: 2px; border-radius: inherit; background: conic-gradient(from var(--ms-ang), rgba(255, 127, 125, 0) 0%, rgba(255, 127, 125, 0) 55%, #ff7f7d 72%, #b85399 86%, rgba(184, 83, 153, 0) 100%); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0); opacity: 0; pointer-events: none; }
+.ms-search.is-glow::before { animation: ms-sweep 2.6s cubic-bezier(.45, 0, .25, 1) forwards; }
+.ms-search.is-glow { animation: ms-halo 2.6s ease-in-out; }
+@keyframes ms-sweep { 0% { --ms-ang: -40deg; opacity: 0; } 12% { opacity: 1; } 80% { opacity: 1; } 100% { --ms-ang: 680deg; opacity: 0; } }
+@keyframes ms-halo { 0%, 100% { box-shadow: 0 0 0 0 rgba(184, 83, 153, 0); } 45% { box-shadow: 0 0 0 4px rgba(255, 127, 125, .12), 0 4px 18px rgba(184, 83, 153, .18); } }
+.ms-search > * { position: relative; z-index: 1; }
+.ms-search > .ms-suggest, .ms-search > .ms-search-note { position: absolute; z-index: 51; }
+.ms-search-go { width: 28px; height: 28px; margin-top: .5px; }
+@media (prefers-reduced-motion: reduce) { .ms-search.is-glow::before, .ms-search.is-glow { animation: none; } }

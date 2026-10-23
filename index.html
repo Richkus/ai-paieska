@@ -7,12 +7,12 @@
 <title>AI paieška: prototipas</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400..800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/shell.css?v=1023v">
-<link rel="stylesheet" href="assets/css/search.css?v=1023v">
-<link rel="stylesheet" href="assets/css/filters.css?v=1023v">
-<link rel="stylesheet" href="assets/css/search-v2.css?v=1023v">
-<link rel="stylesheet" href="assets/css/loader-ai.css?v=1023v">
-<link rel="stylesheet" href="assets/css/admin.css?v=1023v">
+<link rel="stylesheet" href="assets/css/shell.css?v=1023w">
+<link rel="stylesheet" href="assets/css/search.css?v=1023w">
+<link rel="stylesheet" href="assets/css/filters.css?v=1023w">
+<link rel="stylesheet" href="assets/css/search-v2.css?v=1023w">
+<link rel="stylesheet" href="assets/css/loader-ai.css?v=1023w">
+<link rel="stylesheet" href="assets/css/admin.css?v=1023w">
 <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.14.1/dist/cdn.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
 </head>
@@ -751,9 +751,9 @@
   .transition-pn { transition: transform .32s var(--ms-ease); }
   .pn-off { transform: translateX(100%); }
 </style>
-<script src="assets/js/shell.js?v=1023v"></script>
-<script src="assets/js/data.js?v=1023v"></script>
-<script src="assets/js/loader.js?v=1023v"></script>
+<script src="assets/js/shell.js?v=1023w"></script>
+<script src="assets/js/data.js?v=1023w"></script>
+<script src="assets/js/loader.js?v=1023w"></script>
 <script>
   // Admin parametras: filtrai po vienu mygtuku „Filtrai“ arba visada matomi
   // V4 tab'ai. icon: ai | chat. Kurie rodomi, valdoma Admin'e (TABS_PARAM)
@@ -960,7 +960,9 @@
       adminOpen: false,
       pId: null,
 
+      searchGlow: false,   // kartą po įkėlimo aplink paieškos lauką prabėga DI gradientas
       init() {
+        setTimeout(() => { this.searchGlow = true; setTimeout(() => { this.searchGlow = false; }, 3200); }, 1200);
         this.initParams();
         this.loadScenario(0);
         this.query = this.activeQuery = this.origQuery = ''; this.phase = 'start';

@@ -7,7 +7,8 @@
    Paieškos laukas naudoja Alpine: puslapio x-data turi turėti
    `query`, `submitSearch()`, `suggestOpen`, `showSuggest`, `suggestions`,
    `rewriteFlash` (paryškina lauką, kai klausimas pakeičiamas pasirinkus kryptį),
-   `searchNote` (užuomina po lauku, pvz. kad nauja paieška pradės naują pokalbį).
+   `searchNote` (užuomina po lauku, pvz. kad nauja paieška pradės naują pokalbį),
+   `searchGlow` (kartą po įkėlimo aplink lauką prabėga DI spalvų gradientas).
    ========================================================== */
 (function () {
   const IMG = new URL('../img/', document.currentScript.src).href;
@@ -44,7 +45,7 @@
     </ul>`;
 
   const topbar = `
-    <form class="ms-search" role="search" :class="{ 'is-rewrite': rewriteFlash }" @submit.prevent="submitSearch()">
+    <form class="ms-search" role="search" :class="{ 'is-rewrite': rewriteFlash, 'is-glow': searchGlow }" @submit.prevent="submitSearch()">
       <!-- Laukas auga žemyn, kai tekstas netelpa vienoje eilutėje; atitraukus fokusą vėl viena eilutė -->
       <textarea rows="1" x-model="query" x-ref="search" placeholder="Ieškokit frazės arba užduokit klausimą" aria-label="Paieška" autocomplete="off" spellcheck="false"
              x-effect="query; $nextTick(() => { if (document.activeElement === $el) { $el.style.height = 'auto'; $el.style.height = $el.scrollHeight + 'px'; } })"
@@ -53,7 +54,7 @@
              @keydown.enter="if (!$event.shiftKey) { $event.preventDefault(); suggestOpen = false; $el.blur(); $el.form.requestSubmit(); }"
              @keydown.escape="suggestOpen = false; $el.blur()"></textarea>
       <button type="button" class="ms-search-clear" x-show="query" x-cloak @click="query = ''; $el.previousElementSibling.focus()" aria-label="Išvalyti">×</button>
-      <button type="submit" class="ms-search-go" aria-label="Ieškoti">${img('ic-padidke.svg', 18, 18)}</button>
+      <button type="submit" class="ms-search-go" aria-label="Ieškoti su DI"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><defs><linearGradient id="ms-ai-g" x1="15" y1="1" x2="23" y2="10" gradientUnits="userSpaceOnUse"><stop stop-color="#FF7F7D"/><stop offset="1" stop-color="#B85399"/></linearGradient></defs><circle cx="10" cy="11" r="6.6" fill="none" stroke="#0f5354" stroke-width="2.2"/><path d="M15 16l5.2 5.2" stroke="#0f5354" stroke-width="2.4" stroke-linecap="round"/><path d="M19 1.6c.25 1.9 1.6 3.2 3.4 3.4-1.8.25-3.15 1.55-3.4 3.4-.25-1.85-1.6-3.15-3.4-3.4 1.8-.2 3.15-1.5 3.4-3.4Z" fill="url(#ms-ai-g)"/></svg></button>
       <p class="ms-search-note" x-show="suggestOpen && searchNote" x-cloak x-text="searchNote"></p>
       <div class="ms-suggest" x-show="suggestOpen && showSuggest" x-cloak x-transition.opacity.duration.120ms @mousedown.prevent>
         <p>Pabandykit paklausti savais žodžiais</p>

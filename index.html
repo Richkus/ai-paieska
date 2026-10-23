@@ -7,12 +7,12 @@
 <title>AI paieška: prototipas</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400..800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/shell.css?v=1023u">
-<link rel="stylesheet" href="assets/css/search.css?v=1023u">
-<link rel="stylesheet" href="assets/css/filters.css?v=1023u">
-<link rel="stylesheet" href="assets/css/search-v2.css?v=1023u">
-<link rel="stylesheet" href="assets/css/loader-ai.css?v=1023u">
-<link rel="stylesheet" href="assets/css/admin.css?v=1023u">
+<link rel="stylesheet" href="assets/css/shell.css?v=1023v">
+<link rel="stylesheet" href="assets/css/search.css?v=1023v">
+<link rel="stylesheet" href="assets/css/filters.css?v=1023v">
+<link rel="stylesheet" href="assets/css/search-v2.css?v=1023v">
+<link rel="stylesheet" href="assets/css/loader-ai.css?v=1023v">
+<link rel="stylesheet" href="assets/css/admin.css?v=1023v">
 <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.14.1/dist/cdn.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
 </head>
@@ -195,6 +195,54 @@
                             <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="1.5" width="10" height="13" rx="2" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M5.5 4.5h5M5.5 8h1M8 8h1M10.5 8h0M5.5 11h1M8 11h1" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
                             <span x-text="R[m.card.tool].title"></span><em>Atidaryti →</em>
                           </button>
+                        </template>
+                        <!-- Artefaktai: skaičiuoklės fragmentas, failas atsisiuntimui, video nuo konkrečios vietos -->
+                        <template x-for="(a, ai) in m.card.artifacts || []" :key="ai">
+                          <div class="art" :class="'is-' + a.kind">
+                            <!-- Skaičiuoklė -->
+                            <template x-if="a.kind === 'calc'">
+                              <div x-data="calcArt(a)">
+                                <div class="art-head">
+                                  <span class="art-ic"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="1.5" width="10" height="13" rx="2" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M5.5 4.5h5M5.5 8h1M8 8h1M10.5 8h0M5.5 11h1M8 11h1" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></span>
+                                  <div><small>Skaičiuoklė</small><b>Dienpinigių skaičiuoklė</b></div>
+                                  <a class="art-open" href="https://www.mokesciu-sufleris.lt/dienpinigiu-skaiciuokle.html" target="_blank" rel="noopener">Atidaryti visą ↗</a>
+                                </div>
+                                <div class="calc">
+                                  <div class="calc-row is-head"><span>Šalis</span><span>Norma</span><span>Dienos</span><span>Suma</span><span></span></div>
+                                  <template x-for="(r, ri) in rows" :key="ri">
+                                    <div class="calc-row">
+                                      <select x-model="r.country" aria-label="Šalis"><template x-for="c in Object.keys(CALC_NORMS)" :key="c"><option :value="c" x-text="c" :selected="c === r.country"></option></template></select>
+                                      <span class="calc-n" x-text="eur(norm(r.country))"></span>
+                                      <input type="number" min="0" max="365" x-model.number="r.days" aria-label="Dienos">
+                                      <b x-text="eur(sum(r))"></b>
+                                      <button type="button" class="calc-x" x-show="rows.length > 1" @click="remove(ri)" aria-label="Pašalinti šalį">×</button>
+                                    </div>
+                                  </template>
+                                  <button type="button" class="calc-add" @click="add()">+ Pridėti šalį</button>
+                                  <div class="calc-total"><span>Bendra dienpinigių suma</span><b x-text="eur(total)"></b></div>
+                                  <p class="calc-note">Normos pavyzdinės, tik prototipui. Tikros normos SUFLERIO skaičiuoklėje.</p>
+                                </div>
+                              </div>
+                            </template>
+                            <!-- Failas atsisiuntimui -->
+                            <template x-if="a.kind === 'file'">
+                              <div class="art-file" x-data="{ got: false }">
+                                <span class="art-doc" x-text="R[a.id].file"></span>
+                                <div><small x-text="(R[a.id].kind || 'Failas') + ' atsisiuntimui'"></small><b x-text="R[a.id].title"></b><em x-text="R[a.id].file + (R[a.id].pages ? ' · ' + R[a.id].pages + ' psl.' : '') + ' · ' + R[a.id].date"></em></div>
+                                <button type="button" class="art-dl" :class="{ 'is-done': got }" @click="got = true">
+                                  <svg x-show="!got" width="15" height="15" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2v8M4.5 7 8 10.5 11.5 7M3 13.5h10" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                  <span x-text="got ? '✓ Atsisiųsta' : 'Atsisiųsti'"></span>
+                                </button>
+                              </div>
+                            </template>
+                            <!-- Video nuo konkrečios vietos -->
+                            <template x-if="a.kind === 'video'">
+                              <button type="button" class="art-video" @click="openPanel(a.id)">
+                                <span class="art-thumb"><i><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M5.5 3.5v9l7-4.5Z" fill="currentColor"/></svg></i><em x-text="a.at"></em></span>
+                                <span class="art-vt"><small>Vaizdo įrašas</small><b x-text="R[a.id].title"></b><em x-text="'Žiūrėti nuo ' + a.at + (R[a.id].part ? ' · ' + R[a.id].part.split(' · ')[0] : '')"></em></span>
+                              </button>
+                            </template>
+                          </div>
                         </template>
                         <template x-if="m.card.more && m.card.more.length">
                           <div class="ch-more">
@@ -703,9 +751,9 @@
   .transition-pn { transition: transform .32s var(--ms-ease); }
   .pn-off { transform: translateX(100%); }
 </style>
-<script src="assets/js/shell.js?v=1023u"></script>
-<script src="assets/js/data.js?v=1023u"></script>
-<script src="assets/js/loader.js?v=1023u"></script>
+<script src="assets/js/shell.js?v=1023v"></script>
+<script src="assets/js/data.js?v=1023v"></script>
+<script src="assets/js/loader.js?v=1023v"></script>
 <script>
   // Admin parametras: filtrai po vienu mygtuku „Filtrai“ arba visada matomi
   // V4 tab'ai. icon: ai | chat. Kurie rodomi, valdoma Admin'e (TABS_PARAM)

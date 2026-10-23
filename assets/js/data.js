@@ -399,6 +399,13 @@ window.COMPETENCIES = [
   C.komandiruote[3].card = { main: 'k1', summary: [sum.komandiruote[1][0]] };
   C.savaitgalis[2].text = 'Ačiū, radau situaciją, kuri atitinka jūsų atvejį. Trumpai:';
   C.komandiruote[2].text = 'Trumpai apie dienpinigius komandiruotėje užsienyje:';
+  // Artefaktai pokalbyje: skaičiuoklės fragmentas, failas atsisiuntimui, video nuo konkrečios vietos
+  C.komandiruote[2].card.tool = null;
+  C.komandiruote[2].card.artifacts = [{ kind: 'calc', rows: [{ country: 'Vokietija', days: 3 }] }, { kind: 'file', id: 'f6' }];
+  C.komandiruote[2].after = 'Skaičiuoklėje jau įrašiau Vokietiją ir 3 dienas, pakeiskit pagal savo komandiruotę. Ar dar kažkas neaišku?';
+  C.komandiruote[3].card.artifacts = [{ kind: 'video', id: 'v3', at: '18:20' }];
+  C.savaitgalis[2].card.artifacts = [{ kind: 'file', id: 'r6' }];
+  C.savaitgalis[3].card.artifacts = [{ kind: 'video', id: 'r4', at: '24:10' }];
   C.nedaug = [{ text: 'Radau 3 medžiagas, kurios tiesiai atsako į jūsų klausimą:', card: { list: ['r3', 'f4', 'r2'] } }];
 })();
 
@@ -419,3 +426,19 @@ window.COMPETENCIES = [
   };
   Object.entries(map).forEach(([comp, mods]) => Object.entries(mods).forEach(([mod, ids]) => ids.forEach(id => { if (R[id]) { R[id].comp = comp; R[id].mod = mod; } })));
 })();
+
+/* Atmintinė atsisiuntimui (kaip dienpinigių skaičiuoklės puslapyje) */
+window.RESULTS.f6 = { type: 'Atmintinė', date: '2026-09-15', title: 'Dienpinigiai Lietuvoje ir užsienyje: ką turi žinoti buhalteris', snippet: 'Kas keičiasi nuo 2026-10-01: vienos dienos komandiruotė Lietuvoje, 20 proc. dienpinigių trumpoms dienoms.', file: 'PDF', kind: 'Atmintinė', pages: 2, rub: 'Trumpai', fmt: 'Dokumento forma', pro: false, tema: 'Komandiruotės', comp: 'ds', mod: 'Komandiruotės' };
+window.RESULTS.r6.pages = 1; window.RESULTS.r6.file = 'DOCX';
+
+/* Dienpinigių skaičiuoklės fragmentas pokalbyje. Normos PAVYZDINĖS, tik prototipui */
+window.CALC_NORMS = { 'Lietuva': 0, 'Latvija': 46, 'Lenkija': 49, 'Vokietija': 61, 'Prancūzija': 64, 'Švedija': 66, 'JAV': 72 };
+window.calcArt = a => ({
+  rows: (a.rows || [{ country: 'Lietuva', days: 1 }]).map(r => ({ ...r })),
+  norm(c) { return window.CALC_NORMS[c] ?? 0; },
+  sum(r) { return this.norm(r.country) * (+r.days || 0); },
+  get total() { return this.rows.reduce((t, r) => t + this.sum(r), 0); },
+  eur(n) { return n.toFixed(2).replace('.', ',') + ' €'; },
+  add() { this.rows.push({ country: 'Latvija', days: 1 }); },
+  remove(i) { this.rows.splice(i, 1); },
+});

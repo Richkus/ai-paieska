@@ -656,3 +656,9 @@ body.is-chatfull { overflow: hidden; }
 .a2-gistq { margin-bottom: 16px; }
 .a2-gist { margin: 0 0 16px; color: var(--ms-ink); font-size: 16.5px; line-height: 1.65; }
 .a2-gistq .a2-quotes { margin-bottom: 0; }
+/* ⋯ „Daugiau“ tab'ų juostoje (kaip Gmail / Notion) */
+.sr-modes .tb-more > .tb-dots { width: 32px; height: 32px; margin: 6px 0; padding: 0; justify-content: center; border-radius: 8px; color: var(--ms-sub); }
+.sr-modes .tb-more > .tb-dots::after { display: none; }
+.sr-modes .tb-more > .tb-dots:hover, .sr-modes .tb-more > .tb-dots[aria-expanded="true"] { background: var(--ms-surface-soft); color: var(--ms-ink); }
+.tb-more { align-self: center; }
+.tb-menu { left: auto; right: -4px; }

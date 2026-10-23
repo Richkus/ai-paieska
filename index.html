@@ -7,12 +7,12 @@
 <title>AI paieška: prototipas</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400..800&family=Source+Serif+4:opsz,wght@8..60,500..700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/shell.css?v=1024q">
-<link rel="stylesheet" href="assets/css/search.css?v=1024q">
-<link rel="stylesheet" href="assets/css/filters.css?v=1024q">
-<link rel="stylesheet" href="assets/css/search-v2.css?v=1024q">
-<link rel="stylesheet" href="assets/css/loader-ai.css?v=1024q">
-<link rel="stylesheet" href="assets/css/admin.css?v=1024q">
+<link rel="stylesheet" href="assets/css/shell.css?v=1024r">
+<link rel="stylesheet" href="assets/css/search.css?v=1024r">
+<link rel="stylesheet" href="assets/css/filters.css?v=1024r">
+<link rel="stylesheet" href="assets/css/search-v2.css?v=1024r">
+<link rel="stylesheet" href="assets/css/loader-ai.css?v=1024r">
+<link rel="stylesheet" href="assets/css/admin.css?v=1024r">
 <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.14.1/dist/cdn.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
 </head>
@@ -54,7 +54,7 @@
 
         <!-- V4: tab'ų juosta kaip Google. Kurie tab'ai rodomi, valdoma Admin'e; netelpantys nukeliauja į „Daugiau ▾“ -->
         <div class="sr-modes tb" x-show="ver === 'v4'" x-ref="tabsBar" role="tablist" aria-label="Paieškos režimas"
-             x-effect="p.tabs; phase; $nextTick(() => { tabGuard(); tabsMeasure(); })" @resize.window.debounce.80ms="tabsMeasure()">
+             x-effect="p.tabs; phase; mode; $nextTick(() => { tabGuard(); tabsMeasure(); })" @resize.window.debounce.80ms="tabsMeasure()">
           <template x-for="t in tabsRow" :key="t.id">
             <button type="button" role="tab" :class="{ 'is-on': tabActive(t) }" :aria-selected="tabActive(t)" @click="selectTab(t)">
               <template x-if="t.icon === 'ai'"><span class="tb-ic"><img class="ai-ic" src="assets/img/ai.svg" width="15" height="26" alt="" aria-hidden="true"></span></template>
@@ -63,8 +63,8 @@
             </button>
           </template>
           <div class="tb-more" x-show="tabsMore.length" @click.outside="tabMoreOpen = false" @keydown.escape="tabMoreOpen = false">
-            <button type="button" :class="{ 'is-on': !!tabMoreActive }" @click="tabMoreOpen = !tabMoreOpen" :aria-expanded="tabMoreOpen">
-              <span class="tb-more-l" :style="{ maxWidth: tabMoreMax + 'px' }" x-text="tabMoreActive ? tabMoreActive.label : 'Daugiau'"></span> <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><path d="M2 3.5l3 3 3-3" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <button type="button" class="tb-dots" @click="tabMoreOpen = !tabMoreOpen" :aria-expanded="tabMoreOpen" aria-label="Daugiau" title="Daugiau">
+              <svg width="18" height="18" viewBox="0 0 16 16" aria-hidden="true"><circle cx="3" cy="8" r="1.4" fill="currentColor"/><circle cx="8" cy="8" r="1.4" fill="currentColor"/><circle cx="13" cy="8" r="1.4" fill="currentColor"/></svg>
             </button>
             <div class="tb-menu" x-show="tabMoreOpen" x-cloak x-transition.opacity.duration.120ms>
               <template x-for="t in tabsMore" :key="t.id">
@@ -829,9 +829,9 @@
   .transition-pn { transition: transform .32s var(--ms-ease); }
   .pn-off { transform: translateX(100%); }
 </style>
-<script src="assets/js/shell.js?v=1024q"></script>
-<script src="assets/js/data.js?v=1024q"></script>
-<script src="assets/js/loader.js?v=1024q"></script>
+<script src="assets/js/shell.js?v=1024r"></script>
+<script src="assets/js/data.js?v=1024r"></script>
+<script src="assets/js/loader.js?v=1024r"></script>
 <script>
   // Admin parametras: filtrai po vienu mygtuku „Filtrai“ arba visada matomi
   // V4 tab'ai. icon: ai | chat. Kurie rodomi, valdoma Admin'e (TABS_PARAM)
@@ -920,12 +920,14 @@
       TABS,
       tabFit: 99,
       tabMoreOpen: false,
-      tabMoreMax: 200,
       get tabsShown() { return TABS.filter(t => (this.p.tabs || []).includes(t.id)); },
       // Eilutė nejuda (kaip Gmail / Material): jei pasirinktas tab'as yra meniu, „Daugiau“ mygtukas rodo jo pavadinimą ir yra pažymėtas
-      get tabsRow() { return this.tabsShown.slice(0, this.tabFit); },
-      get tabsMore() { return this.tabsShown.slice(this.tabFit); },
-      get tabMoreActive() { return this.tabsMore.find(t => this.tabActive(t)); },
+      // Kaip Gmail / Notion: pasirinktas punktas iš meniu rodomas eilutėje kaip tab'as, o ⋯ visada gale
+      get tabsRow() {
+        const s = this.tabsShown, row = s.slice(0, this.tabFit), act = s.find(t => this.tabActive(t));
+        return act && !row.includes(act) ? [...row, act] : row;
+      },
+      get tabsMore() { const row = this.tabsRow; return this.tabsShown.filter(t => !row.includes(t)); },
       tabActive(t) {
         switch (t.id) {
           case 'all': return this.mode === 'ai' && !this.aiOnly;
@@ -943,17 +945,16 @@
         if (!bar || !meas || !bar.offsetParent) return;
         const ws = [...meas.querySelectorAll('button')].map(b => b.offsetWidth);
         const gap = 28, avail = bar.clientWidth - 4, n = ws.length;
-        // Telpa tiek tab'ų, kiek tilptų su „Daugiau“ mygtuku (~96 px); jei visi telpa, „Daugiau“ nerodomas.
-        // Aktyvus tab'as paryškintas, todėl pridedam kelis px atsargos.
-        const bold = 8;
-        let fit = 1, rowW = 0;
+        // Telpa tiek tab'ų, kiek tilptų kartu su ⋯ mygtuku (~32 px) ir, jei pasirinktas punktas iš meniu, juo pačiu.
+        // Jei visi telpa, ⋯ nerodomas. Aktyvus tab'as paryškintas, todėl pridedam kelis px atsargos.
+        const bold = 8, more = 32, act = this.tabsShown.findIndex(t => this.tabActive(t));
+        let fit = 1;
         for (let k = n; k >= 1; k--) {
-          const row = ws.slice(0, k).reduce((a, w, i) => a + w + (i ? gap : 0), 0) + bold;
-          if (row + (k < n ? gap + 96 : 0) <= avail) { fit = k; rowW = row; break; }
+          let row = ws.slice(0, k).reduce((a, w, i) => a + w + (i ? gap : 0), 0) + bold;
+          if (act >= k) row += gap + ws[act];
+          if (row + (k < n ? gap + more : 0) <= avail) { fit = k; break; }
         }
         this.tabFit = fit;
-        // Jei pasirinktas tab'as yra meniu, „Daugiau“ rodo jo pavadinimą, bet ne platesnį nei likusi vieta
-        this.tabMoreMax = Math.max(80, avail - rowW - gap - 20);
       },
       // ---------- Kompetencijų centras, Testai, Video, Failai ----------
       COMP: window.COMPETENCIES,

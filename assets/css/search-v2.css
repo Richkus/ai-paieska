@@ -968,3 +968,17 @@ body.is-chatfill { overflow: hidden; }
 .chm-close:hover { background: var(--ms-surface-soft); border-color: var(--ms-field-text); }
 .chm-close svg { color: var(--ms-sub); }
 @media (max-width: 900px) { .ch.is-fill { left: 0; right: 0; } .ch.is-fill .chf-wrap { grid-template-columns: minmax(0, 1fr); padding: 0 16px; } .ch.is-fill .ch-rail { display: none; } }
+
+/* V4 „Per visą langą, DI juosta vietoj paieškos juostos“: pokalbis uždengia ir viršutinę juostą,
+   DI juosta tampa viršumi (tokio pat aukščio), paskyros nuorodos ikonomis prieš „Uždaryti“ */
+.ch.is-fill.is-filltop { top: var(--ms-frame); z-index: 35; border-radius: var(--ms-frame-radius) var(--ms-frame-radius) 0 0; }
+.ch.is-filltop .chm-bar { height: var(--ms-topbar-h); padding: 0 24px 0 32px; background: var(--ms-topbar); }
+.ch.is-filltop .chf-wrap { min-height: calc(100vh - var(--ms-frame) - var(--ms-topbar-h)); }
+.ch.is-filltop .ch-rail { top: var(--ms-topbar-h); height: calc(100vh - var(--ms-frame) - var(--ms-topbar-h)); }
+.ch.is-filltop .chf-col { min-height: calc(100vh - var(--ms-frame) - var(--ms-topbar-h)); }
+.chm-nav { display: flex; align-items: center; gap: 4px; margin-left: auto; padding-right: 12px; border-right: 1px solid var(--ms-line-strong); }
+.chm-nav a { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 8px; transition: background .15s; }
+.chm-nav a:hover { background: rgba(255, 255, 255, .7); }
+.chm-nav img { opacity: .7; }
+.chm-nav .ms-ico-user { opacity: 1; }
+.ch.is-filltop .chm-q { flex: 1; }

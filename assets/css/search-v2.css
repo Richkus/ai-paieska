@@ -113,11 +113,19 @@
 .home-tip span { color: var(--ms-sub); font-size: 13.5px; }
 .home-tip button { flex: 0 0 auto; height: 34px; padding: 0 16px; border: 1px solid var(--ms-sidebar); border-radius: 17px; background: #fff; color: var(--ms-teal-dark); font-size: 14px; font-weight: 600; transition: background .15s, border-color .15s; }
 .home-tip button:hover { background: var(--ms-topbar); border-color: var(--ai-accent); }
-.home-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
-.home-card { display: grid; gap: 8px; padding: 0 0 16px; border: 1px solid var(--ms-line); border-radius: 10px; overflow: hidden; }
-.home-card i { height: 110px; margin-bottom: 6px; background: var(--ms-topbar); }
-.home-card b { height: 10px; margin: 0 14px; border-radius: 5px; background: var(--ms-pill); }
-.home-card b.is-short { width: 40%; }
+.home-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+
+.home-card { display: flex; flex-direction: column; gap: 6px; padding: 0 0 18px; border: 1px solid var(--ms-line); border-radius: 12px; overflow: hidden; background: #fff; color: inherit; text-decoration: none; transition: border-color .18s var(--ms-ease), box-shadow .18s var(--ms-ease), transform .18s var(--ms-ease); }
+.home-card:hover { border-color: var(--ms-line-strong); box-shadow: 0 6px 18px rgba(15, 83, 84, .08); transform: translateY(-2px); }
+.hc-img { display: block; margin-bottom: 10px; aspect-ratio: 16 / 9; overflow: hidden; border-bottom: 1px solid var(--ms-line); }
+.hc-img svg { display: block; width: 100%; height: 100%; transition: transform .35s var(--ms-ease); }
+.home-card:hover .hc-img svg { transform: scale(1.03); }
+.hc-meta { padding: 0 18px; color: var(--ms-muted); font-size: 12.5px; letter-spacing: .3px; text-transform: uppercase; }
+.hc-title { padding: 0 18px; color: var(--ms-ink); font-size: 16px; font-weight: 600; line-height: 1.4; transition: color .15s; }
+.home-card:hover .hc-title { color: var(--ms-link); }
+.hc-prog { display: flex; align-items: center; gap: 12px; margin-top: auto; padding: 8px 18px 0; color: var(--ms-ink-soft); font-size: 13px; }
+.hc-prog i { width: 84px; height: 4px; border-radius: 2px; background: var(--ms-mark); }
+.hc-prog b { display: block; height: 100%; border-radius: 2px; background: var(--ms-teal-dark); }
 
 /* ---------- Skeleton: įkėlimas ir tikslinimas ---------- */
 .sk { display: grid; gap: 10px; margin-bottom: 28px; }

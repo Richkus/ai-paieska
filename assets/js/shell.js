@@ -36,7 +36,7 @@
   const sidebar = `
     <a class="ms-logo" href="#" aria-label="Mokesčių SUFLERIS" @click.prevent="goHome()">${img('logo.svg', 102, 30)}</a>
     <ul class="ms-nav ms-nav--main">
-      <li><a href="#" @click.prevent="ver === 'v5' ? openK5() : (setMode && mode === 'chat' && ['fill', 'filltop'].includes(p.chatView) && setMode('ai'), window.scrollTo({ top: 0 }), $nextTick(() => $refs.search && $refs.search.focus()))"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="8.6" cy="8.6" r="6" stroke="currentColor" stroke-width="1.9"/><path d="M13.2 13.2 17.5 17.5" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>Paieška</a></li>
+      <li><a href="#" @click.prevent="ver === 'v5' ? openK5() : (setMode && mode === 'chat' && ['fill', 'filltop'].includes(p.chatView) && setMode('ai'), window.scrollTo({ top: 0 }), $nextTick(() => $refs.search && $refs.search.focus()))"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="8.6" cy="8.6" r="6" stroke="currentColor" stroke-width="1.9"/><path d="M13.2 13.2 17.5 17.5" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>Ieškoti</a></li>
       ${navMain.map(n => `<li><a href="#">${n.icon}${n.label}</a></li>`).join('')}
     </ul>
     <div class="ms-nav-sep" role="presentation"></div>

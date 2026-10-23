@@ -7,12 +7,12 @@
 <title>AI paieška: prototipas</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400..800&family=Source+Serif+4:opsz,wght@8..60,500..700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/shell.css?v=1024s">
-<link rel="stylesheet" href="assets/css/search.css?v=1024s">
-<link rel="stylesheet" href="assets/css/filters.css?v=1024s">
-<link rel="stylesheet" href="assets/css/search-v2.css?v=1024s">
-<link rel="stylesheet" href="assets/css/loader-ai.css?v=1024s">
-<link rel="stylesheet" href="assets/css/admin.css?v=1024s">
+<link rel="stylesheet" href="assets/css/shell.css?v=1024t">
+<link rel="stylesheet" href="assets/css/search.css?v=1024t">
+<link rel="stylesheet" href="assets/css/filters.css?v=1024t">
+<link rel="stylesheet" href="assets/css/search-v2.css?v=1024t">
+<link rel="stylesheet" href="assets/css/loader-ai.css?v=1024t">
+<link rel="stylesheet" href="assets/css/admin.css?v=1024t">
 <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.14.1/dist/cdn.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
 </head>
@@ -662,7 +662,11 @@
         <div class="pn-body">
           <div class="ak" x-show="!ask.sent">
             <h1>Užduokite klausimą</h1>
-            <p class="ak-lead">SUFLERIO ekspertai peržiūrės jūsų klausimą. Jei atsakymas bus naudingas kitiems, jis gali būti publikuotas kaip praktinė situacija, be jūsų ir įmonės duomenų.</p>
+            <p class="ak-lead">Pateikite klausimą Jus dominančia mokestine tema ir mūsų ekspertų komanda jį peržiūrės. Jei atsakymas bus aktualus ir naudingas kitiems, jis gali būti publikuotas Mokesčių SUFLERYJE kaip praktinė situacija. Prieš publikaciją, pašalinsime Jūsų asmeninius ir įmonės identifikavimo duomenis.</p>
+            <div class="ak-info">
+              <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6l7-3Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <p><b>Dėmesio:</b> uždavus klausimą, Jūsų asmeninė informacija bei įmonės rekvizitai nebus viešinami.</p>
+            </div>
 
             <!-- Gal jau yra? Tik kai radom kažką panašaus -->
             <div class="ak-maybe" x-show="askSuggest.length">
@@ -690,10 +694,6 @@
                 </template>
               </div>
               <div class="ak-foot">
-                <span class="ak-privacy">
-                  <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6l7-3Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                  Jūsų ir įmonės duomenys neviešinami
-                </span>
                 <button type="submit" class="ex-btn" :disabled="!ask.q.trim()">Siųsti klausimą</button>
               </div>
             </form>
@@ -829,9 +829,9 @@
   .transition-pn { transition: transform .32s var(--ms-ease); }
   .pn-off { transform: translateX(100%); }
 </style>
-<script src="assets/js/shell.js?v=1024s"></script>
-<script src="assets/js/data.js?v=1024s"></script>
-<script src="assets/js/loader.js?v=1024s"></script>
+<script src="assets/js/shell.js?v=1024t"></script>
+<script src="assets/js/data.js?v=1024t"></script>
+<script src="assets/js/loader.js?v=1024t"></script>
 <script>
   // Admin parametras: filtrai po vienu mygtuku „Filtrai“ arba visada matomi
   // V4 tab'ai. icon: ai | chat. Kurie rodomi, valdoma Admin'e (TABS_PARAM)

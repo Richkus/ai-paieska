@@ -663,3 +663,10 @@ body.is-chatfull { overflow: hidden; }
 .tb-more { align-self: center; }
 .tb-menu { left: auto; right: -4px; }
 .a2-gist + .a2-gist { margin-top: -6px; }
+/* Klausimo ekspertui intro kaip SUFLERIO formoje */
+.ak-lead { color: var(--ms-ink-soft); font-size: 15.5px; line-height: 1.65; }
+.ak-info { display: flex; align-items: flex-start; gap: 14px; margin: 0 0 24px; padding: 16px 18px; border-radius: 10px; background: #edf2fd; color: #5b7bc4; }
+.ak-info svg { flex: 0 0 auto; margin-top: 1px; }
+.ak-info p { margin: 0; color: var(--ms-ink); font-size: 15px; line-height: 1.55; }
+.ak-info b { font-weight: 700; }
+.ak-foot { justify-content: flex-end; }

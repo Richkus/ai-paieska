@@ -7,13 +7,12 @@
 <title>AI paieška: prototipas</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400..800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/shell.css?v=1023g">
-<link rel="stylesheet" href="assets/css/search.css?v=1023g">
-<link rel="stylesheet" href="assets/css/filters.css?v=1023g">
-<link rel="stylesheet" href="assets/css/search-v2.css?v=1023g">
-<link rel="stylesheet" href="assets/css/loader.css?v=1023g">
-<link rel="stylesheet" href="assets/css/loader-ai.css?v=1023g">
-<link rel="stylesheet" href="assets/css/admin.css?v=1023g">
+<link rel="stylesheet" href="assets/css/shell.css?v=1023h">
+<link rel="stylesheet" href="assets/css/search.css?v=1023h">
+<link rel="stylesheet" href="assets/css/filters.css?v=1023h">
+<link rel="stylesheet" href="assets/css/search-v2.css?v=1023h">
+<link rel="stylesheet" href="assets/css/loader-ai.css?v=1023h">
+<link rel="stylesheet" href="assets/css/admin.css?v=1023h">
 <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.14.1/dist/cdn.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
 </head>
@@ -219,7 +218,7 @@
           </template>
           <div class="ch-msg is-ai" x-show="chat.typing">
             <!-- Kol DI ieško, animuojasi pati avataro ikona; atėjus atsakymui jos vietoje lieka nejudanti ikona -->
-            <div class="ch-ai"><i class="ch-av is-busy" aria-hidden="true" x-html="LOADER(p.loader || 'ai-dots', 20, +(p.dots || 7))"></i><p class="ch-typing">Ieškau SUFLERIO medžiagoje…</p></div>
+            <div class="ch-ai"><i class="ch-av is-busy" aria-hidden="true" x-html="LOADER(p.loader || 'ai-dots', 20)"></i><p class="ch-typing">Ieškau SUFLERIO medžiagoje…</p></div>
           </div>
 
           <!-- Laukas prilipęs apačioje, kaip įprastuose chat'uose -->
@@ -260,7 +259,7 @@
 
         <!-- Įkėlimas po paieškos -->
         <div class="sk" :class="{ 'is-card': ver === 'v4' && mode === 'ai' && p.aiStyle !== 'plain', 'is-only': ver === 'v4' && aiOnly }" x-show="phase === 'loading'" x-cloak aria-live="polite">
-          <p class="sk-label"><span class="sk-ic" x-html="LOADER(p.loader || 'ai-dots', 21, +(p.dots || 7))"></span> Ieškom SUFLERIO medžiagoje…</p>
+          <p class="sk-label"><span class="sk-ic" x-html="LOADER(p.loader || 'ai-dots', 21)"></span> Ieškom SUFLERIO medžiagoje…</p>
           <i style="width:55%;height:20px"></i><i style="width:92%"></i><i style="width:80%"></i><i style="width:88%"></i><i style="width:40%"></i>
         </div>
 
@@ -278,7 +277,7 @@
             </div>
 
             <div class="sk is-inline" x-show="busy" x-cloak>
-              <p class="sk-label"><span class="sk-ic" x-html="LOADER(p.loader || 'ai-dots', 21, +(p.dots || 7))"></span> Ieškom pagal jūsų atsakymą…</p>
+              <p class="sk-label"><span class="sk-ic" x-html="LOADER(p.loader || 'ai-dots', 21)"></span> Ieškom pagal jūsų atsakymą…</p>
               <i style="width:50%;height:20px"></i><i style="width:90%"></i><i style="width:76%"></i><i style="width:84%"></i>
             </div>
 
@@ -720,9 +719,9 @@
   .transition-pn { transition: transform .32s var(--ms-ease); }
   .pn-off { transform: translateX(100%); }
 </style>
-<script src="assets/js/shell.js?v=1023g"></script>
-<script src="assets/js/data.js?v=1023g"></script>
-<script src="assets/js/loader.js?v=1023g"></script>
+<script src="assets/js/shell.js?v=1023h"></script>
+<script src="assets/js/data.js?v=1023h"></script>
+<script src="assets/js/loader.js?v=1023h"></script>
 <script>
   // Admin parametras: filtrai po vienu mygtuku „Filtrai“ arba visada matomi
   const ANSWERS_PARAM = { key: 'answers', label: 'Atsakymai į patikslinimą', type: 'radio', default: 'list', options: [
@@ -767,12 +766,6 @@
     { id: 'ai-dots', label: 'Taškai susirenka į DI žvaigždę' },
     { id: 'ai-draw', label: 'DI žvaigždė nusipiešia' },
     { id: 'ai-pulse', label: 'DI žvaigždė kvėpuoja su kometomis' },
-    { id: 'morph', label: 'S susidėlioja iš taškų' },
-    { id: 'wave', label: 'S banga' },
-    { id: 'spark', label: 'Žvaigždutė (kaip buvo)' },
-  ] };
-  const DOTS_PARAM = { key: 'dots', label: 'Taškų skaičius S raidėje', type: 'radio', default: '7', options: [
-    { id: '8', label: '8 taškai' }, { id: '7', label: '7 taškai' }, { id: '6', label: '6 taškai' }, { id: '5', label: '5 taškai' },
   ] };
   function search() {
     const store = {
@@ -875,8 +868,8 @@
       ask: { q: '', sent: false, edit: false, me: { vardas: 'Laurynas', pavarde: 'Petrauskas', imone: 'UAB Įmonita', pareigos: 'Vyr. buhalteris', miestas: 'Vilnius', tel: '+370 600 00000' } },
       // ---------- Versijos ----------
       VERSIONS: [
-        { id: 'v2', label: 'V2 · Dešinė kolona', desc: 'Vienas laukas, „Kita…“ atsakymas, dešinėje eiga, šaltiniai, istorija', params: [ANSWERS_PARAM, FILTERS_PARAM, LOADER_PARAM, DOTS_PARAM] },
-        { id: 'v4', label: 'V4 · Kaip Google', desc: 'Susijusios paieškos tampa nauja paieška, grįžtama naršyklės Atgal. Tab\'ai: DI režimas · Viskas · Rezultatų sąrašas', params: [TABS_PARAM, SIDE_PARAM, TOP_PARAM, AI_STYLE_PARAM, FILTERS_PARAM, LOADER_PARAM, DOTS_PARAM] },
+        { id: 'v2', label: 'V2 · Dešinė kolona', desc: 'Vienas laukas, „Kita…“ atsakymas, dešinėje eiga, šaltiniai, istorija', params: [ANSWERS_PARAM, FILTERS_PARAM, LOADER_PARAM] },
+        { id: 'v4', label: 'V4 · Kaip Google', desc: 'Susijusios paieškos tampa nauja paieška, grįžtama naršyklės Atgal. Tab\'ai: DI režimas · Viskas · Rezultatų sąrašas', params: [TABS_PARAM, SIDE_PARAM, TOP_PARAM, AI_STYLE_PARAM, FILTERS_PARAM, LOADER_PARAM] },
       ],
       ver: (() => {
         const q = new URLSearchParams(location.search).get('v');

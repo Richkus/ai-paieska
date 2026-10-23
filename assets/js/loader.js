@@ -1,10 +1,8 @@
-/* Įkėlimo animacijos markup'as.
-   LOADER(kind, size, n)
-     morph | wave  — taškai susidėlioja į S / S banga (stiliai assets/css/loader.css, generuoja scripts/loader-gen.py), n = 5–8
-     ai-dots       — taškai susirenka į DI žvaigždę (assets/css/loader-ai.css)
-     ai-draw       — DI žvaigždė nusipiešia ir išsitrina
-     ai-pulse      — DI žvaigždė „kvėpuoja“, pro šalį skrieja dvi kometos
-     spark         — sena žvaigždutė
+/* Įkėlimo animacijos su DI ikona (stiliai assets/css/loader-ai.css).
+   LOADER(kind, size)
+     ai-dots   — taškai susirenka į DI žvaigždę
+     ai-draw   — DI žvaigždė nusipiešia ir išsitrina
+     ai-pulse  — DI žvaigždė „kvėpuoja“, pro šalį skrieja dvi kometos
    Spalvos kaip DI ikonos (assets/img/ai.svg): #FF7F7D → #B85399. */
 (function () {
   const C0 = [255, 127, 125], C1 = [184, 83, 153];
@@ -31,11 +29,9 @@
     return [20.5 + 14 * Math.cos(t), 37 + 14 * Math.sin(t)];
   });
 
-  window.LOADER = (kind, size = 18, n = 7) => {
+  window.LOADER = (kind, size = 18) => {
     const id = 'ldg' + (++uid);
-    if (kind === 'spark') return `<span class="ld ld-spark"><svg width="${size}" height="${size}" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5c.4 3.3 3.2 6.1 6.5 6.5-3.3.4-6.1 3.2-6.5 6.5-.4-3.3-3.2-6.1-6.5-6.5 3.3-.4 6.1-3.2 6.5-6.5Z" fill="currentColor"/></svg></span>`;
-
-    if (kind === 'ai-dots') {
+    if (kind !== 'ai-draw' && kind !== 'ai-pulse') {   // numatytoji: ai-dots
       const N = 12, a = ringPts(N), b = starPts(N);
       const dots = a.map((p, i) => `<circle r="2.6" style="fill:${mix(Math.abs(b[i][1] - 21) / 32)};--ax:${p[0].toFixed(2)}px;--ay:${p[1].toFixed(2)}px;--bx:${b[i][0].toFixed(2)}px;--by:${b[i][1].toFixed(2)}px;animation-delay:${(i * 0.025).toFixed(3)}s"/>`).join('');
       return box(size, `${grad(id)}<path class="ld-ai-line" d="${LINE_A}" stroke="#F0CFE3"/><path class="ld-ai-line is-b" d="${LINE_B}" stroke="#F0CFE3"/><path class="ld-ai-star" d="${STAR}" stroke="url(#${id})"/><g class="ld-ai-ring">${dots}</g>`, 'ld-ai ld-ai-dots');
@@ -46,10 +42,5 @@
     if (kind === 'ai-pulse') {
       return box(size, `${grad(id)}<path class="ld-ai-line" d="${LINE_A}" stroke="url(#${id})" pathLength="1"/><path class="ld-ai-line is-b" d="${LINE_B}" stroke="url(#${id})" pathLength="1"/><path class="ld-ai-star" d="${STAR}" stroke="url(#${id})"/>`, 'ld-ai ld-ai-pulse');
     }
-
-    // S iš taškų: kiekvienas taškas savo spalvos, nuo ikonos koralinės iki violetinės
-    const r = { 8: 1.6, 7: 1.75, 6: 1.9, 5: 2.1 }[n] || 1.75;   // sutampa su scripts/loader-gen.py
-    const dots = Array.from({ length: n }, (_, i) => `<circle r="${r}" style="fill:${mix(i / (n - 1))}"/>`).join('');
-    return `<span class="ld ld-${kind}" data-n="${n}"><svg width="${size}" height="${size}" viewBox="0 0 20 20" aria-hidden="true"><g>${dots}</g></svg></span>`;
   };
 })();

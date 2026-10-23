@@ -7,68 +7,43 @@
 <title>AI paieška: įkėlimo animacija</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400..700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/loader.css">
 <link rel="stylesheet" href="assets/css/loader-ai.css">
 <style>
-  :root { --ink: #2f4347; --sub: #5f7a7e; --line: #e3ecec; --ai-accent: #3e9aa2; }
+  :root { --ink: #2f4347; --sub: #5f7a7e; --line: #e3ecec; }
   * { box-sizing: border-box; }
   body { margin: 0; padding: 48px 16px; font-family: 'Open Sans', system-ui, sans-serif; color: var(--ink); background: #fff; }
-  main { max-width: 760px; margin: 0 auto; }
+  main { max-width: 860px; margin: 0 auto; }
   h1 { margin: 0 0 6px; font-size: 22px; }
   p.lead { margin: 0 0 28px; color: var(--sub); line-height: 1.6; }
-  .row { display: grid; grid-template-columns: 110px repeat(2, minmax(0, 1fr)); gap: 14px; align-items: stretch; margin-bottom: 14px; }
-  .row > b { align-self: center; font-size: 15px; }
-  .row > b small { display: block; margin-top: 2px; color: var(--sub); font-size: 12px; font-weight: 400; }
-  .row.is-rec .card { border-color: #99cccc; background: #f6fafa; }
-  h2.sub { margin: 32px 0 12px; font-size: 15px; }
-  .grid { display: grid; gap: 14px; }
-  .grid.one { grid-template-columns: minmax(0, 260px); }
+  .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
   .card { display: grid; gap: 18px; justify-items: center; padding: 28px 16px 20px; border: 1px solid var(--line); border-radius: 14px; }
-  .card h2 { margin: 0; font-size: 14px; font-weight: 600; }
+  .card.is-rec { border-color: #99cccc; background: #f6fafa; }
+  .card h2 { margin: 0; font-size: 14px; font-weight: 600; text-align: center; }
   .card small { color: var(--sub); font-size: 12.5px; text-align: center; line-height: 1.5; }
-  .inline { display: flex; align-items: center; gap: 8px; color: #b85399; font-size: 14px; font-weight: 600; }
-  .grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  @media (max-width: 640px) { .grid.three { grid-template-columns: minmax(0, 1fr); } }
-  @media (max-width: 640px) { .row { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } .row > b { grid-column: 1 / -1; } }
+  .inline { display: flex; align-items: center; gap: 6px; color: var(--sub); font-size: 14px; }
+  @media (max-width: 640px) { .grid { grid-template-columns: minmax(0, 1fr); } }
 </style>
 </head>
 <body>
 <main>
   <h1>Įkėlimo animacija</h1>
-  <h2 class="sub" style="margin-top:0">Su DI ikona (nauja)</h2>
-  <div class="grid three" id="ai"></div>
-  <h2 class="sub">S iš taškų</h2>
-  <p class="lead">Taškai susidėlioja į S arba per S bėga banga. Kiekvienoje eilutėje kitas taškų skaičius. Kortelėje viršuje padidinta, apačioje tikru dydžiu, kaip prototipe. Prototipe perjungiama per Admin → Įkėlimo animacija ir Taškų skaičius.</p>
-  <div id="rows"></div>
-  <h2 class="sub">Palyginimui: žvaigždutė (kaip buvo)</h2>
-  <div class="grid one"><div class="card" id="spark"></div></div>
+  <p class="lead">Kol DI ieško atsakymo, animuojasi pati DI ikona. Kortelėje viršuje padidinta, apačioje tikru dydžiu, kaip prototipe. Prototipe perjungiama per Admin → Įkėlimo animacija.</p>
+  <div class="grid" id="ai"></div>
 </main>
 <script src="assets/js/loader.js"></script>
 <script>
-  const counts = [
-    [8, 'Aiški S, tankesnė'],
-    [7, 'Aiški S (siūloma)', true],
-    [6, 'Abstrakti, simbolinė S'],
-    [5, 'Labiausiai abstrakti'],
+  const items = [
+    ['ai-dots', 'Taškai susirenka į DI žvaigždę', 'Numatytoji', true],
+    ['ai-draw', 'DI žvaigždė nusipiešia', 'Lyg ranka rašoma', false],
+    ['ai-pulse', 'DI žvaigždė kvėpuoja su kometomis', 'Ramiausia', false],
   ];
-  const card = (k, n, title) => `
-    <div class="card">
-      ${LOADER(k, 72, n)}
-      <h2>${title}</h2>
-      <div class="inline">${LOADER(k, 18, n)} Ieškom SUFLERIO medžiagoje…</div>
-    </div>`;
-  document.getElementById('rows').innerHTML = counts.map(([n, note, rec]) => `
-    <div class="row${rec ? ' is-rec' : ''}">
-      <b>${n} taškai<small>${note}</small></b>
-      ${card('morph', n, 'S susidėlioja')}
-      ${card('wave', n, 'S banga')}
+  document.getElementById('ai').innerHTML = items.map(([k, t, note, rec]) => `
+    <div class="card${rec ? ' is-rec' : ''}">
+      ${LOADER(k, 72)}
+      <h2>${t}</h2>
+      <small>${note}</small>
+      <div class="inline">${LOADER(k, 21)} Ieškom SUFLERIO medžiagoje…</div>
     </div>`).join('');
-  document.getElementById('ai').innerHTML = [
-    ['ai-dots', 'Taškai susirenka į DI žvaigždę (siūloma)'],
-    ['ai-draw', 'DI žvaigždė nusipiešia'],
-    ['ai-pulse', 'DI žvaigždė kvėpuoja su kometomis'],
-  ].map(([k, t]) => card(k, 7, t)).join('');
-  document.getElementById('spark').outerHTML = card('spark', 0, 'Žvaigždutė');
 </script>
 </body>
 </html>

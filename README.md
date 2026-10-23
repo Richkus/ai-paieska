@@ -17,7 +17,7 @@ Prototipas prasideda nuo tuščios būsenos: paspaudus paieškos lauką rodomi p
 
 Admin'e taip pat yra scenarijai (konkreti situacija, platus klausimas, trumpa frazė, mažas panašumas, nėra rezultatų) ir aktyvios versijos parametrai, jei jų yra. Sena nuoroda `v2/` nukreipia į tą patį puslapį. V1 ir V3 išimtos (liko git istorijoje).
 
-Įkėlimo animacijos (DI ikonos spalvomis: taškai susirenka į DI žvaigždę, žvaigždė nusipiešia, žvaigždė kvėpuoja su kometomis, taškai susidėlioja į S, S banga, sena žvaigždutė) peržiūrimos [`loaderis.html`](https://richkus.github.io/ai-paieska/loaderis.html), prototipe perjungiamos per Admin → Įkėlimo animacija ir Taškų skaičius S raidėje (5–8).
+Įkėlimo animacijos su DI ikona (taškai susirenka į žvaigždę, žvaigždė nusipiešia, žvaigždė kvėpuoja su kometomis) peržiūrimos [`loaderis.html`](https://richkus.github.io/ai-paieska/loaderis.html), prototipe perjungiamos per Admin → Įkėlimo animacija.
 
 Konkrečią būseną galima atidaryti nuoroda: `?v=4&s=savaitgalis&step=1` (scenarijai: `savaitgalis`, `komandiruote`, `pvm`, `mazai`, `nera`). Pridėjus `&shot=1` paslepiamas Admin mygtukas, patogu ekranams.
 
@@ -31,7 +31,6 @@ assets/
   css/search-v2.css V2: AI blokas be dėžučių, dešinė kolona, PRO paywall
   css/filters.css  filtrų juosta (pill filtrai, popover'iai, mobile bottom sheet)
   css/admin.css    prototipo admin skydelis (neutralus, ne brando)
-  css/loader.css   įkėlimo animacija: 5–8 taškai susidėlioja į S (generuoja scripts/loader-gen.py)
   css/loader-ai.css įkėlimo animacijos su DI ikona (ai-dots, ai-draw, ai-pulse)
   js/loader.js     įkėlimo animacijos markup'as
   js/shell.js      įdeda karkasą į [data-shell] elementus

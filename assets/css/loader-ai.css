@@ -2,6 +2,8 @@
    Įkėlimo animacijos su DI ikona (assets/img/ai.svg).
    Markup'as: assets/js/loader.js (ai-dots | ai-draw | ai-pulse).
    ========================================================== */
+.ld { display: inline-grid; place-items: center; flex: 0 0 auto; }
+.ld svg { display: block; overflow: visible; }
 .ld-ai svg path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
 .ld-ai .ld-ai-star { stroke-width: 4.4; }
 .ld-ai .ld-ai-line { stroke-width: 3.8; opacity: 0; }   /* kol animacija neprasidėjo, linijų nesimato */

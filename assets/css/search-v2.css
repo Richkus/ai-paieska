@@ -464,3 +464,7 @@ body.is-chatfull { overflow: hidden; }
 .tl-count { margin: 0; color: var(--ms-ink); font-size: 16px; font-weight: 600; }
 .tl-row { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 16px; }
 .sr-file { margin-left: 6px; padding: 1px 6px; border-radius: 4px; background: var(--ms-pill); color: var(--ms-sub); font-style: normal; font-size: 11px; font-weight: 700; letter-spacing: .03em; }
+
+/* Turinys centre, ne prilipęs prie kairės */
+.v2, .home { margin-left: auto; margin-right: auto; }
+.v2.no-side { justify-content: center; }

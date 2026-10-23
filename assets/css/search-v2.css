@@ -329,7 +329,6 @@
 /* ==========================================================
    V4 · DI pokalbis pilname ekrane (tas pats pokalbis kaip „DI chatas“)
    ========================================================== */
-.sr-modes .is-ext { color: var(--ms-muted); }
 body.is-chatfull { overflow: hidden; }
 .chf-wrap { display: block; }
 .ch.is-full { position: fixed; inset: 0; z-index: 55; display: block; min-height: 0; overflow-y: auto; background: #fff; animation: chf-in .25s var(--ms-ease); }

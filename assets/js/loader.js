@@ -28,7 +28,7 @@
   });
   const ringPts = n => Array.from({ length: n }, (_, i) => {
     const t = (i / n) * Math.PI * 2;
-    return [20.5 + 11 * Math.cos(t), 37 + 11 * Math.sin(t)];
+    return [20.5 + 14 * Math.cos(t), 37 + 14 * Math.sin(t)];
   });
 
   window.LOADER = (kind, size = 18, n = 7) => {

@@ -7,13 +7,13 @@
 <title>AI paieška: prototipas</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400..800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/shell.css?v=1022z">
-<link rel="stylesheet" href="assets/css/search.css?v=1022z">
-<link rel="stylesheet" href="assets/css/filters.css?v=1022z">
-<link rel="stylesheet" href="assets/css/search-v2.css?v=1022z">
-<link rel="stylesheet" href="assets/css/loader.css?v=1022z">
-<link rel="stylesheet" href="assets/css/loader-ai.css?v=1022z">
-<link rel="stylesheet" href="assets/css/admin.css?v=1022z">
+<link rel="stylesheet" href="assets/css/shell.css?v=1023b">
+<link rel="stylesheet" href="assets/css/search.css?v=1023b">
+<link rel="stylesheet" href="assets/css/filters.css?v=1023b">
+<link rel="stylesheet" href="assets/css/search-v2.css?v=1023b">
+<link rel="stylesheet" href="assets/css/loader.css?v=1023b">
+<link rel="stylesheet" href="assets/css/loader-ai.css?v=1023b">
+<link rel="stylesheet" href="assets/css/admin.css?v=1023b">
 <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.14.1/dist/cdn.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
 </head>
@@ -153,7 +153,8 @@
             </div>
           </template>
           <div class="ch-msg is-ai" x-show="chat.typing">
-            <div class="ch-ai"><i class="ch-av" aria-hidden="true"><img class="ai-ic" src="assets/img/ai.svg" width="15" height="26" alt="" aria-hidden="true"></i><p class="ch-typing"><span x-html="LOADER(p.loader || 'morph', 16, +(p.dots || 7))"></span> Ieškau SUFLERIO medžiagoje…</p></div>
+            <!-- Kol DI ieško, animuojasi pati avataro ikona; atėjus atsakymui jos vietoje lieka nejudanti ikona -->
+            <div class="ch-ai"><i class="ch-av is-busy" aria-hidden="true" x-html="LOADER(p.loader || 'ai-dots', 20, +(p.dots || 7))"></i><p class="ch-typing">Ieškau SUFLERIO medžiagoje…</p></div>
           </div>
 
           <!-- Laukas prilipęs apačioje, kaip įprastuose chat'uose -->
@@ -193,8 +194,8 @@
         </div>
 
         <!-- Įkėlimas po paieškos -->
-        <div class="sk" x-show="phase === 'loading'" x-cloak aria-live="polite">
-          <p class="sk-label"><span x-html="LOADER(p.loader || 'morph', 18, +(p.dots || 7))"></span> Ieškom SUFLERIO medžiagoje…</p>
+        <div class="sk" :class="{ 'is-card': ver === 'v4' && mode === 'ai' && p.aiStyle !== 'plain' }" x-show="phase === 'loading'" x-cloak aria-live="polite">
+          <p class="sk-label"><span class="sk-ic" x-html="LOADER(p.loader || 'ai-dots', 21, +(p.dots || 7))"></span> Ieškom SUFLERIO medžiagoje…</p>
           <i style="width:55%;height:20px"></i><i style="width:92%"></i><i style="width:80%"></i><i style="width:88%"></i><i style="width:40%"></i>
         </div>
 
@@ -212,7 +213,7 @@
             </div>
 
             <div class="sk is-inline" x-show="busy" x-cloak>
-              <p class="sk-label"><span x-html="LOADER(p.loader || 'morph', 18, +(p.dots || 7))"></span> Ieškom pagal jūsų atsakymą…</p>
+              <p class="sk-label"><span class="sk-ic" x-html="LOADER(p.loader || 'ai-dots', 21, +(p.dots || 7))"></span> Ieškom pagal jūsų atsakymą…</p>
               <i style="width:50%;height:20px"></i><i style="width:90%"></i><i style="width:76%"></i><i style="width:84%"></i>
             </div>
 
@@ -636,9 +637,9 @@
   .transition-pn { transition: transform .32s var(--ms-ease); }
   .pn-off { transform: translateX(100%); }
 </style>
-<script src="assets/js/shell.js?v=1022z"></script>
-<script src="assets/js/data.js?v=1022z"></script>
-<script src="assets/js/loader.js?v=1022z"></script>
+<script src="assets/js/shell.js?v=1023b"></script>
+<script src="assets/js/data.js?v=1023b"></script>
+<script src="assets/js/loader.js?v=1023b"></script>
 <script>
   // Admin parametras: filtrai po vienu mygtuku „Filtrai“ arba visada matomi
   const ANSWERS_PARAM = { key: 'answers', label: 'Atsakymai į patikslinimą', type: 'radio', default: 'list', options: [

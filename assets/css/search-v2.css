@@ -313,7 +313,7 @@
 .ch-opts button { height: 36px; padding: 0 14px; border: 1px solid var(--ms-sidebar); border-radius: 8px; background: #fff; color: var(--ms-teal-dark); font-size: 14px; transition: background .15s, border-color .15s; }
 .ch-opts button:hover { background: var(--ms-topbar); border-color: var(--ai-accent); }
 .ch-tools { display: flex; gap: 2px; margin-left: -6px; }
-.ch-typing { display: flex; align-items: center; gap: 8px; margin: 4px 0 0; color: #b85399; font-size: 14px; font-weight: 600; }
+.ch-typing { margin: 5px 0 0; color: var(--ms-muted); font-size: 15px; }
 .ch-msg { animation: ch-in .3s var(--ms-ease); }
 @keyframes ch-in { from { opacity: 0; transform: translateY(6px); } }
 
@@ -396,3 +396,12 @@ body.is-chatfull { overflow: hidden; }
 .ms-search.is-locked { opacity: .5; box-shadow: none; cursor: not-allowed; }
 .ms-search.is-locked textarea { cursor: not-allowed; }
 .ms-search-go:disabled { cursor: not-allowed; }
+
+/* Generuojant animuojasi pati DI ikona (avatare ir prieš antraštę), ne atskiras elementas */
+.ch-av.is-busy { background: var(--ms-topbar); }
+.ch-av.is-busy .ld { display: grid; }
+.sk-label { gap: 6px; color: var(--ms-ink); font-size: 18px; }
+.sk-ic { display: inline-grid; place-items: center; width: 22px; height: 32px; margin: -6px 0 -6px -4px; }
+/* Įkėlimas V4 toje pačioje kortelėje kaip DI atsakymas, kad ikona ir antraštė liktų vietoje */
+.sk.is-card { padding: 24px 28px 22px; border: 1px solid var(--ms-line); border-radius: 16px; background: var(--ms-topbar); }
+.sk.is-card i { background: rgba(255, 255, 255, .8); }

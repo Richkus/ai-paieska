@@ -391,6 +391,19 @@ window.COMPETENCIES = [
     ],
   };
   Object.entries(sum).forEach(([id, list]) => list.forEach((x, i) => { if (x) S[id].steps[i].ai.summary = x; }));
+  // Bendra mintis vienu-dviem sakiniais (Admin variantas „Santrauka + citatos“)
+  const gist = {
+    savaitgalis: [
+      'Taip, darbuotojo prašymu vietoj padidinto apmokėjimo už darbą poilsio dieną galima suteikti kitą poilsio dieną. Svarbiausia prašymą įforminti raštu ir abi dienas pažymėti žiniaraštyje.',
+      'Kai šeštadienis nebuvo grafike, darbuotojas renkasi tarp padidinto apmokėjimo ir laisvos dienos. Prašyme nurodomos abi datos, o žiniaraštyje abi dienos pažymimos.',
+      'Žiniaraštyje pažymimos abi dienos: dirbta poilsio diena ir vėliau suteikta laisva diena.',
+    ],
+    komandiruote: [null,
+      'Dienpinigiai neapmokestinami tik iki nustatyto dydžio. Vienos dienos komandiruotei Lietuvoje jie mokami, kai komandiruotė įforminta įsakymu.',
+      'Užsienyje dienpinigiai skaičiuojami pagal šalį, kurioje darbuotojas buvo tą dieną. Viršijanti dalis apmokestinama kaip darbo pajamos.',
+    ],
+  };
+  Object.entries(gist).forEach(([id, list]) => list.forEach((g, i) => { if (g) S[id].steps[i].ai.gist = g; }));
   // Chat'o atsakymo kortelės: tas pats apibendrinimas
   const C = window.CHATS;
   C.savaitgalis[2].card = { main: 'r1', summary: sum.savaitgalis[1], more: ['r3'] };

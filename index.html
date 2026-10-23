@@ -144,13 +144,13 @@
         </div>
 
         <!-- Tas pats pokalbis: tab'e „DI chatas“ puslapio viduje, „DI pokalbis“ atidaro jį pilname ekrane -->
-        <!-- Admin „SUFLERIO DI: peržiūra“ = modalas: tamsus fonas, pokalbis dideliame lange -->
+        <!-- Admin „DI režimas: peržiūra“ = modalas: tamsus fonas, pokalbis dideliame lange -->
         <div class="ch-bd" x-show="chatModal" x-cloak x-transition.opacity.duration.200ms @click="closeChatModal()"></div>
         <section class="ch" :class="{ 'is-modal': chatModal }" x-ref="chatBox" x-show="mode === 'chat' || chatModal" x-cloak
                  x-effect="if ((mode === 'chat' || chatModal) && phase === 'results') chatEnsure()"
                  @keydown.escape.window="chatModal && !panelOpen && closeChatModal()">
           <header class="chm-bar" x-show="chatModal">
-            <span class="chm-brand"><img class="ai-ic" src="assets/img/ai.svg" width="15" height="26" alt="" aria-hidden="true"> SUFLERIO DI</span>
+            <span class="chm-brand"><img class="ai-ic" src="assets/img/ai.svg" width="15" height="26" alt="" aria-hidden="true"> DI režimas</span>
             <span class="chm-q" x-text="activeQuery"></span>
             <button type="button" class="pn-btn" @click="closeChatModal()" aria-label="Uždaryti" title="Uždaryti (Esc)">
               <svg width="18" height="18" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
@@ -765,7 +765,7 @@
       <li>DI ištraukia, kas parašyta SUFLERYJE, o ne kuria naujų faktų.</li>
     </ul>
 
-    <h3>SUFLERIO DI (pokalbis)</h3>
+    <h3>DI režimas (pokalbis)</h3>
     <ul>
       <li>DI užduoda 1–2 patikslinimo klausimus ir veda prie atsakymo.</li>
       <li>Atsakyme gali būti skaičiuoklė su įrašytais duomenimis, failas atsisiuntimui ar video nuo reikiamos vietos.</li>
@@ -839,7 +839,7 @@
   // Admin parametras: filtrai po vienu mygtuku „Filtrai“ arba visada matomi
   // V4 tab'ai. icon: ai | chat. Kurie rodomi, valdoma Admin'e (TABS_PARAM)
   const TABS = [
-    { id: 'chat', label: 'SUFLERIO DI', icon: 'ai' },
+    { id: 'chat', label: 'DI režimas' },
     { id: 'all', label: 'Visi rezultatai' },
     { id: 'comp', label: 'Kompetencijų centras' },
     { id: 'video', label: 'Video' },
@@ -850,8 +850,8 @@
   ];
   const TABS_PARAM = { key: 'tabs', label: 'Tab\'ai juostoje', type: 'checks', default: ['chat', 'all', 'comp', 'video', 'list', 'tests', 'files', 'plain'],
     options: TABS.map(t => ({ id: t.id, label: t.label })) };
-  // Admin parametras (V4): kur rodomas „SUFLERIO DI“
-  const CHAT_VIEW_PARAM = { key: 'chatView', label: 'SUFLERIO DI: peržiūra', type: 'radio', default: 'tab', options: [
+  // Admin parametras (V4): kur rodomas „DI režimas“
+  const CHAT_VIEW_PARAM = { key: 'chatView', label: 'DI režimas: peržiūra', type: 'radio', default: 'tab', options: [
     { id: 'tab', label: 'Puslapyje, kaip tab\'as' },
     { id: 'modal', label: 'Dideliame modale' },
   ] };

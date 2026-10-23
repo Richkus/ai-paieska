@@ -607,3 +607,4 @@ body.is-chatfull { overflow: hidden; }
 .pill-off { opacity: 0; transform: translateX(-50%) translateY(12px); }
 @media (max-width: 860px) { .ask-pill { left: 50%; bottom: 16px; } }
 .rf-ov { margin-bottom: 18px; }
+.ms-main.is-topwhite .ms-search-go { width: 34px; height: 34px; margin-top: 4px; } /* apvalus mygtukas sucentruotas 44 px lauke */

@@ -186,14 +186,14 @@ img { display: block; }
 @media (max-width: 640px) { .ms-k5btn kbd, .ms-k5btn-ai { display: none; } }
 
 /* Paieškos mygtukas nurimsta, kai rodomi rezultatai ir klausimas lauke nepakeistas (fokusas rezultatams).
-   Pakeitus klausimą vėl užsidega gradientu: yra ką siųsti */
+   Įėjus į lauką arba pakeitus klausimą vėl pilnai gradientinis, kaip pradžioje */
 .ms-search-go { position: relative; }
-.ms-search-go::before { content: ''; position: absolute; inset: 0; border-radius: 50%; background: #fff; box-shadow: inset 0 0 0 1px var(--ms-line-strong); opacity: 0; transition: opacity .3s var(--ms-ease); }
+.ms-search-go::before { content: ''; position: absolute; inset: 0; border-radius: 50%; background: #e9eeee; opacity: 0; transition: opacity .3s var(--ms-ease); }
 .ms-search-go svg { position: relative; }
 .ms-search-go svg circle, .ms-search-go svg path { transition: stroke .3s var(--ms-ease), fill .3s var(--ms-ease); }
-.ms-search-go.is-calm { box-shadow: none; }
-.ms-search-go.is-calm::before { opacity: 1; }
-.ms-search-go.is-calm svg circle, .ms-search-go.is-calm svg path:first-of-type { stroke: var(--ms-field-text); }
-.ms-search-go.is-calm svg path:last-of-type { fill: #d0708f; }
-.ms-search-go.is-calm:hover { filter: none; box-shadow: 0 2px 6px rgba(15, 40, 42, .1); }
-.ms-search-go.is-calm:hover::before { box-shadow: inset 0 0 0 1px #e2b8d4; }
+.ms-search:not(:focus-within) .ms-search-go.is-calm { box-shadow: none; }
+.ms-search:not(:focus-within) .ms-search-go.is-calm::before { opacity: 1; }
+.ms-search:not(:focus-within) .ms-search-go.is-calm svg circle, .ms-search:not(:focus-within) .ms-search-go.is-calm svg path:first-of-type { stroke: #7f9a9c; }
+.ms-search:not(:focus-within) .ms-search-go.is-calm svg path:last-of-type { fill: #c98aa8; }
+.ms-search:not(:focus-within) .ms-search-go.is-calm:hover { filter: none; transform: none; }
+.ms-search:not(:focus-within) .ms-search-go.is-calm:hover::before { background: #dfe7e7; }

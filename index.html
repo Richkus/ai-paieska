@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="assets/css/search.css?v=1025k">
 <link rel="stylesheet" href="assets/css/filters.css?v=1025k">
 <link rel="stylesheet" href="assets/css/search-v2.css?v=1025y">
+<link rel="stylesheet" href="assets/css/loader.css?v=1025z">
 <link rel="stylesheet" href="assets/css/loader-ai.css?v=1025k">
 <link rel="stylesheet" href="assets/css/admin.css?v=1025w">
 <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.14.1/dist/cdn.min.js"></script>
@@ -350,7 +351,7 @@
           </template>
           <div class="ch-msg is-ai" x-show="chat.typing">
             <!-- Kol DI ieško, animuojasi pati avataro ikona; atėjus atsakymui jos vietoje lieka nejudanti ikona -->
-            <div class="ch-ai"><i class="ch-av is-busy" aria-hidden="true" x-html="LOADER(p.loader || 'ai-draw', 20)"></i><p class="ch-typing">Ieškoma rezultatų…</p></div>
+            <div class="ch-ai"><i class="ch-av is-busy" aria-hidden="true" x-html="LOADER(p.loader || 'morph', 20)"></i><p class="ch-typing">Ieškoma rezultatų…</p></div>
           </div>
 
           <!-- Laukas prilipęs apačioje, kaip įprastuose chat'uose -->
@@ -390,7 +391,7 @@
 
         <!-- Įkėlimas po paieškos -->
         <div class="sk" :class="{ 'is-card': ver === 'v4' && mode === 'ai' && p.aiStyle !== 'plain', 'is-only': ver === 'v4' && aiOnly }" x-show="phase === 'loading'" x-cloak aria-live="polite">
-          <p class="sk-label"><span class="sk-ic" x-html="LOADER(p.loader || 'ai-draw', 21)"></span> Ieškoma rezultatų…</p>
+          <p class="sk-label"><span class="sk-ic" x-html="LOADER(p.loader || 'morph', 21)"></span> Ieškoma rezultatų…</p>
           <i style="width:55%;height:20px"></i><i style="width:92%"></i><i style="width:80%"></i><i style="width:88%"></i><i style="width:40%"></i>
         </div>
 
@@ -957,7 +958,7 @@
 </style>
 <script src="assets/js/shell.js?v=1025k"></script>
 <script src="assets/js/data.js?v=1025x"></script>
-<script src="assets/js/loader.js?v=1025k"></script>
+<script src="assets/js/loader.js?v=1025z"></script>
 <script>
   // Admin parametras: filtrai po vienu mygtuku „Filtrai“ arba visada matomi
   // V4 tab'ai. icon: ai | chat. Kurie rodomi, valdoma Admin'e (TABS_PARAM)
@@ -1015,7 +1016,8 @@
     { id: 'open', label: 'Visada matomi' },
   ] };
   // Admin parametras: įkėlimo animacija (visoms versijoms)
-  const LOADER_PARAM = { key: 'loader', label: 'Įkėlimo animacija', type: 'radio', default: 'ai-draw', options: [
+  const LOADER_PARAM = { key: 'loader', label: 'Įkėlimo animacija', type: 'radio', default: 'morph', options: [
+    { id: 'morph', label: 'Abstrakti: taškai susidėlioja į S' },
     { id: 'ai-dots', label: 'Taškai susirenka į DI žvaigždę' },
     { id: 'ai-draw', label: 'DI žvaigždė nusipiešia' },
     { id: 'ai-pulse', label: 'DI žvaigždė kvėpuoja su kometomis' },

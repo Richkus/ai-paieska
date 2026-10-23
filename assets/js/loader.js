@@ -3,6 +3,7 @@
      ai-dots   — taškai susirenka į DI žvaigždę
      ai-draw   — DI žvaigždė nusipiešia ir išsitrina
      ai-pulse  — DI žvaigždė „kvėpuoja“, pro šalį skrieja dvi kometos
+     morph     — abstraktus: 7 taškai susidėlioja į S (stiliai assets/css/loader.css)
    Spalvos kaip DI ikonos (assets/img/ai.svg): #FF7F7D → #B85399. */
 (function () {
   const C0 = [255, 127, 125], C1 = [184, 83, 153];
@@ -31,6 +32,10 @@
 
   window.LOADER = (kind, size = 18) => {
     const id = 'ldg' + (++uid);
+    if (kind === 'morph') {   // S iš taškų: spalvos nuo ikonos koralinės iki violetinės
+      const n = 7, dots = Array.from({ length: n }, (_, i) => `<circle r="1.75" style="fill:${mix(i / (n - 1))}"/>`).join('');
+      return `<span class="ld ld-morph" data-n="${n}"><svg width="${size}" height="${size}" viewBox="0 0 20 20" aria-hidden="true"><g>${dots}</g></svg></span>`;
+    }
     if (kind !== 'ai-draw' && kind !== 'ai-pulse') {   // numatytoji: ai-dots
       const N = 12, a = ringPts(N), b = starPts(N);
       const dots = a.map((p, i) => `<circle r="2.6" style="fill:${mix(Math.abs(b[i][1] - 21) / 32)};--ax:${p[0].toFixed(2)}px;--ay:${p[1].toFixed(2)}px;--bx:${b[i][0].toFixed(2)}px;--by:${b[i][1].toFixed(2)}px;animation-delay:${(i * 0.025).toFixed(3)}s"/>`).join('');

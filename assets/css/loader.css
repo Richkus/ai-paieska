@@ -1,0 +1,37 @@
+/* ==========================================================
+   Abstraktus įkėlimas „Ieškoma rezultatų…“: 7 taškai sukasi ratu
+   ir susidėlioja į S (Sufleris). Kai atsiranda DI atsakymas,
+   jo vietoje lieka DI ikona. Koordinatės iš scripts/loader-gen.py (git istorijoje).
+   ========================================================== */
+.ld { display: inline-grid; place-items: center; flex: 0 0 auto; color: var(--ai-accent, #3e9aa2); }
+.ld svg { display: block; overflow: visible; }
+.ld circle { fill: currentColor; }
+.ld-morph g { animation: ld-spin 2.6s cubic-bezier(.65,0,.35,1) infinite; transform-origin: 10px 10px; }
+@keyframes ld-spin { 0% { transform: rotate(0deg); } 36% { transform: rotate(360deg); } 100% { transform: rotate(360deg); } }
+
+/* ---- 7 taškai (galai 60°, spindulys 1.75 nustatomas loader.js) ---- */
+.ld-morph[data-n="7"] circle:nth-child(1) { animation: ld-m7-0 2.6s cubic-bezier(.65,0,.35,1) infinite; }
+@keyframes ld-m7-0 { 0%, 34% { transform: translate(15.37px, 6.90px); } 52%, 84% { transform: translate(12.00px, 2.54px); } 100% { transform: translate(15.37px, 6.90px); } }
+.ld-morph[data-n="7"] circle:nth-child(2) { animation: ld-m7-1 2.6s cubic-bezier(.65,0,.35,1) infinite; }
+@keyframes ld-m7-1 { 0%, 36% { transform: translate(10.92px, 3.87px); } 54%, 84% { transform: translate(7.42px, 2.94px); } 100% { transform: translate(10.92px, 3.87px); } }
+.ld-morph[data-n="7"] circle:nth-child(3) { animation: ld-m7-2 2.6s cubic-bezier(.65,0,.35,1) infinite; }
+@keyframes ld-m7-2 { 0%, 38% { transform: translate(5.78px, 5.46px); } 56%, 84% { transform: translate(6.24px, 7.36px); } 100% { transform: translate(5.78px, 5.46px); } }
+.ld-morph[data-n="7"] circle:nth-child(4) { animation: ld-m7-3 2.6s cubic-bezier(.65,0,.35,1) infinite; }
+@keyframes ld-m7-3 { 0%, 40% { transform: translate(3.82px, 10.46px); } 58%, 84% { transform: translate(10.00px, 10.00px); } 100% { transform: translate(3.82px, 10.46px); } }
+.ld-morph[data-n="7"] circle:nth-child(5) { animation: ld-m7-4 2.6s cubic-bezier(.65,0,.35,1) infinite; }
+@keyframes ld-m7-4 { 0%, 42% { transform: translate(6.51px, 15.12px); } 60%, 84% { transform: translate(13.76px, 12.64px); } 100% { transform: translate(6.51px, 15.12px); } }
+.ld-morph[data-n="7"] circle:nth-child(6) { animation: ld-m7-5 2.6s cubic-bezier(.65,0,.35,1) infinite; }
+@keyframes ld-m7-5 { 0%, 43% { transform: translate(11.83px, 15.92px); } 61%, 84% { transform: translate(12.58px, 17.06px); } 100% { transform: translate(11.83px, 15.92px); } }
+.ld-morph[data-n="7"] circle:nth-child(7) { animation: ld-m7-6 2.6s cubic-bezier(.65,0,.35,1) infinite; }
+@keyframes ld-m7-6 { 0%, 45% { transform: translate(15.77px, 12.27px); } 63%, 84% { transform: translate(8.00px, 17.46px); } 100% { transform: translate(15.77px, 12.27px); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .ld * { animation: none !important; opacity: 1 !important; }
+  .ld-morph[data-n="7"] circle:nth-child(1) { transform: translate(12.00px, 2.54px); }
+  .ld-morph[data-n="7"] circle:nth-child(2) { transform: translate(7.42px, 2.94px); }
+  .ld-morph[data-n="7"] circle:nth-child(3) { transform: translate(6.24px, 7.36px); }
+  .ld-morph[data-n="7"] circle:nth-child(4) { transform: translate(10.00px, 10.00px); }
+  .ld-morph[data-n="7"] circle:nth-child(5) { transform: translate(13.76px, 12.64px); }
+  .ld-morph[data-n="7"] circle:nth-child(6) { transform: translate(12.58px, 17.06px); }
+  .ld-morph[data-n="7"] circle:nth-child(7) { transform: translate(8.00px, 17.46px); }
+}

@@ -691,3 +691,4 @@ body.is-chatmodal { overflow: hidden; }
 .ch.is-modal .chf-col { min-height: calc(100vh - 56px - 60px - 28px); }
 .ch.is-modal .ch-compose { margin-top: auto; padding-bottom: 20px; }
 @media (max-width: 640px) { .ch.is-modal { inset: 8px; } .chm-q { display: none; } }
+.cite-nw { white-space: nowrap; } /* paskutinis žodis ir šaltinio numeris visada vienoje eilutėje */

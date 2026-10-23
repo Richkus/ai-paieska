@@ -7,12 +7,12 @@
 <title>AI paieška: prototipas</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400..800&family=Source+Serif+4:opsz,wght@8..60,500..700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/shell.css?v=1025f">
-<link rel="stylesheet" href="assets/css/search.css?v=1025f">
-<link rel="stylesheet" href="assets/css/filters.css?v=1025f">
-<link rel="stylesheet" href="assets/css/search-v2.css?v=1025f">
-<link rel="stylesheet" href="assets/css/loader-ai.css?v=1025f">
-<link rel="stylesheet" href="assets/css/admin.css?v=1025f">
+<link rel="stylesheet" href="assets/css/shell.css?v=1025g">
+<link rel="stylesheet" href="assets/css/search.css?v=1025g">
+<link rel="stylesheet" href="assets/css/filters.css?v=1025g">
+<link rel="stylesheet" href="assets/css/search-v2.css?v=1025g">
+<link rel="stylesheet" href="assets/css/loader-ai.css?v=1025g">
+<link rel="stylesheet" href="assets/css/admin.css?v=1025g">
 <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.14.1/dist/cdn.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
 </head>
@@ -157,6 +157,13 @@
             </button>
           </header>
           <div class="chf-wrap">
+          <!-- Siauras šoninis meniu su ankstesnėmis paieškomis (kaip Claude): ilgi pavadinimai nublunka -->
+          <aside class="ch-rail" aria-label="Ankstesnės paieškos">
+            <p class="ch-rail-h">Ankstesnės paieškos</p>
+            <template x-for="h in chatHistory" :key="h.q">
+              <button type="button" class="ch-rail-i" :class="{ 'is-on': h.active }" @click="!h.active && openHistory(h)" :title="h.q"><span x-text="h.q"></span></button>
+            </template>
+          </aside>
           <div class="chf-col">
           <template x-for="(m, i) in chat.msgs" :key="i">
             <div class="ch-msg" :class="'is-' + m.who">
@@ -846,9 +853,9 @@
   .transition-pn { transition: transform .32s var(--ms-ease); }
   .pn-off { transform: translateX(100%); }
 </style>
-<script src="assets/js/shell.js?v=1025f"></script>
-<script src="assets/js/data.js?v=1025f"></script>
-<script src="assets/js/loader.js?v=1025f"></script>
+<script src="assets/js/shell.js?v=1025g"></script>
+<script src="assets/js/data.js?v=1025g"></script>
+<script src="assets/js/loader.js?v=1025g"></script>
 <script>
   // Admin parametras: filtrai po vienu mygtuku „Filtrai“ arba visada matomi
   // V4 tab'ai. icon: ai | chat. Kurie rodomi, valdoma Admin'e (TABS_PARAM)
@@ -1046,6 +1053,15 @@
       // Demonstracija „nukrypimas nuo temos“: pokalbio pasiūlymuose atsiranda visai kitos temos klausimas
       offDemo: false,
       OFFTOPIC: 'O kaip apmokestinami komandiruotės dienpinigiai?',
+      // DI režimo šoninis meniu: dabartinė paieška, šios sesijos paieškos ir pavyzdinės
+      get chatHistory() {
+        const cur = { q: this.activeQuery, active: true };
+        const real = this.history.map(h => ({ q: h.query, h })).filter(x => x.q && x.q !== cur.q);
+        const demo = ['Kaip apskaitoje pažymėti dovanų kuponus darbuotojams', 'Atostoginių skaičiavimas 2026', 'GPM deklaracija už 2025 metus', 'Ilgalaikio turto nusidėvėjimo normatyvo keitimas', 'Avansinė apyskaita po komandiruotės', 'pvm sąskaita faktūra užsienio pirkėjui']
+          .map(q => ({ q })).filter(x => x.q !== cur.q && !real.some(r => r.q === x.q));
+        return [cur, ...real, ...demo].slice(0, 9);
+      },
+      openHistory(x) { if (x.h) this.restore(x.h); else { this.query = x.q; this.submitSearch(); } },
       optsFor(m) { const o = m.options || []; return this.offDemo && this.sc.id === 'savaitgalis' && o.length && m.after ? [...o, this.OFFTOPIC] : o; },
       brainOpen: false,  // prezentacijos lapelis „Kaip veikia DI paieška“
       scrolled: false,   // puslapis paslinktas (baltai viršutinei juostai rodom šešėlį)

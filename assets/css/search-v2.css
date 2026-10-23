@@ -699,3 +699,16 @@ body.is-chatmodal { overflow: hidden; }
 /* Nukrypimas nuo temos: patarimas */
 .ch-tip { margin: 0; padding: 10px 12px; border-radius: 8px; background: var(--ms-surface-soft); color: var(--ms-sub); font-size: 13.5px; line-height: 1.5; }
 .ch-newq .ex-btn { white-space: normal; height: auto; min-height: 40px; padding: 8px 16px; text-align: left; }
+
+/* DI režimas: siauras šoninis meniu „Ankstesnės paieškos“ (kaip Claude) */
+.ch .chf-wrap { display: grid; grid-template-columns: 196px minmax(0, 1fr); gap: 28px; align-items: start; }
+.ch-rail { position: sticky; top: 76px; display: grid; gap: 1px; max-height: calc(100vh - 100px); overflow-y: auto; padding-right: 4px; }
+.ch-rail-h { margin: 2px 10px 8px; color: var(--ms-muted); font-size: 12.5px; font-weight: 600; }
+.ch-rail-i { display: block; width: 100%; padding: 7px 10px; border: 0; border-radius: 8px; background: none; color: var(--ms-ink-soft); font-size: 13.5px; text-align: left; white-space: nowrap; overflow: hidden; transition: background .15s; }
+.ch-rail-i span { display: block; overflow: hidden; -webkit-mask-image: linear-gradient(to right, #000 78%, transparent); mask-image: linear-gradient(to right, #000 78%, transparent); }
+.ch-rail-i:hover { background: var(--ms-surface-soft); }
+.ch-rail-i.is-on { background: var(--ms-pill); color: var(--ms-ink); font-weight: 600; cursor: default; }
+.v2:has(.ch:not(.is-modal):not([style*="none"])) { max-width: calc(760px + 224px + var(--ms-gutter) * 2); grid-template-columns: minmax(0, 984px); }
+.ch.is-modal { width: min(1080px, calc(100vw - 32px)); }
+.ch.is-modal .ch-rail { top: 84px; }
+@media (max-width: 900px) { .ch .chf-wrap { grid-template-columns: minmax(0, 1fr); } .ch-rail { display: none; } }

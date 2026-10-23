@@ -36,7 +36,7 @@
 .a2-other-field { flex: 1; display: flex; align-items: center; gap: 6px; height: 38px; padding: 0 5px 0 14px; border: 1px solid var(--ms-field-text); border-radius: 19px; background: #fff; box-shadow: 0 0 0 3px rgba(83, 169, 177, .15); }
 .a2-other-field input { flex: 1; min-width: 0; border: 0; outline: none; background: none; font: inherit; font-size: 14px; color: var(--ms-ink); }
 .a2-other-field input::placeholder { color: var(--ms-muted); }
-.a2-other-field button { display: grid; place-items: center; width: 28px; height: 28px; padding: 0; border: 0; border-radius: 50%; background: var(--ms-teal-dark); color: #fff; transition: opacity .15s; }
+.a2-other-field button { display: grid; place-items: center; width: 28px; height: 28px; padding: 0; border: 0; border-radius: 50%; background: var(--ms-cta); color: #fff; transition: opacity .15s; }
 .a2-other-field button:disabled { opacity: .3; cursor: default; }
 .a2-cancel { padding: 6px 8px; border: 0; border-radius: 6px; background: none; color: var(--ms-sub); font-size: 13px; transition: background .15s, color .15s; }
 .a2-cancel:hover { background: var(--ms-pill); color: var(--ms-ink); }
@@ -205,8 +205,8 @@
 .ex textarea:focus { border-color: var(--ms-field-text); box-shadow: 0 0 0 3px rgba(83, 169, 177, .2); }
 .ex-foot { display: flex; justify-content: flex-end; }
 .ex-foot small { flex: 1; color: var(--ms-muted); font-size: 12.5px; }
-.ex-btn { flex: 0 0 auto; height: 40px; padding: 0 20px; border: 0; border-radius: 8px; background: var(--ms-teal-dark); color: #fff; font-size: 14px; font-weight: 600; transition: opacity .15s, background .15s; }
-.ex-btn:hover { background: var(--ms-teal); }
+.ex-btn { flex: 0 0 auto; height: 40px; padding: 0 20px; border: 0; border-radius: 8px; background: var(--ms-cta); color: #fff; font-size: 14px; font-weight: 600; transition: opacity .15s, background .15s; }
+.ex-btn:hover { background: var(--ms-cta-hover); }
 .ex-btn:disabled { opacity: .35; cursor: default; }
 .ex-done { display: flex; align-items: center; gap: 8px; margin: 0; padding: 12px 14px; border-radius: 10px; background: #fff; color: var(--ms-teal-dark); font-size: 14px; font-weight: 600; }
 
@@ -332,7 +332,7 @@
 .ch-field { display: flex; align-items: flex-end; gap: 8px; padding: 8px 8px 8px 16px; border: 1px solid var(--ms-line-strong); border-radius: 16px; background: #fff; box-shadow: 0 6px 24px rgba(15, 40, 42, .08); transition: border-color .15s, box-shadow .15s; }
 .ch-field:focus-within { border-color: var(--ms-field-text); box-shadow: 0 0 0 3px rgba(83, 169, 177, .2), 0 6px 24px rgba(15, 40, 42, .08); }
 .ch-field textarea { flex: 1; min-width: 0; height: 36px; max-height: 160px; padding: 7px 0; border: 0; outline: none; resize: none; background: none; font: inherit; font-size: 15px; line-height: 22px; color: var(--ms-ink); }
-.ch-field .ch-sendbtn { flex: 0 0 auto; display: grid; place-items: center; width: 36px; height: 36px; padding: 0; border: 0; border-radius: 10px; background: var(--ms-teal-dark); color: #fff; transition: opacity .15s; }
+.ch-field .ch-sendbtn { flex: 0 0 auto; display: grid; place-items: center; width: 36px; height: 36px; padding: 0; border: 0; border-radius: 10px; background: var(--ms-cta); color: #fff; transition: opacity .15s; }
 .ch-field .ch-sendbtn:disabled { opacity: .3; cursor: default; }
 .ch-compose small { display: block; margin-top: 8px; color: var(--ms-muted); font-size: 12px; text-align: center; }
 
@@ -453,8 +453,8 @@ body.is-chatfull { overflow: hidden; }
 .cc-card h3 { margin: 0 14px 6px; color: var(--ms-ink); font-size: 17px; font-weight: 700; line-height: 1.35; }
 .cc-card p { margin: 0 14px 6px; color: var(--ms-sub); font-size: 13.5px; line-height: 1.55; }
 .cc-card small { margin-bottom: 16px; color: var(--ms-muted); font-size: 12.5px; }
-.cc-go { height: 40px; padding: 0 22px; border: 0; border-radius: 6px; background: #53a9b1; color: #fff; font-size: 14px; font-weight: 600; transition: background .15s; }
-.cc-go:hover { background: var(--ms-teal-dark); }
+.cc-go { height: 40px; padding: 0 22px; border: 0; border-radius: 6px; background: var(--ms-cta); color: #fff; font-size: 14px; font-weight: 600; transition: background .15s; }
+.cc-go:hover { background: var(--ms-cta-hover); }
 .cc-mods { align-self: stretch; margin: 14px 8px 0; padding: 0; list-style: none; text-align: left; }
 .cc-mods li { display: flex; gap: 8px; padding: 9px 6px; border-top: 1px solid var(--ms-line); color: var(--ms-ink); font-size: 14px; }
 .cc-mods li span:first-child { color: var(--ms-muted); }

@@ -20,6 +20,8 @@
 
   --ms-teal: #53a9b1;
   --ms-teal-dark: #0f5354;
+  --ms-cta: #4c9095;        /* pagrindiniai veiksmo mygtukai */
+  --ms-cta-hover: #3e7b80;
   --ms-teal-ink: #00555a;
   --ms-link: #1f8f97;
   --ms-sidebar: #99cccc;

@@ -10,7 +10,7 @@ Viena versija (V4, kaip Google). DI elgiasi pagal tai, ką rado:
 
 | Būsena | Ką rodom | Scenarijus |
 |---|---|---|
-| Normaliai rezultatų | **DI trumpai:** DI apibendrinimas 2–3 sakiniais, kiekvieno gale šaltinio žymė (paspaudus atidaroma citata), disclaimeris „Esu DI, tai kaip žinot, galiu suklysti…“, po to „Tęskit temą“ | `savaitgalis` |
+| Normaliai rezultatų | **SUFLERIO DI santrauka:** DI apibendrinimas 2–3 sakiniais, kiekvieno gale šaltinio žymė (paspaudus atidaroma citata), disclaimeris „Esu DI, tai kaip žinot, galiu suklysti…“, po to „Tęskit temą“ | `savaitgalis` |
 | Daug / plati tema | Vieno sakinio apžvalga ir užuominos tikslinti (🔍 sąrašas) | `komandiruote` |
 | Nedaug ir tikslu | Vienas sakinys ir iškart rezultatai, be apibendrinimo | `nedaug` |
 | Rasta, bet nepanašu | Tik rezultatai ir „Klausti eksperto“, DI neapibendrina | `mazai` |

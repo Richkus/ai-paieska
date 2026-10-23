@@ -119,12 +119,12 @@
 .home-card:hover { border-color: var(--ms-line-strong); box-shadow: 0 6px 18px rgba(15, 83, 84, .08); transform: translateY(-2px); }
 .hc-img { display: block; margin-bottom: 10px; aspect-ratio: 16 / 9; overflow: hidden; border-bottom: 1px solid var(--ms-line); }
 .hc-img { background-size: 100% 100%; }
-.hc-g1 { background: linear-gradient(160deg, #2f5e60, #234a4c); }
-.hc-g2 { background: linear-gradient(160deg, #7c9e9c, #67898a); }
-.hc-g3 { background: linear-gradient(160deg, #3e4f57, #2f3d44); }
-.hc-g4 { background: linear-gradient(160deg, #a8bfbd, #93adab); }
-.hc-g5 { background: linear-gradient(160deg, #6e5468, #5a4356); }
-.hc-g6 { background: linear-gradient(160deg, #c9b9a3, #b7a68f); }
+.hc-g1 { background: linear-gradient(160deg, #dfe9e9, #d5e1e1); }
+.hc-g2 { background: linear-gradient(160deg, #e2eae9, #d7e2e1); }
+.hc-g3 { background: linear-gradient(160deg, #dde7e8, #d2dfe0); }
+.hc-g4 { background: linear-gradient(160deg, #e3ebea, #d8e3e2); }
+.hc-g5 { background: linear-gradient(160deg, #e0e8e9, #d5e0e1); }
+.hc-g6 { background: linear-gradient(160deg, #e2e9e7, #d7e1df); }
 .hc-meta { padding: 0 18px; color: var(--ms-muted); font-size: 12.5px; letter-spacing: .3px; text-transform: uppercase; }
 .hc-title { padding: 0 18px; color: var(--ms-ink); font-size: 16px; font-weight: 600; line-height: 1.4; transition: color .15s; }
 .home-card:hover .hc-title { color: var(--ms-link); }

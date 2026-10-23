@@ -119,6 +119,7 @@ window.SCENARIOS = [
         ai: {
           kind: 'directions',
           heading: 'Tema plati. Kas jums aktualiausia?',
+          overview: 'Komandiruočių išlaidos apima dienpinigius, kelionės ir nakvynės išlaidas, komandiruotes į užsienį ir jų įforminimą.',
           lead: 'Apie komandiruotės išlaidas yra kelios temos. Ką norit sužinoti?',
           directions: [
             { label: 'Dienpinigiai', count: 124, hint: 'dydžiai, GPM, vienos dienos komandiruotė' },
@@ -153,41 +154,16 @@ window.SCENARIOS = [
     ],
   },
   {
-    id: 'pvm',
-    label: 'Trumpa frazė',
-    query: 'pvm',
-    classicCount: 1949,
+    id: 'nedaug',
+    label: 'Nedaug ir tikslu',
+    query: 'Kaip žiniaraštyje pažymėti laisvą dieną už darbą poilsio dieną?',
+    classicCount: 3,
     steps: [
       {
-        count: 1949,
-        results: ['p1', 'p2', 'p5', 'p3', 'p4'],
-        ai: {
-          kind: 'directions',
-          heading: 'Radom daug. Siaurinkim?',
-          lead: 'Apie PVM yra daug temų. Ką norit sužinoti?',
-          directions: [
-            { label: 'Registracija PVM mokėtoju', count: 212, hint: 'apyvartos riba, savanoriška' },
-            { label: 'PVM sąskaitos faktūros', count: 388, hint: 'išrašymas, registras' },
-            { label: 'PVM deklaravimas', count: 301, hint: 'formos, terminai' },
-            { label: 'PVM atskaita', count: 274, hint: 'kada galima, ribojimai' },
-          ],
-        },
-      },
-      {
-        count: 31,
-        results: ['p4', 'p3', 'p5'],
-        ai: {
-          kind: 'quotes',
-          heading: 'Registracija PVM mokėtoju',
-          quotes: [{ id: 'p4' }, { id: 'p3' }],
-          ask: 'Kokia jūsų situacija?',
-          chips: ['Viršijom apyvartos ribą', 'Norim registruotis savanoriškai'],
-        },
-      },
-      {
         count: 3,
-        results: ['p4', 'p5'],
-        ai: { kind: 'quotes', heading: 'Privaloma registracija viršijus ribą', quotes: [{ id: 'p4' }], ask: 'Jei vis dar ne tai, parašykit savais žodžiais.', chips: [] },
+        results: ['r3', 'f4', 'r2'],
+        // Rezultatų nedaug ir jie tikslūs: DI neapibendrina, tik vienu sakiniu pasako, kad tai tinka
+        ai: { kind: 'few', heading: 'Šios 3 medžiagos atitinka jūsų klausimą', chips: [] },
       },
     ],
   },
@@ -275,8 +251,6 @@ window.FILTERS = {
   S.savaitgalis.steps.forEach(s => { s.filters = { tema: ['Darbo laikas'] }; });
   S.komandiruote.steps[1].filters = { tema: ['Komandiruotės'] };
   S.komandiruote.steps[2].filters = { tema: ['Komandiruotės'] };
-  S.pvm.steps[1].filters = { tema: ['PVM'] };
-  S.pvm.steps[2].filters = { tema: ['PVM'], data: '2026' };
 })();
 
 /* V3: AI perrašytas klausimas po kiekvieno patikslinimo (įrašomas į paieškos lauką) */
@@ -285,7 +259,6 @@ window.FILTERS = {
   const rq = {
     savaitgalis: ['Kaip suteikti laisvą dieną už darbą šeštadienį, kai jis nebuvo grafike?', 'Kaip žiniaraštyje pažymėti laisvą dieną už darbą poilsio dieną?'],
     komandiruote: ['Kokio dydžio dienpinigiai ir kada jie neapmokestinami?', 'Kaip skaičiuoti dienpinigius komandiruotėje užsienyje?'],
-    pvm: ['Kada reikia registruotis PVM mokėtoju?', 'Ką daryti viršijus PVM mokėtojo registracijos ribą?'],
   };
   Object.entries(rq).forEach(([id, list]) => list.forEach((q, i) => { S[id].steps[i + 1].rq = q; }));
 })();
@@ -301,10 +274,6 @@ window.FILTERS = {
     komandiruote: [
       ['Kokio dydžio dienpinigiai ir kada jie neapmokestinami?', 'Kokias kelionės ir nakvynės išlaidas galima kompensuoti?', 'Ką apmokėti, kai komandiruotė į užsienį?', 'Kaip įforminti komandiruotę ir avansinę apyskaitą?'],
       ['Kaip skaičiuoti dienpinigius komandiruotėje užsienyje?', 'Dienpinigiai komandiruotėje Lietuvoje', 'Dienpinigiai, kai komandiruotė į kelias šalis'],
-    ],
-    pvm: [
-      ['Kada reikia registruotis PVM mokėtoju?', 'Kaip išrašyti PVM sąskaitą faktūrą?', 'Kaip ir kada deklaruoti PVM?', 'Kada galima atskaityti pirkimo PVM?'],
-      ['Ką daryti viršijus PVM mokėtojo registracijos ribą?', 'Kaip registruotis PVM mokėtoju savanoriškai?', 'Nuo kada skaičiuoti PVM po registracijos?'],
     ],
   };
   Object.entries(rel).forEach(([id, list]) => list.forEach((r, i) => { S[id].steps[i].related = r; }));
@@ -342,19 +311,6 @@ window.CHATS = {
     { text: 'Apie apmokestinimą:',
       card: { main: 'k1', quotes: ['k1'] },
       after: 'Jei vis dar ne tai, galiu perduoti klausimą ekspertui.', expert: true },
-  ],
-  pvm: [
-    { text: '„PVM“ apima daug temų. Apie ką norit sužinoti?',
-      options: ['Registracija PVM mokėtoju', 'PVM sąskaitos faktūros', 'PVM deklaravimas', 'PVM atskaita'] },
-    { text: 'Aišku. Kokia jūsų situacija?',
-      options: ['Viršijom apyvartos ribą', 'Norim registruotis savanoriškai'] },
-    { text: 'Štai kas SUFLERYJE rašoma apie privalomą registraciją PVM mokėtoju:',
-      card: { main: 'p4', quotes: ['p4'], more: ['p5'] },
-      after: 'Ar dar kažkas neaišku?',
-      options: ['Nuo kada skaičiuoti PVM?', 'Kaip užpildyti prašymą?'] },
-    { text: 'Tiksliai šiam klausimui atskiros medžiagos neradau. Artimiausia:',
-      card: { main: 'p5', quotes: [] },
-      after: 'Galiu perduoti klausimą ekspertui, jis atsakys asmeniškai.', expert: true },
   ],
   mazai: [
     { text: 'Tiksliai tokios situacijos SUFLERYJE neradau, bet yra artimų temų. Kad parinkčiau tinkamiausią: tortas skirtas įmonės šventei ar dovana konkrečiam darbuotojui?',
@@ -409,3 +365,39 @@ window.COMPETENCIES = [
   { id: 'ig', title: 'Įmonių grupės', desc: 'Sandoriai tarp susijusių asmenų, kainodara ir konsolidavimas.', icon: 'percent', modules: ['Susiję asmenys', 'Sandorių kainodara', 'Paskolos grupėje', 'Konsolidavimas'], match: [] },
   { id: 'ds', title: 'Darbo santykiai ir darbo užmokestis', desc: 'Darbo laikas, poilsis, komandiruotės ir darbo užmokesčio skaičiavimas.', icon: 'people', modules: ['Darbo laikas ir poilsis', 'Komandiruotės', 'Darbo užmokestis ir priedai', 'Atostogos'], match: ['savaitgalis', 'komandiruote'] },
 ];
+
+/* ==========================================================
+   DI apibendrinimas (kai rezultatų normaliai): trumpi sakiniai,
+   kiekvienas su šaltiniu. Paspaudus šaltinį atidaroma citata.
+   ========================================================== */
+(function summaries() {
+  const S = Object.fromEntries(window.SCENARIOS.map(s => [s.id, s]));
+  const sum = {
+    savaitgalis: [
+      [{ t: 'Jei darbuotojas dirbo poilsio dieną, kuri nebuvo numatyta grafike, jo prašymu vietoj padidinto apmokėjimo galima suteikti kitą poilsio dieną. Prašymas turi būti įformintas raštu.', src: 'r1' },
+       { t: 'Laisvą dieną reikėtų suteikti per protingą laiką, o darbo laiko apskaitos žiniaraštyje pažymėti ir darbą poilsio dieną, ir suteiktą poilsio dieną.', src: 'r2' }],
+      [{ t: 'Kai šeštadienis nebuvo grafike, darbuotojas gali rinktis: padidintas apmokėjimas arba kita poilsio diena.', src: 'r2' },
+       { t: 'Prašyme nurodoma, kurią dieną dirbta ir kada norima laisvos dienos. Pavyzdinė forma yra SUFLERYJE.', src: 'r6' },
+       { t: 'Dažniausia klaida: laisva diena suteikiama, bet žiniaraštyje nepažymima, už kurią poilsio dieną ji suteikta.', src: 'r3' }],
+      [{ t: 'Žiniaraštyje pažymima ir dirbta poilsio diena, ir vėliau suteikta laisva diena, kad būtų aišku, už ką ji suteikta.', src: 'r3' },
+       { t: 'Abi dienos žymimos tame pačiame darbo laiko apskaitos žiniaraštyje.', src: 'r2' }],
+    ],
+    komandiruote: [
+      null,
+      [{ t: 'Dienpinigiai neapmokestinami tik neviršijant nustatytų dydžių. Viršijanti dalis laikoma su darbo santykiais susijusiomis pajamomis.', src: 'k1' },
+       { t: 'Vienos dienos komandiruotei Lietuvoje dienpinigiai mokami, jei komandiruotė įforminta įsakymu ir darbuotojas vyko į kitą vietovę.', src: 'k2' }],
+      [{ t: 'Kai per vieną komandiruotę lankomasi keliose šalyse, dienpinigiai skaičiuojami pagal šalį, kurioje darbuotojas buvo tą dieną.', src: 'k3' },
+       { t: 'Neapmokestinama tik dalis iki nustatyto dydžio, likusi apmokestinama kaip darbo pajamos.', src: 'k1' }],
+    ],
+  };
+  Object.entries(sum).forEach(([id, list]) => list.forEach((x, i) => { if (x) S[id].steps[i].ai.summary = x; }));
+  // Chat'o atsakymo kortelės: tas pats apibendrinimas
+  const C = window.CHATS;
+  C.savaitgalis[2].card = { main: 'r1', summary: sum.savaitgalis[1], more: ['r3'] };
+  C.savaitgalis[3].card = { main: 'r3', summary: sum.savaitgalis[2] };
+  C.komandiruote[2].card = { main: 'k3', summary: sum.komandiruote[2], tool: 'k4' };
+  C.komandiruote[3].card = { main: 'k1', summary: [sum.komandiruote[1][0]] };
+  C.savaitgalis[2].text = 'Ačiū, radau situaciją, kuri atitinka jūsų atvejį. Trumpai:';
+  C.komandiruote[2].text = 'Trumpai apie dienpinigius komandiruotėje užsienyje:';
+  C.nedaug = [{ text: 'Radau 3 medžiagas, kurios tiesiai atsako į jūsų klausimą:', card: { list: ['r3', 'f4', 'r2'] } }];
+})();

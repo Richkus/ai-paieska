@@ -7,12 +7,12 @@
 <title>AI paieška: prototipas</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400..800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/shell.css?v=1023n">
-<link rel="stylesheet" href="assets/css/search.css?v=1023n">
-<link rel="stylesheet" href="assets/css/filters.css?v=1023n">
-<link rel="stylesheet" href="assets/css/search-v2.css?v=1023n">
-<link rel="stylesheet" href="assets/css/loader-ai.css?v=1023n">
-<link rel="stylesheet" href="assets/css/admin.css?v=1023n">
+<link rel="stylesheet" href="assets/css/shell.css?v=1023o">
+<link rel="stylesheet" href="assets/css/search.css?v=1023o">
+<link rel="stylesheet" href="assets/css/filters.css?v=1023o">
+<link rel="stylesheet" href="assets/css/search-v2.css?v=1023o">
+<link rel="stylesheet" href="assets/css/loader-ai.css?v=1023o">
+<link rel="stylesheet" href="assets/css/admin.css?v=1023o">
 <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.14.1/dist/cdn.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
 </head>
@@ -80,6 +80,7 @@
 
         <!-- V4, plati tema: kryptys pirmos po tab'ais (kaip Google „Refine“), paspaudus perrašomas klausimas lauke -->
         <div class="rf" x-show="ver === 'v4' && ai.kind === 'directions' && ['ai', 'classic'].includes(mode)" x-cloak>
+          <p class="rf-ov" x-show="ai.overview" x-text="ai.overview"></p>
           <p class="rf-q" x-text="ai.lead || ai.heading"></p>
           <!-- Sąrašas su paieškos ikona, kaip Google pasiūlymai -->
           <ul class="rf-list">
@@ -171,17 +172,8 @@
         </div>
 
         <!-- Tas pats pokalbis: tab'e „DI chatas“ puslapio viduje, „DI pokalbis“ atidaro jį pilname ekrane -->
-        <section class="ch" :class="{ 'is-full': chatFull }" x-ref="chatBox" x-show="ver === 'v4' && (mode === 'chat' || chatFull)" x-cloak
-                 x-effect="if (ver === 'v4' && (mode === 'chat' || chatFull) && phase === 'results') chatEnsure()"
-                 @keydown.escape.window="chatFull && !panelOpen && closeChatFull()">
-          <header class="chf-bar" x-show="chatFull">
-            <span class="chf-brand"><img class="ai-ic" src="assets/img/ai.svg" width="15" height="26" alt="" aria-hidden="true"> DI pokalbis</span>
-            <span class="chf-q" x-text="chat.msgs.length ? chat.msgs[0].text : ''"></span>
-            <button type="button" class="chf-new" @click="chatRestart()">Naujas pokalbis</button>
-            <button type="button" class="pn-btn" @click="closeChatFull()" aria-label="Uždaryti" title="Uždaryti (Esc)">
-              <svg width="18" height="18" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-            </button>
-          </header>
+        <section class="ch" x-ref="chatBox" x-show="mode === 'chat'" x-cloak
+                 x-effect="if (mode === 'chat' && phase === 'results') chatEnsure()">
           <div class="chf-wrap">
           <div class="chf-col">
           <template x-for="(m, i) in chat.msgs" :key="i">
@@ -194,11 +186,25 @@
                     <p x-text="m.text"></p>
                     <template x-if="m.card">
                       <div class="ch-card">
-                        <button type="button" class="ch-main" @click="openPanel(m.card.main)">
-                          <small x-text="R[m.card.main].type + ' · ' + R[m.card.main].date"></small>
-                          <b x-text="R[m.card.main].title"></b>
+                        <button type="button" class="ch-main" x-show="m.card.main" @click="openPanel(m.card.main)">
+                          <small x-text="m.card.main ? R[m.card.main].type + ' · ' + R[m.card.main].date : ''"></small>
+                          <b x-text="m.card.main ? R[m.card.main].title : ''"></b>
                         </button>
-                        <template x-for="id in m.card.quotes" :key="id">
+                        <template x-if="m.card.summary">
+                          <div class="a2-sum">
+                <template x-for="(x, i) in m.card.summary" :key="i">
+                  <p><span x-text="x.t"></span> <button type="button" class="a2-cite is-src" :class="{ 'is-pro': R[x.src].pro }" @click="pvClose(); openPanel(x.src, true)" @mouseenter="pvEnter(x.src, $el)" @mouseleave="pvLeave()" @focus="pvEnter(x.src, $el)" @blur="pvLeave()" :aria-label="'Šaltinis: ' + R[x.src].title"><svg width="12" height="12" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg><span x-text="R[x.src].type + ' · ' + R[x.src].date"></span></button></p>
+                </template>
+              </div>
+                        </template>
+                        <template x-if="m.card.list">
+                          <div class="ch-list">
+                            <template x-for="id in m.card.list" :key="id">
+                              <button type="button" @click="openPanel(id)"><small x-text="R[id].type + ' · ' + R[id].date"></small><b x-text="R[id].title"></b></button>
+                            </template>
+                          </div>
+                        </template>
+                        <template x-for="id in m.card.quotes || []" :key="id">
                           <blockquote class="ch-quote" x-show="R[id].quote">
                             <span x-text="'„' + R[id].quote + '“'"></span>
                             <button type="button" class="a2-cite" @click="openPanel(id, true)" x-text="R[id].type"></button>
@@ -227,7 +233,8 @@
                         <button type="button" @click="chatSend(o)" x-text="o"></button>
                       </template>
                     </div>
-                    <div class="ch-tools" x-show="m.card">
+                    <div class="ch-tools" x-show="m.card && m.card.summary">
+                      <p class="a2-disc"><img class="ai-ic" src="assets/img/ai.svg" width="9" height="16" alt="" aria-hidden="true">Esu SUFLERIO DI ir galiu suklysti, todėl pasitikrinkit šaltiniuose.</p>
                       <button type="button" class="a2-vote" aria-label="Padėjo" title="Padėjo"><svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 7v7H2V7h3Zm0 0 3-5.5c1 0 1.8.8 1.6 1.8L9.2 6H13a1.5 1.5 0 0 1 1.5 1.8l-1 5A1.5 1.5 0 0 1 12 14H5" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg></button>
                       <button type="button" class="a2-vote" aria-label="Nepadėjo" title="Nepadėjo"><svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true" style="transform:scaleY(-1)"><path d="M5 7v7H2V7h3Zm0 0 3-5.5c1 0 1.8.8 1.6 1.8L9.2 6H13a1.5 1.5 0 0 1 1.5 1.8l-1 5A1.5 1.5 0 0 1 12 14H5" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg></button>
                     </div>
@@ -251,31 +258,11 @@
                 <svg width="16" height="16" viewBox="0 0 14 14" aria-hidden="true"><path d="M7 12V2M3 6l4-4 4 4" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
               </button>
             </div>
-            <small>DI atrenka SUFLERIO medžiagą ir išvadų nedaro. Prototipas: pokalbis iš anksto surašytas.</small>
+            <small>Atsakymus rašo SUFLERIO DI pagal SUFLERIO medžiagą. Prototipas: pokalbis iš anksto surašytas.</small>
           </form>
           </div>
-          <!-- Pilname ekrane šaltiniai dešinėje (kaip Google AI Mode) -->
-          <aside class="chf-src" x-show="chatFull && sources.length">
-            <h3>Šaltiniai <span x-text="sources.length"></span></h3>
-            <template x-for="id in sources" :key="id">
-              <button type="button" @click="openPanel(id, true)">
-                <small><i class="a2-pro" x-show="R[id].pro">PRO</i><span x-text="R[id].type + ' · ' + R[id].date"></span></small>
-                <b x-text="R[id].title"></b>
-                <span class="chf-snip" x-text="R[id].snippet"></span>
-              </button>
-            </template>
-          </aside>
           </div>
         </section>
-
-        <!-- Režimai (V2) -->
-        <div class="sr-modes" x-show="ver === 'v2'" role="tablist" aria-label="Paieškos režimas">
-          <button type="button" role="tab" :class="{ 'is-on': mode === 'ai' }" :aria-selected="mode === 'ai'" @click="setMode('ai')">
-            <img class="ai-ic" src="assets/img/ai.svg" width="15" height="26" alt="" aria-hidden="true">
-            Atsakymas su AI
-          </button>
-          <button type="button" role="tab" :class="{ 'is-on': mode === 'classic' }" :aria-selected="mode === 'classic'" @click="setMode('classic')">Tik rezultatai</button>
-        </div>
 
         <!-- Įkėlimas po paieškos -->
         <div class="sk" :class="{ 'is-card': ver === 'v4' && mode === 'ai' && p.aiStyle !== 'plain', 'is-only': ver === 'v4' && aiOnly }" x-show="phase === 'loading'" x-cloak aria-live="polite">
@@ -284,35 +271,36 @@
         </div>
 
         <!-- ===== V2 · AI blokas be dėžučių ===== -->
-        <template x-if="mode === 'ai' && !(ver === 'v4' && ['low', 'directions'].includes(ai.kind))">
+        <template x-if="mode === 'ai' && !['low', 'directions', 'few'].includes(ai.kind)">
           <section class="a2" :class="{ 'is-card': ver === 'v4' && p.aiStyle !== 'plain', 'is-plain': ver === 'v4' && p.aiStyle === 'plain', 'is-only': ver === 'v4' && aiOnly }" aria-live="polite">
-            <!-- Į ką ką tik atsakėt: lieka matoma, kad būtų aišku, kodėl pasikeitė -->
-            <div class="a2-answered" x-show="lastAnswer && ver === 'v2'" x-cloak :title="lastAnswer && lastAnswer.q">
-              <span x-text="busy ? 'Tikslinam pagal jūsų atsakymą' : 'Patikslinta pagal jūsų atsakymą'"></span>
-              <span class="a2-ans">
-                <span x-text="lastAnswer && lastAnswer.a"></span>
-                <button type="button" :hidden="!!busy" @click="goStep(step - 1)" aria-label="Atšaukti patikslinimą" title="Atšaukti patikslinimą">×</button>
-              </span>
-              <span class="a2-delta" x-show="!busy && lastAnswer && lastAnswer.from" x-text="!busy && lastAnswer && lastAnswer.from ? lastAnswer.from + ' → ' + lastAnswer.to + ' ' + rezultatai(lastAnswer.to) : ''"></span>
-            </div>
-
-            <div class="sk is-inline" x-show="busy" x-cloak>
-              <p class="sk-label"><span class="sk-ic" x-html="LOADER(p.loader || 'ai-draw', 21)"></span> Ieškom pagal jūsų atsakymą…</p>
-              <i style="width:50%;height:20px"></i><i style="width:90%"></i><i style="width:76%"></i><i style="width:84%"></i>
-            </div>
-
             <div x-show="!busy" x-effect="sc.id; step; $el.classList.remove('ai-swap'); void $el.offsetWidth; $el.classList.add('ai-swap')">
             <div class="a2-head" :class="{ 'is-label': ver === 'v4', 'is-ask': ver === 'v4' && ai.kind !== 'quotes' }">
               <img class="ai-ic" src="assets/img/ai.svg" width="15" height="26" alt="" aria-hidden="true">
-              <h2 x-show="ver !== 'v4'" x-text="ai.heading"></h2>
-              <span class="a2-label" x-show="ver === 'v4'" x-text="ai.kind === 'quotes' ? 'DI atrinktos ištraukos iš panašių situacijų' : ai.heading"></span>
+              <span class="a2-label" x-show="ver === 'v4'" x-text="ai.kind === 'quotes' ? (ai.summary ? 'Trumpai' : 'DI atrinktos ištraukos iš panašių situacijų') : ai.heading"></span>
               <button type="button" class="a2-info" @mouseenter="tip = true" @mouseleave="tip = false" @focus="tip = true" @blur="tip = false" aria-label="Kaip tai veikia">
                 <svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.3" fill="none"/><path d="M8 7.2v4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><circle cx="8" cy="5" r=".9" fill="currentColor"/></svg>
-                <span class="a2-tip" x-show="tip" x-cloak x-transition.opacity.duration.120ms>Rodom tik ištraukas iš SUFLERIO medžiagos. Išvadų nedarom, sprendimą priimat jūs.</span>
+                <span class="a2-tip" x-show="tip" x-cloak x-transition.opacity.duration.120ms x-text="ai.summary ? 'Apibendrinimą parašė SUFLERIO DI pagal rastą medžiagą. Kiekvienas teiginys turi šaltinį, paspaudus jį atsidaro citata.' : 'Rodom tik ištraukas iš SUFLERIO medžiagos. Išvadų nedarom, sprendimą priimat jūs.'"></span>
               </button>
             </div>
 
-            <template x-if="ai.kind === 'quotes'">
+            <!-- DI apibendrinimas: trumpi sakiniai, kiekvieno gale šaltinis (kaip LRT „Klauskite DI“) -->
+            <template x-if="ai.kind === 'quotes' && ai.summary">
+              <div class="a2-sum">
+                <template x-for="(x, i) in ai.summary" :key="i">
+                  <p><span x-text="x.t"></span> <button type="button" class="a2-cite is-src" :class="{ 'is-pro': R[x.src].pro }" @click="pvClose(); openPanel(x.src, true)" @mouseenter="pvEnter(x.src, $el)" @mouseleave="pvLeave()" @focus="pvEnter(x.src, $el)" @blur="pvLeave()" :aria-label="'Šaltinis: ' + R[x.src].title"><svg width="12" height="12" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg><span x-text="R[x.src].type + ' · ' + R[x.src].date"></span></button></p>
+                </template>
+              </div>
+            </template>
+            <template x-if="ai.kind === 'quotes' && ai.summary">
+              <div class="a2-discrow">
+                <p class="a2-disc"><img class="ai-ic" src="assets/img/ai.svg" width="9" height="16" alt="" aria-hidden="true">Esu SUFLERIO DI ir galiu suklysti, todėl pasitikrinkit šaltiniuose.</p>
+                <span class="a2-votes">
+                  <button type="button" class="a2-vote" :class="{ 'is-on': vote === 1 }" @click="vote = vote === 1 ? 0 : 1" aria-label="Padėjo" title="Padėjo"><svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 7v7H2V7h3Zm0 0 3-5.5c1 0 1.8.8 1.6 1.8L9.2 6H13a1.5 1.5 0 0 1 1.5 1.8l-1 5A1.5 1.5 0 0 1 12 14H5" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg></button>
+                  <button type="button" class="a2-vote" :class="{ 'is-on': vote === -1 }" @click="vote = vote === -1 ? 0 : -1" aria-label="Nepadėjo" title="Nepadėjo"><svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true" style="transform:scaleY(-1)"><path d="M5 7v7H2V7h3Zm0 0 3-5.5c1 0 1.8.8 1.6 1.8L9.2 6H13a1.5 1.5 0 0 1 1.5 1.8l-1 5A1.5 1.5 0 0 1 12 14H5" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg></button>
+                </span>
+              </div>
+            </template>
+            <template x-if="ai.kind === 'quotes' && !ai.summary">
               <ul class="a2-quotes">
                 <template x-for="qt in ai.quotes" :key="qt.id">
                   <li class="a2-quote">
@@ -351,34 +339,7 @@
                   </ul>
                 </div>
               </div>
-              <div x-show="ver !== 'v4'">
-                <div x-show="answers.length">
-                    <p class="a2-ask" x-show="askText" x-text="askText"></p>
-                    <ul class="a2-list" x-show="!other && p.answers === 'list'">
-                      <template x-for="a in answers" :key="a.label">
-                        <li><button type="button" class="a2-row" @click="refine(a.label)" :title="a.hint || ''"><i aria-hidden="true">↳</i><span x-text="a.label"></span><em x-show="a.count" x-text="a.count"></em></button></li>
-                      </template>
-                      <li x-show="ai.kind !== 'empty'"><button type="button" class="a2-row is-other" @click="openOther()"><i aria-hidden="true">↳</i><span>Kita, parašysiu pats…</span></button></li>
-                    </ul>
-                    <div class="a2-answers" x-show="!other && p.answers !== 'list'">
-                      <template x-for="a in answers" :key="a.label">
-                        <button type="button" class="a2-chip" @click="refine(a.label)" :title="a.hint || ''"><span x-text="a.label"></span><em x-show="a.count" x-text="a.count"></em></button>
-                      </template>
-                      <button type="button" class="a2-chip is-other" x-show="ai.kind !== 'empty'" @click="openOther()">Kita…</button>
-                    </div>
-                    <form class="a2-other" x-show="other" x-cloak @submit.prevent="refine(own)">
-                      <label class="a2-other-field">
-                        <input type="text" x-ref="other" x-model="own" placeholder="Jūsų atsakymas…" aria-label="Jūsų atsakymas" @keydown.escape.stop="other = false; own = ''">
-                        <button type="submit" :disabled="!own.trim()" aria-label="Atsakyti">
-                          <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                        </button>
-                      </label>
-                      <button type="button" class="a2-cancel" @click="other = false; own = ''">Atšaukti</button>
-                    </form>
-                </div>
-                <p class="a2-hint" x-show="!answers.length">Ne tai? Pakeiskit klausimą paieškos lauke viršuje.</p>
-              </div>
-              <div class="a2-votes">
+              <div class="a2-votes" x-show="!ai.summary">
                 <button type="button" class="a2-vote" :class="{ 'is-on': vote === 1 }" @click="vote = vote === 1 ? 0 : 1" aria-label="Padėjo" title="Padėjo">
                   <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 7v7H2V7h3Zm0 0 3-5.5c1 0 1.8.8 1.6 1.8L9.2 6H13a1.5 1.5 0 0 1 1.5 1.8l-1 5A1.5 1.5 0 0 1 12 14H5" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>
                 </button>
@@ -390,6 +351,9 @@
             </div>
           </section>
         </template>
+
+        <!-- Nedaug ir tikslu: be apibendrinimo, vienas sakinys ir iškart rezultatai -->
+        <p class="few" x-show="mode === 'ai' && ai.kind === 'few'" x-cloak><img class="ai-ic" src="assets/img/ai.svg" width="11" height="19" alt="" aria-hidden="true"><span x-text="ai.heading + '.'"></span></p>
 
         <!-- V4, mažas panašumas: DI bloko nerodom, tik paaiškinimą ir kelią į ekspertą -->
         <template x-if="mode === 'ai' && ver === 'v4' && ai.kind === 'low'">
@@ -530,21 +494,6 @@
           <span x-text="sideSummary"></span>
           <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><path d="M2 3.5l3 3 3-3" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
-
-        <section class="sc" x-show="mode === 'ai' && ver !== 'v4'">
-          <h3>Jūsų paieška <span x-text="'iš ' + sc.classicCount"></span></h3>
-          <ol class="st">
-            <template x-for="(s, i) in steps" :key="i">
-              <li :class="{ 'is-current': i === steps.length - 1, 'is-new': flash && i === steps.length - 1 && i > 0 }">
-                <button type="button" class="st-row" @click="goStep(i)" :title="i === steps.length - 1 ? '' : 'Grįžti į šį žingsnį'">
-                  <span><span x-text="s.label"></span><em class="st-ans" x-show="s.ans" x-text="s.ans"></em></span>
-                  <small x-text="s.count"></small>
-                  <i x-show="i > 0 && i === steps.length - 1" @click.stop="goStep(i - 1)" role="button" aria-label="Nuimti patikslinimą">×</i>
-                </button>
-              </li>
-            </template>
-          </ol>
-        </section>
 
         <section class="sc" x-show="(mode === 'ai' || mode === 'chat') && sources.length">
           <h3>Šaltiniai <span x-text="sources.length"></span></h3>
@@ -722,8 +671,8 @@
   <div class="ms-admin" @keydown.escape.window="adminOpen = false">
     <div class="ms-admin-panel" x-show="adminOpen" x-cloak x-transition.opacity.scale.95.origin.bottom.left.duration.150ms @click.outside="adminOpen = false">
       <div class="ms-admin-title">Prototipo nustatymai</div>
-      <div class="ms-admin-group">Versija</div>
-      <template x-for="v in VERSIONS" :key="v.id">
+      <div class="ms-admin-group" x-show="VERSIONS.length > 1">Versija</div>
+      <template x-for="v in VERSIONS.length > 1 ? VERSIONS : []" :key="v.id">
         <label class="ms-admin-opt" :title="v.desc"><input type="radio" name="ms-ver" :checked="ver === v.id" @change="setVer(v.id)"><span x-text="v.label"></span></label>
       </template>
       <!-- Tik aktyvios versijos parametrai -->
@@ -766,26 +715,20 @@
   .transition-pn { transition: transform .32s var(--ms-ease); }
   .pn-off { transform: translateX(100%); }
 </style>
-<script src="assets/js/shell.js?v=1023n"></script>
-<script src="assets/js/data.js?v=1023n"></script>
-<script src="assets/js/loader.js?v=1023n"></script>
+<script src="assets/js/shell.js?v=1023o"></script>
+<script src="assets/js/data.js?v=1023o"></script>
+<script src="assets/js/loader.js?v=1023o"></script>
 <script>
   // Admin parametras: filtrai po vienu mygtuku „Filtrai“ arba visada matomi
-  const ANSWERS_PARAM = { key: 'answers', label: 'Atsakymai į patikslinimą', type: 'radio', default: 'list', options: [
-    { id: 'list', label: 'Sąrašas ↳ (kaip Perplexity)' },
-    { id: 'chips', label: 'Chip\'ai' },
-  ] };
   // V4 tab'ai. icon: ai | chat. Kurie rodomi, valdoma Admin'e (TABS_PARAM)
   const TABS = [
     { id: 'chat', label: 'Atsakymas su DI', icon: 'ai' },
-    { id: 'di', label: 'DI režimas', icon: 'ai' },
     { id: 'all', label: 'Visi rezultatai' },
     { id: 'comp', label: 'Kompetencijų centras' },
     { id: 'video', label: 'Video' },
     { id: 'list', label: 'Tekstas' },
     { id: 'tests', label: 'Testai' },
     { id: 'files', label: 'Failai atsisiuntimui' },
-    { id: 'full', label: 'DI pokalbis', icon: 'ai' },
   ];
   const TABS_PARAM = { key: 'tabs', label: 'Tab\'ai juostoje', type: 'checks', default: ['chat', 'all', 'comp', 'video', 'list', 'tests', 'files'],
     options: TABS.map(t => ({ id: t.id, label: t.label })) };
@@ -852,17 +795,14 @@
       get tabMoreActive() { return this.tabsMore.find(t => this.tabActive(t)); },
       tabActive(t) {
         switch (t.id) {
-          case 'di': return this.mode === 'ai' && this.aiOnly;
           case 'all': return this.mode === 'ai' && !this.aiOnly;
           case 'list': return this.mode === 'classic';
-          case 'full': return this.chatFull;
           default: return this.mode === t.id;
         }
       },
       selectTab(t) {
-        if (t.id === 'full') return this.openChatFull();
         const m = { di: 'ai', all: 'ai', list: 'classic' }[t.id] || t.id;
-        this.setMode(m, t.id === 'di');
+        this.setMode(m);
       },
       // Kiek tab'ų telpa į juostą; likę rodomi „Daugiau ▾“ meniu
       tabsMeasure() {
@@ -935,19 +875,17 @@
         return n + ' ' + ({ tests: ['testas', 'testai', 'testų'], video: ['vaizdo įrašas', 'vaizdo įrašai', 'vaizdo įrašų'], files: ['failas', 'failai', 'failų'] }[this.mode] || ['', '', ''])[(d => d === 0 || (n % 100 > 10 && n % 100 < 20) ? 2 : d === 1 ? 0 : 1)(n % 10)];
       },
       scrolled: false,   // puslapis paslinktas (baltai viršutinei juostai rodom šešėlį)
-      chatFull: false,   // V4 · DI pokalbis pilname ekrane
       pMode: 'item',
       pBack: false,      // medžiaga atidaryta iš klausimo ekspertui formos     // panel'is: medžiaga (item) arba klausimas ekspertui (ask)
       ask: { q: '', sent: false, edit: false, me: { vardas: 'Laurynas', pavarde: 'Petrauskas', imone: 'UAB Įmonita', pareigos: 'Vyr. buhalteris', miestas: 'Vilnius', tel: '+370 600 00000' } },
       // ---------- Versijos ----------
       VERSIONS: [
-        { id: 'v2', label: 'V2 · Dešinė kolona', desc: 'Vienas laukas, „Kita…“ atsakymas, dešinėje eiga, šaltiniai, istorija', params: [ANSWERS_PARAM, FILTERS_PARAM, LOADER_PARAM] },
         { id: 'v4', label: 'V4 · Kaip Google', desc: 'Susijusios paieškos tampa nauja paieška, grįžtama naršyklės Atgal. Tab\'ai: DI režimas · Viskas · Rezultatų sąrašas', params: [TABS_PARAM, SIDE_PARAM, TOP_PARAM, AI_STYLE_PARAM, FILTERS_PARAM, LOADER_PARAM] },
       ],
       ver: (() => {
         const q = new URLSearchParams(location.search).get('v');
         const v = q ? 'v' + q.replace(/^v/, '') : store.get('ai-paieska-ver');
-        return ['v2', 'v4'].includes(v) ? v : 'v4';
+        return 'v4';
       })(),
       p: {},             // aktyvios versijos admin parametrai
       fbOpen: false,
@@ -963,7 +901,7 @@
         if (v !== 'v4') { this.aiOnly = false; if (this.mode === 'chat') this.mode = 'ai'; }
         if (this.phase === 'results') { if (v === 'v4') this.query = this.activeQuery = this.queryFor(this.step); else this.query = this.activeQuery = this.origQuery; }
       },
-      tabGuard() { if (this.ver === 'v4' && this.p.tabs && !this.tabsShown.some(t => this.tabActive(t))) { const t = this.tabsShown[0]; if (t && t.id !== 'full') this.selectTab(t); } },
+      tabGuard() { if (this.ver === 'v4' && this.p.tabs && !this.tabsShown.some(t => this.tabActive(t))) { const t = this.tabsShown[0]; if (t) this.selectTab(t); } },
       initParams() { this.p = Object.fromEntries(this.verParams.map(g => [g.key, Array.isArray(g.default) ? [...g.default] : g.default])); },
 
       mode: store.get('ai-paieska-mode') === 'classic' ? 'classic' : 'ai',
@@ -1025,7 +963,7 @@
       // V4: lauke rodomas klausimas pagal žingsnį
       queryFor(n) { return n === 0 ? this.origQuery : (this.sc.steps[n].rq || this.origQuery); },
       get sources() {
-        if (this.mode === 'chat' || this.chatFull) return [...new Set(this.chat.msgs.filter(m => m.card).flatMap(m => [m.card.main, ...m.card.quotes]))];
+        if (this.mode === 'chat') return [...new Set(this.chat.msgs.filter(m => m.card).flatMap(m => [m.card.main, ...(m.card.quotes || []), ...(m.card.summary || []).map(x => x.src), ...(m.card.list || [])]).filter(Boolean))];
         return this.ai.kind === 'quotes' ? this.ai.quotes.map(q => q.id) : [];
       },
       get pastSearches() { return this.history.filter(h => h.scIdx !== this.scIdx).slice(0, 5); },
@@ -1159,7 +1097,7 @@
         if (!typed || (typed === this.activeQuery && this.phase === 'results')) return;
         const wasResults = this.phase === 'results';
         const q = typed.toLowerCase();
-        const rules = [[/tort|gimtadien|dovan|reprezent/, 'mazai'], [/šeštad|savaitg|laisv|poilsio/, 'savaitgalis'], [/komandir|dienpinig/, 'komandiruote'], [/pvm/, 'pvm']];
+        const rules = [[/tort|gimtadien|dovan|reprezent/, 'mazai'], [/žiniaraš/, 'nedaug'], [/šeštad|savaitg|laisv|poilsio/, 'savaitgalis'], [/komandir|dienpinig/, 'komandiruote']];
         const hit = rules.find(([re]) => re.test(q));
         const idx = this.S.findIndex(s => s.id === (hit ? hit[1] : 'nera'));
         if (wasResults) this.remember();
@@ -1283,13 +1221,6 @@
           if (last && last.getBoundingClientRect().bottom > innerHeight - 130) last.scrollIntoView({ behavior: 'smooth', block: 'end' });
         });
       },
-      chatRestart() { this.chat.key = ''; this.chatEnsure(); },
-      openChatFull() {
-        this.chatFull = true; document.body.classList.add('is-chatfull');
-        this.chatEnsure();
-        this.$nextTick(() => { this.chatScroll(); setTimeout(() => this.$refs.chatIn && this.$refs.chatIn.focus(), 200); });
-      },
-      closeChatFull() { this.chatFull = false; document.body.classList.remove('is-chatfull'); },
       openFromAsk(id) { this.openPanel(id); this.pBack = true; },
       backToAsk() { this.pBack = false; this.pMode = 'ask'; },
       askAdd(label) {

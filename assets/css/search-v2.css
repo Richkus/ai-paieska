@@ -488,3 +488,32 @@ body.is-chatfull { overflow: hidden; }
 @media (max-width: 640px) { .pl-head { grid-template-columns: minmax(0, 1fr) auto; } .pl-thumb { grid-column: 1 / -1; grid-row: 1; } }
 .tb-menu button.is-on::before { content: '✓'; margin-right: 8px; color: var(--ms-teal-dark); }
 .fb.xf .fb-pop { width: max-content; min-width: 240px; max-width: 360px; }
+
+/* ==========================================================
+   DI apibendrinimas su šaltiniais (kai rezultatų normaliai)
+   ========================================================== */
+.a2-sum { display: grid; gap: 12px; margin-bottom: 16px; }
+.a2-sum p { margin: 0; color: var(--ms-ink); font-size: 16px; line-height: 1.7; }
+.a2-cite.is-src { gap: 5px; height: 22px; padding: 0 8px 0 6px; vertical-align: 1px; font-size: 12px; }
+.a2-cite.is-src svg { flex: 0 0 auto; color: var(--ms-muted); }
+.a2-discrow { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; padding-top: 10px; border-top: 1px dashed var(--ms-line-strong); }
+.a2-discrow .a2-votes { margin-left: auto; display: flex; gap: 2px; }
+.a2-disc { display: flex; align-items: center; gap: 6px; margin: 0; color: var(--ms-muted); font-size: 12.5px; line-height: 1.4; }
+.a2-disc .ai-ic { opacity: .8; }
+.ch-tools .a2-disc { margin-right: auto; }
+.ch-tools { align-items: center; gap: 4px; margin-left: 0; }
+
+/* Nedaug ir tikslu: vienas sakinys virš rezultatų */
+.few { display: flex; align-items: center; gap: 8px; margin: 0 0 6px; color: var(--ms-ink); font-size: 16px; font-weight: 600; }
+.few .ai-ic { margin: -4px 0; }
+
+/* Plati tema: vieno sakinio apžvalga prieš klausimą */
+.rf-ov { margin: 0 0 6px; color: var(--ms-sub); font-size: 15px; line-height: 1.6; }
+
+/* Chat'e: tikslių rezultatų sąrašas be apibendrinimo */
+.ch-list { display: grid; gap: 2px; }
+.ch-list button { display: grid; gap: 1px; padding: 8px 0; border: 0; border-bottom: 1px solid var(--ms-line); background: none; text-align: left; }
+.ch-list button:last-child { border-bottom: 0; }
+.ch-list small { color: var(--ms-muted); font-size: 12px; }
+.ch-list b { color: var(--ms-ink); font-size: 15px; font-weight: 600; }
+.ch-list button:hover b { color: var(--ms-link); }

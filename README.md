@@ -4,18 +4,19 @@ Mokesčių SUFLERIO AI paieškos prototipas. Idėja: paieška beveik kaip Google
 
 **Peržiūra:** https://richkus.github.io/ai-paieska/
 
-## Versijos
+## Kaip veikia
 
-Visos versijos yra viename puslapyje. Perjungiama apačioje kairėje per **Admin → Versija** arba nuoroda:
+Viena versija (V4, kaip Google). DI elgiasi pagal tai, ką rado:
 
-| Nuoroda | Kas tai |
-|---|---|
-| [`?v=2`](https://richkus.github.io/ai-paieska/?v=2) | **V2 · Dešinė kolona.** Vienas įvesties laukas viršuje, pakeitus tekstą prasideda nauja paieška. AI blokas be dėžučių: citatos + klausimas, į kurį atsakoma chip'ais arba „Kita…“. Dešinėje būsena: paieškos eiga, šaltiniai, ankstesnės paieškos. |
-| [`?v=4`](https://richkus.github.io/ai-paieska/?v=4) | **V4 · Kaip Google** (numatytoji). AI bloke nėra antraštės ir patikslinimo pill'o, tik žymė „DI atrinktos ištraukos iš panašių situacijų“, šaltiniai mažais pill'ais citatos gale. Po citatomis „Tęskit temą“ (↳): paspaudus klausimas įsirašo į paieškos lauką ir prasideda nauja paieška, grįžtama naršyklės Atgal. Tab'ai (kurie rodomi, valdoma Admin → Tab'ai juostoje; netelpantys nukeliauja į „Daugiau ▾“): **Atsakymas su DI** (pokalbio simuliatorius: DI mandagiai klausia 1–2 patikslinimo klausimų ir veda prie citatų; pokalbiai `data.js` → `CHATS`), **DI režimas** (numatytai paslėptas; tik DI atsakymas), **Visi rezultatai** (DI + rezultatai), **Kompetencijų centras** (3 kompetencijos su moduliais, abstrakčiai), **Video**, **Tekstas** (tik tekstinė medžiaga, su filtrais), **Testai**, **Failai atsisiuntimui** (filtras pagal tipą ir formatą), **DI pokalbis** (tas pats pokalbis pilname ekrane, numatytai paslėptas). |
+| Būsena | Ką rodom | Scenarijus |
+|---|---|---|
+| Normaliai rezultatų | **Trumpai:** DI apibendrinimas 2–3 sakiniais, kiekvieno gale šaltinio žymė (paspaudus atidaroma citata), disclaimeris „Esu SUFLERIO DI ir galiu suklysti…“, po to „Tęskit temą“ | `savaitgalis` |
+| Daug / plati tema | Vieno sakinio apžvalga ir užuominos tikslinti (🔍 sąrašas) | `komandiruote` |
+| Nedaug ir tikslu | Vienas sakinys ir iškart rezultatai, be apibendrinimo | `nedaug` |
+| Rasta, bet nepanašu | Tik rezultatai ir „Klausti eksperto“, DI neapibendrina | `mazai` |
+| Nieko | „Klausti eksperto“ su įrašytu klausimu | `nera` |
 
-Prototipas prasideda nuo tuščios būsenos: paspaudus paieškos lauką rodomi pavyzdiniai klausimai, po Enter matosi įkėlimas ir tada rezultatai. Paspaudus logotipą grįžtama į pradžią.
-
-Admin'e taip pat yra scenarijai (konkreti situacija, platus klausimas, trumpa frazė, mažas panašumas, nėra rezultatų) ir aktyvios versijos parametrai, jei jų yra. Sena nuoroda `v2/` nukreipia į tą patį puslapį. V1 ir V3 išimtos (liko git istorijoje).
+Admin'e taip pat yra scenarijai (konkreti situacija, platus klausimas, trumpa frazė, mažas panašumas, nėra rezultatų) ir aktyvios versijos parametrai, jei jų yra. Ankstesnės versijos (V1–V3) išimtos, liko git istorijoje.
 
 Įkėlimo animacijos su DI ikona (taškai susirenka į žvaigždę, žvaigždė nusipiešia, žvaigždė kvėpuoja su kometomis) peržiūrimos [`loaderis.html`](https://richkus.github.io/ai-paieska/loaderis.html), prototipe perjungiamos per Admin → Įkėlimo animacija.
 
@@ -36,7 +37,6 @@ assets/
   js/shell.js      įdeda karkasą į [data-shell] elementus
   js/data.js       pavyzdiniai scenarijai, rezultatai, filtrai
   img/             ikonos ir logotipas iš Figmos
-v2/                nukreipimas į ?v=2
 ```
 
 ## Nauja versija

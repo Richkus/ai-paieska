@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="assets/css/shell.css?v=1025k">
 <link rel="stylesheet" href="assets/css/search.css?v=1025k">
 <link rel="stylesheet" href="assets/css/filters.css?v=1025k">
-<link rel="stylesheet" href="assets/css/search-v2.css?v=1025m">
+<link rel="stylesheet" href="assets/css/search-v2.css?v=1025n">
 <link rel="stylesheet" href="assets/css/loader-ai.css?v=1025k">
 <link rel="stylesheet" href="assets/css/admin.css?v=1025k">
 <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.14.1/dist/cdn.min.js"></script>
@@ -236,7 +236,7 @@
                         <template x-if="m.card.summary && sumMode !== 'quotes'">
                           <div class="a2-sum">
                 <template x-for="(x, i) in m.card.summary" :key="i">
-                  <p><span x-text="x.t.replace(/\s*\S+$/, '')"></span> <span class="cite-nw"><span x-text="(x.t.match(/\S+$/) || [''])[0]"></span><button type="button" class="cite-n" :class="{ 'is-pro': R[x.src].pro }" @click="pvClose(); openPanel(x.src, true)" @mouseenter="pvEnter(x.src, $el)" @mouseleave="pvLeave()" @focus="pvEnter(x.src, $el)" @blur="pvLeave()" :aria-label="'Šaltinis: ' + R[x.src].title"><span x-text="citeNo(m.card.summary, x.src)"></span></button></span></p>
+                  <p><span x-text="x.t.replace(/\s*\S+$/, '')"></span> <span class="cite-nw"><span x-text="(x.t.match(/\S+$/) || [''])[0]"></span><button type="button" class="cite-n" :class="{ 'is-pro': R[x.src].pro }" @click="pvClose(); openPanel(x.src, true)" @mouseenter="pvEnter(x.src, $el, true)" @mouseleave="pvLeave()" @focus="pvEnter(x.src, $el, true)" @blur="pvLeave()" :aria-label="'Šaltinis: ' + R[x.src].title"><span x-text="citeNo(m.card.summary, x.src)"></span></button></span></p>
                 </template>
               </div>
                         </template>
@@ -407,7 +407,7 @@
             <template x-if="ai.kind === 'quotes' && ai.summary && sumMode !== 'quotes'">
               <div class="a2-sum">
                 <template x-for="(x, i) in ai.summary" :key="i">
-                  <p><span x-text="x.t.replace(/\s*\S+$/, '')"></span> <span class="cite-nw"><span x-text="(x.t.match(/\S+$/) || [''])[0]"></span><button type="button" class="cite-n" :class="{ 'is-pro': R[x.src].pro }" @click="pvClose(); openPanel(x.src, true)" @mouseenter="pvEnter(x.src, $el)" @mouseleave="pvLeave()" @focus="pvEnter(x.src, $el)" @blur="pvLeave()" :aria-label="'Šaltinis: ' + R[x.src].title"><span x-text="citeNo(ai.summary, x.src)"></span></button></span></p>
+                  <p><span x-text="x.t.replace(/\s*\S+$/, '')"></span> <span class="cite-nw"><span x-text="(x.t.match(/\S+$/) || [''])[0]"></span><button type="button" class="cite-n" :class="{ 'is-pro': R[x.src].pro }" @click="pvClose(); openPanel(x.src, true)" @mouseenter="pvEnter(x.src, $el, true)" @mouseleave="pvLeave()" @focus="pvEnter(x.src, $el, true)" @blur="pvLeave()" :aria-label="'Šaltinis: ' + R[x.src].title"><span x-text="citeNo(ai.summary, x.src)"></span></button></span></p>
                 </template>
               </div>
             </template>
@@ -777,10 +777,17 @@
 
   <!-- Greita peržiūra užvedus pelę ant šaltinio (kaip Wikipedia / Notion) -->
   <div class="pv" x-show="pv.id" x-cloak role="tooltip"
-       :class="'is-' + pv.place" :style="`left:${pv.x}px; top:${pv.y}px`"
+       :class="{ ['is-' + pv.place]: true, 'is-mini': pv.mini }" :style="pv.mini && pv.place === 'above' ? `left:${pv.x}px; bottom:${pv.y}px` : `left:${pv.x}px; top:${pv.y}px`"
        x-transition:enter="pv-anim" x-transition:enter-start="pv-off" x-transition:leave="pv-anim" x-transition:leave-end="pv-off"
        @mouseenter="pvKeep()" @mouseleave="pvLeave()">
-    <template x-if="pv.id">
+    <!-- Citatos numeriui: vos vos matoma mini kortelė -->
+    <template x-if="pv.id && pv.mini">
+      <button type="button" class="pv-mini" @click="openPanel(pv.id, true); pvClose()">
+        <span class="pv-mini-meta"><i class="a2-pro" x-show="R[pv.id].pro">PRO</i><span x-text="R[pv.id].type + ' · ' + R[pv.id].date"></span></span>
+        <span class="pv-mini-t" x-text="R[pv.id].title"></span>
+      </button>
+    </template>
+    <template x-if="pv.id && !pv.mini">
       <div class="pv-in">
         <div class="pv-meta">
           <i class="a2-pro" x-show="R[pv.id].pro">PRO</i>
@@ -1582,14 +1589,24 @@
       get askSuggest() { return this.ai.kind === 'low' ? this.sc.steps[this.step].results.slice(0, 2) : []; },
 
       // ---------- Greita peržiūra ----------
-      pv: { id: null, x: 0, y: 0, place: 'below' },
-      pvEnter(id, el) {
+      pv: { id: null, x: 0, y: 0, place: 'below', mini: false },
+      pvEnter(id, el, mini = false) {
         if (!window.matchMedia('(hover: hover)').matches || this.panelOpen) return;
         clearTimeout(this._pvOut); clearTimeout(this._pvIn);
         this._pvIn = setTimeout(() => {
-          const r = el.getBoundingClientRect(), W = 380, Hh = 360, gap = 8;
+          const r = el.getBoundingClientRect(), gap = 8;
+          if (mini) {
+            // Mažas: centruojamas virš numerio, jei netelpa - po juo
+            const W = 300, above = r.top > 120;
+            this.pv = { id, mini, place: above ? 'above' : 'below',
+              x: Math.max(12, Math.min(r.left + r.width / 2 - W / 2, innerWidth - W - 12)),
+              y: above ? innerHeight - r.top + 6 : r.bottom + 6 };
+            return;
+          }
+          const W = 380, Hh = 360;
           const below = r.bottom + gap + Hh < innerHeight || r.top < Hh + gap;
           this.pv = {
+            mini,
             id,
             x: Math.max(12, Math.min(r.left, innerWidth - W - 12)),
             y: below ? r.bottom + gap : r.top - gap - Hh,

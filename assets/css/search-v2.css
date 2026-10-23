@@ -597,9 +597,10 @@ body.is-chatfull { overflow: hidden; }
 .ch-body > .ch-after { margin-top: 20px; }
 
 /* Šaltinio nuoroda apibendrinime: mažas numeris (kaip ChatGPT / Perplexity), užvedus pelę peržiūra, paspaudus citata */
-.cite-n { display: inline-grid; place-items: center; min-width: 18px; height: 18px; margin-left: 3px; padding: 0 5px; border: 0; border-radius: 9px; background: var(--ms-pill); color: var(--ms-sub); font-size: 11px; font-weight: 700; line-height: 1; vertical-align: 2px; font-variant-numeric: tabular-nums; transition: background .15s, color .15s; }
+.cite-n { display: inline-grid; place-items: center; min-width: 18px; height: 18px; margin-left: 4px; padding: 0 5px; border: 0; border-radius: 4px; background: #d7e9e9; color: var(--ms-teal-dark); font-size: 11px; font-weight: 700; line-height: 1; vertical-align: 2px; font-variant-numeric: tabular-nums; transition: background .15s, color .15s; }
 .cite-n:hover, .cite-n:focus-visible { background: var(--ms-teal-dark); color: #fff; outline: none; }
-.cite-n.is-pro { background: #f6e3ef; color: var(--ms-pro); }
+.cite-n.is-pro { background: #f3d6e9; color: var(--ms-pro); }
+.cite-n.is-pro:hover, .cite-n.is-pro:focus-visible { background: var(--ms-pro); color: #fff; }
 
 /* Ekspertas: maža nuoroda virš pokalbio lauko, prisegti šaltiniai formoje */
 .ch-exlink { margin: 0 4px 6px; color: var(--ms-muted); font-size: 13px; text-align: right; }
@@ -762,3 +763,11 @@ body.is-chatmodal { overflow: hidden; }
 .ch.is-modal .chf-wrap { align-items: stretch; min-height: calc(100vh - 56px - 61px); padding: 0 40px 0 24px; }
 .ch.is-modal .ch-rail { position: sticky; top: 61px; align-self: stretch; max-height: none; min-height: 0; height: calc(100vh - 56px - 61px); margin-left: -10px; padding: 24px 14px 24px 0; }
 .ch.is-modal .chf-col { padding-top: 24px; }
+
+/* Citatos numerio mini peržiūra: tik tipas, data ir pavadinimas */
+.pv.is-mini { width: 300px; height: auto; display: block; }
+.pv-mini { display: grid; gap: 3px; width: 100%; padding: 9px 12px 10px; border: 1px solid var(--ms-line); border-radius: 8px; background: #fff; box-shadow: 0 6px 18px rgba(15, 40, 42, .08); text-align: left; cursor: pointer; transition: border-color .15s; }
+.pv-mini:hover { border-color: var(--ms-line-strong); }
+.pv-mini-meta { display: flex; align-items: center; gap: 6px; color: var(--ms-muted); font-size: 11.5px; }
+.pv-mini-t { color: var(--ms-ink); font-size: 13.5px; font-weight: 600; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.pv.is-mini .pv-mini { pointer-events: auto; }

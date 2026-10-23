@@ -996,3 +996,7 @@ body.is-chatfill { overflow: hidden; }
 /* Antraštės klausimas išnyra tik nuslinkus (Perplexity principas) */
 .chm-q { opacity: 0; transform: translateY(4px); pointer-events: none; transition: opacity .2s var(--ms-ease), transform .2s var(--ms-ease); }
 .chm-q.is-on { opacity: 1; transform: none; pointer-events: auto; }
+
+/* DI režimas per visą langą: ankstesnių paieškų blokas ~30 px platesnis */
+.ch.is-fill .chf-wrap { grid-template-columns: 236px minmax(0, 1fr); }
+@media (max-width: 900px) { .ch.is-fill .chf-wrap { grid-template-columns: minmax(0, 1fr); } }

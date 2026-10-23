@@ -390,3 +390,10 @@ body.is-chatfull { overflow: hidden; }
 .ch-av .ai-ic, .chf-brand .ai-ic { margin: -6px 0; }
 .fb-pill .ai-ic { margin: -4px -2px; }
 .a2-head.is-label > .ai-ic { width: auto; height: 32px; margin: -7px -1px -7px -4px; }
+
+/* DI chatas: žinutės slenkamos tik tiek, kad matytųsi virš lauko; viršutinis laukas išjungtas */
+.ch-msg { scroll-margin-bottom: 130px; }
+.ch.is-full .ch-msg { scroll-margin-bottom: 130px; scroll-margin-top: 80px; }
+.ms-search.is-locked { opacity: .5; box-shadow: none; cursor: not-allowed; }
+.ms-search.is-locked textarea { cursor: not-allowed; }
+.ms-search-go:disabled { cursor: not-allowed; }

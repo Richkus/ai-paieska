@@ -7,12 +7,12 @@
 <title>AI paieška: prototipas</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400..800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/shell.css?v=1022x">
-<link rel="stylesheet" href="assets/css/search.css?v=1022x">
-<link rel="stylesheet" href="assets/css/filters.css?v=1022x">
-<link rel="stylesheet" href="assets/css/search-v2.css?v=1022x">
-<link rel="stylesheet" href="assets/css/loader.css?v=1022x">
-<link rel="stylesheet" href="assets/css/admin.css?v=1022x">
+<link rel="stylesheet" href="assets/css/shell.css?v=1022y">
+<link rel="stylesheet" href="assets/css/search.css?v=1022y">
+<link rel="stylesheet" href="assets/css/filters.css?v=1022y">
+<link rel="stylesheet" href="assets/css/search-v2.css?v=1022y">
+<link rel="stylesheet" href="assets/css/loader.css?v=1022y">
+<link rel="stylesheet" href="assets/css/admin.css?v=1022y">
 <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.14.1/dist/cdn.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
 </head>
@@ -636,9 +636,9 @@
   .transition-pn { transition: transform .32s var(--ms-ease); }
   .pn-off { transform: translateX(100%); }
 </style>
-<script src="assets/js/shell.js?v=1022x"></script>
-<script src="assets/js/data.js?v=1022x"></script>
-<script src="assets/js/loader.js?v=1022x"></script>
+<script src="assets/js/shell.js?v=1022y"></script>
+<script src="assets/js/data.js?v=1022y"></script>
+<script src="assets/js/loader.js?v=1022y"></script>
 <script>
   // Admin parametras: filtrai po vienu mygtuku „Filtrai“ arba visada matomi
   const ANSWERS_PARAM = { key: 'answers', label: 'Atsakymai į patikslinimą', type: 'radio', default: 'list', options: [
@@ -728,6 +728,8 @@
 
       mode: store.get('ai-paieska-mode') === 'classic' ? 'classic' : 'ai',
       aiOnly: false,     // V4 tab'as „Su AI“: tik AI atsakymas, be nuorodų
+      // DI chate rašoma apačioje, todėl viršutinis paieškos laukas tuo metu išjungtas
+      get searchLocked() { return this.ver === 'v4' && this.mode === 'chat' && this.phase === 'results'; },
       get hideLinks() { return this.ver === 'v4' && ((this.mode === 'ai' && this.aiOnly) || this.mode === 'chat'); },
       panelOpen: false,
       adminOpen: false,
@@ -1012,11 +1014,13 @@
         if (this.$refs.chatIn) this.$refs.chatIn.style.height = '';
         this.chat.step++; this.chatReply();
       },
+      // Naujausia žinutė parodoma virš apačioje prilipusio lauko; puslapio iki pat apačios (footerio) neslenkam
       chatScroll() {
         this.$nextTick(() => {
-          const box = this.$refs.chatBox;
-          if (this.chatFull && box) box.scrollTo({ top: box.scrollHeight, behavior: 'smooth' });
-          else window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' });
+          const box = this.$refs.chatBox; if (!box) return;
+          const msgs = [...box.querySelectorAll('.ch-msg')].filter(el => el.offsetParent);
+          const last = msgs[msgs.length - 1];
+          if (last && last.getBoundingClientRect().bottom > innerHeight - 130) last.scrollIntoView({ behavior: 'smooth', block: 'end' });
         });
       },
       chatRestart() { this.chat.key = ''; this.chatEnsure(); },

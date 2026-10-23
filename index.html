@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="assets/css/shell.css?v=1025k">
 <link rel="stylesheet" href="assets/css/search.css?v=1025k">
 <link rel="stylesheet" href="assets/css/filters.css?v=1025k">
-<link rel="stylesheet" href="assets/css/search-v2.css?v=1025p">
+<link rel="stylesheet" href="assets/css/search-v2.css?v=1025q">
 <link rel="stylesheet" href="assets/css/loader-ai.css?v=1025k">
 <link rel="stylesheet" href="assets/css/admin.css?v=1025k">
 <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.14.1/dist/cdn.min.js"></script>
@@ -759,10 +759,18 @@
               <p class="ak-hint">Aprašykit situaciją ir užduokit vieną klausimą. Ką verta nurodyti:</p>
               <div class="ak-chips">
                 <template x-for="c in ['Kas (įmonė, MB, gyventojas)', 'Laikotarpis', 'Sumos', 'Ką jau darėte']" :key="c">
-                  <button type="button" @click="askAdd(c)" x-text="'+ ' + c"></button>
+                  <button type="button" :class="{ 'is-done': p.qmeter !== 'off' && askCtx.has[c.split(' (')[0]] }" @click="askAdd(c)" x-text="(p.qmeter !== 'off' && askCtx.has[c.split(' (')[0]] ? '✓ ' : '+ ') + c"></button>
                 </template>
               </div>
-              <textarea id="ak-q" x-ref="askQ" rows="7" x-model="ask.q" placeholder="Įrašykite klausimą"></textarea>
+              <!-- Konteksto indikatorius: ar užtenka informacijos geram atsakymui (Admin → Klausimo konteksto indikatorius) -->
+              <div class="ak-qwrap" :class="p.qmeter !== 'off' && 'has-meter'">
+                <textarea id="ak-q" x-ref="askQ" rows="7" x-model="ask.q" placeholder="Įrašykite klausimą"></textarea>
+                <div class="ak-meter" x-show="p.qmeter !== 'off' && askCtx.level" x-cloak :class="'is-' + askCtx.level + ' is-' + p.qmeter" aria-live="polite">
+                  <i class="ak-dot" x-show="p.qmeter === 'dot'"></i>
+                  <span class="ak-bars" x-show="p.qmeter === 'bar'"><b></b><b></b><b></b></span>
+                  <span x-text="askCtx.text"></span>
+                </div>
+              </div>
               <p class="ak-warn" x-show="(ask.q.match(/\?/g) || []).length > 1" x-cloak>Atrodo, čia keli klausimai. Ekspertas atsakys į vieną, kitus geriau užduoti atskirai.</p>
 
               <div class="ak-att" x-show="ask.attach && ask.attach.length">
@@ -953,6 +961,12 @@
     { id: 'tint', label: 'Žalsva, atskira (kaip dabar)' },
     { id: 'white', label: 'Balta, viena su rezultatais (kaip Google)' },
   ] };
+  // Admin parametras (V4): subtilus indikatorius eksperto klausimo formoje, ar užtenka konteksto
+  const QMETER_PARAM = { key: 'qmeter', label: 'Klausimo konteksto indikatorius', type: 'radio', default: 'dot', options: [
+    { id: 'dot', label: 'Taškelis su tekstu' },
+    { id: 'bar', label: 'Trys brūkšneliai su tekstu' },
+    { id: 'off', label: 'Nerodyti' },
+  ] };
   // Admin parametras (V4): kaip atskirti DI dalį nuo paieškos rezultatų
   const AI_STYLE_PARAM = { key: 'aiStyle', label: 'DI dalies išskyrimas', type: 'radio', default: 'card', options: [
     { id: 'card', label: 'Kortelė su fonu' },
@@ -1132,7 +1146,7 @@
       ask: { q: '', sent: false, edit: false, attach: [], me: { vardas: 'Laurynas', pavarde: 'Petrauskas', imone: 'UAB Įmonita', pareigos: 'Vyr. buhalteris', miestas: 'Vilnius', tel: '+370 600 00000' } },
       // ---------- Versijos ----------
       VERSIONS: [
-        { id: 'v4', label: 'V4 · Kaip Google', desc: 'Susijusios paieškos tampa nauja paieška, grįžtama naršyklės Atgal. Tab\'ai: DI režimas · Viskas · Rezultatų sąrašas', params: [TABS_PARAM, CHAT_VIEW_PARAM, SERIF_PARAM, SIDE_PARAM, TOP_PARAM, AI_STYLE_PARAM, FILTERS_PARAM, LOADER_PARAM] },
+        { id: 'v4', label: 'V4 · Kaip Google', desc: 'Susijusios paieškos tampa nauja paieška, grįžtama naršyklės Atgal. Tab\'ai: DI režimas · Viskas · Rezultatų sąrašas', params: [TABS_PARAM, CHAT_VIEW_PARAM, SERIF_PARAM, SIDE_PARAM, TOP_PARAM, AI_STYLE_PARAM, FILTERS_PARAM, QMETER_PARAM, LOADER_PARAM] },
       ],
       ver: (() => {
         const q = new URLSearchParams(location.search).get('v');
@@ -1595,6 +1609,26 @@
       citeNo(list, src) { return [...new Set(list.map(x => x.src))].indexOf(src) + 1; },
       openFromAsk(id) { this.openPanel(id); this.pBack = true; },
       backToAsk() { this.pBack = false; this.pMode = 'ask'; },
+      // Ar klausime pakanka konteksto: ne tikrinam teisingumo, tik ar yra kas, kada, kiek, ką jau darė
+      get askCtx() {
+        const raw = this.ask.q || '';
+        const KEYS = ['Kas', 'Laikotarpis', 'Sumos', 'Ką jau darėte'];
+        const filled = k => new RegExp('^' + k + ':\\s*\\S', 'mi').test(raw);
+        const txt = raw.replace(new RegExp('^(' + KEYS.join('|') + '):', 'gmi'), ' ');
+        const words = txt.trim() ? txt.trim().split(/\s+/).length : 0;
+        const has = {
+          'Kas': filled('Kas') || /(įmon|uab|\bmb\b|\biį\b|všį|gyventoj|darbuotoj|savarankiš|individual|direktor|akcinink|bendrij|ūkinink)/i.test(txt),
+          'Laikotarpis': filled('Laikotarpis') || /(20\d\d|\bm\.|metų|metais|mėn|ketvirt|sausio|vasario|kovo|baland|gegužės|birželio|liepos|rugpjūčio|rugsėjo|spalio|lapkričio|gruodžio|praėjusi|šiais)/i.test(txt),
+          'Sumos': filled('Sumos') || /(\d[\d\s.,]*\s?(eur|€|%|proc|tūkst))|\bsum[aąosųę]/i.test(txt),
+          'Ką jau darėte': filled('Ką jau darėte') || /(jau |darėm|padarė|išraš|sumokėj|deklarav|apskaitė|įtrauk|pateik|sudarė|užregistrav|nusprendė)/i.test(txt),
+        };
+        if (words < 3) return { level: '', text: '', has };
+        const sig = Object.values(has).filter(Boolean).length + (words >= 25 ? 1 : 0) + (words >= 50 ? 1 : 0);
+        const miss = KEYS.filter(k => !has[k]).map(k => ({ 'Kas': 'kas jūs', 'Laikotarpis': 'laikotarpis', 'Sumos': 'sumos', 'Ką jau darėte': 'ką jau darėte' })[k]);
+        if (sig >= 4) return { level: 'good', text: 'Konteksto pakanka geram atsakymui', has };
+        if (sig >= 1) return { level: 'mid', text: 'Neblogai, dar praverstų: ' + miss.slice(0, 2).join(', '), has };
+        return { level: 'low', text: 'Kol kas mažai konteksto, ekspertui gali tekti klausti papildomai', has };
+      },
       askAdd(label) {
         const key = label.split(' (')[0];
         this.ask.q = this.ask.q.replace(/\s+$/, '') + '\n' + key + ': ';

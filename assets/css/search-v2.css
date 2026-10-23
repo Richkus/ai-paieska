@@ -696,3 +696,6 @@ body.is-chatmodal { overflow: hidden; }
 .ch.is-modal { top: 28px; bottom: 28px; left: 0; right: 0; width: min(840px, calc(100vw - 32px)); margin: 0 auto; }
 .ch.is-modal .chf-wrap { max-width: none; padding: 24px 40px 0; }
 @media (max-width: 640px) { .ch.is-modal { top: 8px; bottom: 8px; width: calc(100vw - 16px); } .ch.is-modal .chf-wrap { padding: 20px 16px 0; } }
+/* Nukrypimas nuo temos: patarimas */
+.ch-tip { margin: 0; padding: 10px 12px; border-radius: 8px; background: var(--ms-surface-soft); color: var(--ms-sub); font-size: 13.5px; line-height: 1.5; }
+.ch-newq .ex-btn { white-space: normal; height: auto; min-height: 40px; padding: 8px 16px; text-align: left; }

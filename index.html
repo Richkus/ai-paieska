@@ -7,12 +7,12 @@
 <title>AI paieška: prototipas</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400..800&family=Source+Serif+4:opsz,wght@8..60,500..700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/shell.css?v=1025e">
-<link rel="stylesheet" href="assets/css/search.css?v=1025e">
-<link rel="stylesheet" href="assets/css/filters.css?v=1025e">
-<link rel="stylesheet" href="assets/css/search-v2.css?v=1025e">
-<link rel="stylesheet" href="assets/css/loader-ai.css?v=1025e">
-<link rel="stylesheet" href="assets/css/admin.css?v=1025e">
+<link rel="stylesheet" href="assets/css/shell.css?v=1025f">
+<link rel="stylesheet" href="assets/css/search.css?v=1025f">
+<link rel="stylesheet" href="assets/css/filters.css?v=1025f">
+<link rel="stylesheet" href="assets/css/search-v2.css?v=1025f">
+<link rel="stylesheet" href="assets/css/loader-ai.css?v=1025f">
+<link rel="stylesheet" href="assets/css/admin.css?v=1025f">
 <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.14.1/dist/cdn.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
 </head>
@@ -277,17 +277,18 @@
                         </template>
                       </ul>
                     </template>
+                    <p class="ch-tip" x-show="m.tip" x-text="m.tip"></p>
                     <template x-if="m.newSearch">
                     <div class="ch-newq" x-show="i === chat.msgs.length - 1">
                       <button type="button" class="ex-btn" @click="query = m.newSearch; submitSearch()" x-text="'Ieškoti: „' + m.newSearch + '“'"></button>
-                      <button type="button" class="lowc-btn" @click="chat.msgs.push({ who: 'ai', text: 'Gerai, tęsiam. Ką dar norit sužinoti apie pradinį klausimą?' }); chatScroll()">Tęsti šį pokalbį</button>
+                      <button type="button" class="lowc-btn" @click="chat.msgs.push({ who: 'ai', text: 'Gerai, tęsiam. Ką dar norit sužinoti apie pradinį klausimą?' }); chatScroll()" x-text="'Ne, tęsti apie ' + (m.topic || 'pradinę temą')"></button>
                     </div>
                     </template>
                     <button type="button" class="ex-btn ch-ex" x-show="m.expert" @click="openAsk(chatQuestion, sources)">Klausti eksperto</button>
                     <!-- Atsakymo variantai sąrašu su ↳, kaip „Tęskit temą“ -->
                     <ul class="a2-list ch-opts" x-show="m.options && i === chat.msgs.length - 1 && !chat.typing">
-                      <template x-for="o in m.options || []" :key="o">
-                        <li><button type="button" class="a2-row" @click="chatSend(o, true)"><i aria-hidden="true">↳</i><span x-text="o"></span></button></li>
+                      <template x-for="o in optsFor(m)" :key="o">
+                        <li><button type="button" class="a2-row" @click="chatSend(o, o !== OFFTOPIC)"><i aria-hidden="true">↳</i><span x-text="o"></span></button></li>
                       </template>
                     </ul>
                     <div class="ch-tools" x-show="m.card && m.card.summary">
@@ -803,7 +804,7 @@
       <!-- Scenarijus: ką paieška rado. „Konkreti situacija“ turi du santraukos rodymo būdus -->
       <div class="ms-admin-group">Scenarijus</div>
       <template x-for="(a, ai) in adminScen" :key="ai">
-        <label class="ms-admin-opt"><input type="radio" name="ms-scenario" :checked="scIdx === a.idx && (!a.sum || sumMode === a.sum)" @change="sumMode = a.sum || sumMode; loadScenario(a.idx)"><span x-text="a.label"></span></label>
+        <label class="ms-admin-opt"><input type="radio" name="ms-scenario" :checked="scIdx === a.idx && (!a.sum || sumMode === a.sum) && !!a.off === offDemo" @change="sumMode = a.sum || sumMode; offDemo = !!a.off; loadScenario(a.idx); if (a.off) setMode('chat')"><span x-text="a.label"></span></label>
       </template>
       <div class="ms-admin-group" x-show="VERSIONS.length > 1">Versija</div>
       <template x-for="v in VERSIONS.length > 1 ? VERSIONS : []" :key="v.id">
@@ -845,9 +846,9 @@
   .transition-pn { transition: transform .32s var(--ms-ease); }
   .pn-off { transform: translateX(100%); }
 </style>
-<script src="assets/js/shell.js?v=1025e"></script>
-<script src="assets/js/data.js?v=1025e"></script>
-<script src="assets/js/loader.js?v=1025e"></script>
+<script src="assets/js/shell.js?v=1025f"></script>
+<script src="assets/js/data.js?v=1025f"></script>
+<script src="assets/js/loader.js?v=1025f"></script>
 <script>
   // Admin parametras: filtrai po vienu mygtuku „Filtrai“ arba visada matomi
   // V4 tab'ai. icon: ai | chat. Kurie rodomi, valdoma Admin'e (TABS_PARAM)
@@ -1038,9 +1039,14 @@
       sumMode: new URLSearchParams(location.search).get('sum') === 'quotes' ? 'quotes' : 'cite',   // „DI trumpai“: sakiniai su šaltiniais | mintis + citatos
       get adminScen() {
         return this.S.flatMap((s, idx) => s.id === 'savaitgalis'
-          ? [{ idx, sum: 'cite', label: s.label + ' · sakiniai su šaltiniais' }, { idx, sum: 'quotes', label: s.label + ' · mintis + citatos' }]
+          ? [{ idx, sum: 'cite', label: s.label + ' · sakiniai su šaltiniais' }, { idx, sum: 'quotes', label: s.label + ' · mintis + citatos' },
+             { idx, sum: 'cite', off: true, label: s.label + ' · nukrypimas nuo temos (DI režimas)' }]
           : [{ idx, label: s.label }]);
       },
+      // Demonstracija „nukrypimas nuo temos“: pokalbio pasiūlymuose atsiranda visai kitos temos klausimas
+      offDemo: false,
+      OFFTOPIC: 'O kaip apmokestinami komandiruotės dienpinigiai?',
+      optsFor(m) { const o = m.options || []; return this.offDemo && this.sc.id === 'savaitgalis' && o.length && m.after ? [...o, this.OFFTOPIC] : o; },
       brainOpen: false,  // prezentacijos lapelis „Kaip veikia DI paieška“
       scrolled: false,   // puslapis paslinktas (baltai viršutinei juostai rodom šešėlį)
       pMode: 'item',
@@ -1269,6 +1275,7 @@
       },
       setMode(m, aiOnly = false) { this.mode = m; this.aiOnly = aiOnly; if (m === 'classic') this.f.fmt = []; store.set('ai-paieska-mode', m); this.applyAi(); },
       loadScenario(i) {
+        if (this.S[i].id !== 'savaitgalis') this.offDemo = false;
         this.scIdx = i; this.step = 0; this.trail = []; this.vote = 0; this.own = '';
         this.query = this.activeQuery = this.origQuery = this.sc.query; this.closePanel(); this.other = false;
         this.answered = []; this.busy = ''; this.phase = 'results'; this.fbOpen = false;
@@ -1439,7 +1446,10 @@
         const other = !fromOption && this.scenarioFor(text);
         if (other && topic(other) !== topic(this.sc.id)) {
           this.chat.typing = true; this.chatScroll(); clearTimeout(this._ct);
-          this._ct = setTimeout(() => { this.chat.typing = false; this.chat.msgs.push({ who: 'ai', text: 'Atrodo, tai nauja tema. Kad atsakymas būtų tikslus, geriau pradėti naują paiešką.', newSearch: text }); this.chatScroll(); }, 900);
+          const name = { savaitgalis: 'poilsio dieną', nedaug: 'poilsio dieną', komandiruote: 'komandiruotes', mazai: 'reprezentacines sąnaudas' }[this.sc.id] || 'pradinę temą';
+          const msg = `Tai jau kita kryptis: kalbėjom apie ${name}, o dabar klausiat apie visai kitą temą. Kad atsakymas būtų tikslus, siūlau pradėti naują paiešką. Šis pokalbis liks „Ankstesnėse paieškose“, galėsit grįžti.`;
+          const tip = 'Jei abi temos susijusios (pvz. darbas poilsio dieną komandiruotės metu), parašykit jas viename klausime, tada ieškosiu abiejų kartu.';
+          this._ct = setTimeout(() => { this.chat.typing = false; this.chat.msgs.push({ who: 'ai', text: msg, tip, newSearch: text, topic: name }); this.chatScroll(); }, 900);
           return;
         }
         // Pasirinkus variantą, kuris turi savo atsakymą (branches), DI atsako būtent į jį, o ne pagal bendrą eiliškumą

@@ -942,3 +942,7 @@ a.src-pill:not([href]) { cursor: default; }
 /* Našumas: viso ekrano blur (backdrop-filter) po modalu kiekvieną hover perpiešdavo iš naujo ir lėtino.
    Fonai be blur, modalo antraštė vientisa balta */
 .ch.is-modal .chm-bar { background: #fff; -webkit-backdrop-filter: none; backdrop-filter: none; }
+
+/* „Paieškoti plačiau“: tikra paieškos ikona vietoj ⌕ simbolio */
+.a2-row i.is-search { display: inline-grid; place-items: center; align-self: center; }
+.a2-row i.is-search svg { display: block; }

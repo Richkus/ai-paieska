@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="assets/css/shell.css?v=1026m">
 <link rel="stylesheet" href="assets/css/search.css?v=1025k">
 <link rel="stylesheet" href="assets/css/filters.css?v=1025k">
-<link rel="stylesheet" href="assets/css/search-v2.css?v=1026k">
+<link rel="stylesheet" href="assets/css/search-v2.css?v=1026n">
 <link rel="stylesheet" href="assets/css/loader.css?v=1025z">
 <link rel="stylesheet" href="assets/css/loader-ai.css?v=1026e">
 <link rel="stylesheet" href="assets/css/admin.css?v=1025w">
@@ -281,7 +281,7 @@
                     <template x-if="m.recover">
                       <ul class="a2-list ch-opts" x-show="i === chat.msgs.length - 1">
                         <template x-for="r in m.recover" :key="r">
-                          <li><button type="button" class="a2-row" @click="recoverPick(r)"><i aria-hidden="true" x-text="r === '__wide' ? '⌕' : '↳'"></i><span x-text="r === '__wide' ? 'Paieškoti plačiau visuose rezultatuose' : r"></span></button></li>
+                          <li><button type="button" class="a2-row" @click="recoverPick(r)"><i aria-hidden="true" :class="r === '__wide' && 'is-search'" x-html="r === '__wide' ? '<svg width=&quot;14&quot; height=&quot;14&quot; viewBox=&quot;0 0 18 18&quot;><circle cx=&quot;7.5&quot; cy=&quot;7.5&quot; r=&quot;6&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;1.8&quot; fill=&quot;none&quot;/><path d=&quot;M12 12l4.5 4.5&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;1.8&quot; stroke-linecap=&quot;round&quot;/></svg>' : '↳'"></i><span x-text="r === '__wide' ? 'Paieškoti plačiau visuose rezultatuose' : r"></span></button></li>
                         </template>
                       </ul>
                     </template>

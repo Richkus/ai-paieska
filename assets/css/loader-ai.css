@@ -1,0 +1,43 @@
+/* ==========================================================
+   Įkėlimo animacijos su DI ikona (assets/img/ai.svg).
+   Markup'as: assets/js/loader.js (ai-dots | ai-draw | ai-pulse).
+   ========================================================== */
+.ld-ai svg path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.ld-ai .ld-ai-star { stroke-width: 4.4; }
+.ld-ai .ld-ai-line { stroke-width: 3.8; opacity: 0; }   /* kol animacija neprasidėjo, linijų nesimato */
+
+/* 1. Taškai sukasi žiedu, susirenka į žvaigždę, ji trumpam užsidega, ir vėl išsisklaido */
+.ld-ai-dots .ld-ai-ring { transform-origin: 20.5px 37px; animation: ldai-ring 2.8s cubic-bezier(.65, 0, .35, 1) infinite; }
+.ld-ai-dots circle { transform: translate(var(--ax), var(--ay)); animation: ldai-gather 2.8s cubic-bezier(.65, 0, .35, 1) infinite; }
+.ld-ai-dots .ld-ai-star { opacity: 0; animation: ldai-star-on 2.8s ease-in-out infinite; }
+.ld-ai-dots .ld-ai-line { stroke-dasharray: 30; stroke-dashoffset: 30; animation: ldai-line-on 2.8s ease-in-out infinite; }
+.ld-ai-dots .ld-ai-line.is-b { animation-delay: .08s; }
+/* žiedas pasisuka 240° (12 taškų, todėl ciklo pradžia ir pabaiga sutampa) ir sustoja, kai taškai renkasi */
+@keyframes ldai-ring { 0% { transform: rotate(-240deg); } 22%, 100% { transform: rotate(0deg); } }
+@keyframes ldai-gather {
+  0%, 22% { transform: translate(var(--ax), var(--ay)) scale(1); }
+  42%, 74% { transform: translate(var(--bx), var(--by)) scale(.75); }
+  100% { transform: translate(var(--ax), var(--ay)) scale(1); }
+}
+@keyframes ldai-star-on { 0%, 44% { opacity: 0; } 52%, 70% { opacity: 1; } 78%, 100% { opacity: 0; } }
+@keyframes ldai-line-on { 0%, 46% { stroke-dashoffset: 30; opacity: 0; } 56%, 70% { stroke-dashoffset: 0; opacity: 1; } 80%, 100% { stroke-dashoffset: -30; opacity: 0; } }
+
+/* 2. Žvaigždė nusipiešia viena linija, tada kometos, ir viskas išsitrina ta pačia kryptimi */
+.ld-ai-draw .ld-ai-star { stroke-dasharray: 1; stroke-dashoffset: 1; animation: ldai-draw 2.4s cubic-bezier(.65, 0, .35, 1) infinite; }
+.ld-ai-draw .ld-ai-line { stroke-dasharray: 1; stroke-dashoffset: 1; animation: ldai-draw-line 2.4s cubic-bezier(.65, 0, .35, 1) infinite; }
+.ld-ai-draw .ld-ai-line.is-b { animation-delay: .1s; }
+@keyframes ldai-draw { 0% { stroke-dashoffset: 1; opacity: 0; } 4% { opacity: 1; } 45%, 60% { stroke-dashoffset: 0; } 96% { opacity: 1; } 100% { stroke-dashoffset: -1; opacity: 0; } }
+@keyframes ldai-draw-line { 0%, 30% { stroke-dashoffset: 1; opacity: 0; } 32% { opacity: 1; } 50%, 62% { stroke-dashoffset: 0; } 88% { opacity: 1; } 90%, 100% { stroke-dashoffset: -1; opacity: 0; } }
+
+/* 3. Žvaigždė ramiai „kvėpuoja“ ir pasisuka, pro šalį praskrieja dvi kometos */
+.ld-ai-pulse .ld-ai-star { transform-origin: 20.5px 37px; animation: ldai-breathe 1.8s ease-in-out infinite; }
+.ld-ai-pulse .ld-ai-line { stroke-dasharray: .35 1; stroke-dashoffset: 1.35; animation: ldai-comet 1.8s cubic-bezier(.4, 0, .2, 1) infinite; }
+.ld-ai-pulse .ld-ai-line.is-b { animation-delay: .9s; }
+@keyframes ldai-breathe { 0%, 100% { transform: scale(.82) rotate(0deg); } 50% { transform: scale(1.04) rotate(45deg); } }
+@keyframes ldai-comet { 0% { stroke-dashoffset: 1.35; opacity: 0; } 15% { opacity: 1; } 60% { stroke-dashoffset: 0; opacity: 1; } 75%, 100% { stroke-dashoffset: 0; opacity: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .ld-ai *, .ld-ai svg { animation: none !important; }
+  .ld-ai .ld-ai-star { opacity: 1 !important; stroke-dashoffset: 0 !important; }
+  .ld-ai-dots circle { display: none; }
+}

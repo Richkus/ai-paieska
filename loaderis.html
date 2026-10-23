@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400..700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/loader.css">
+<link rel="stylesheet" href="assets/css/loader-ai.css">
 <style>
   :root { --ink: #2f4347; --sub: #5f7a7e; --line: #e3ecec; --ai-accent: #3e9aa2; }
   * { box-sizing: border-box; }
@@ -25,13 +26,18 @@
   .card { display: grid; gap: 18px; justify-items: center; padding: 28px 16px 20px; border: 1px solid var(--line); border-radius: 14px; }
   .card h2 { margin: 0; font-size: 14px; font-weight: 600; }
   .card small { color: var(--sub); font-size: 12.5px; text-align: center; line-height: 1.5; }
-  .inline { display: flex; align-items: center; gap: 8px; color: var(--ai-accent); font-size: 14px; font-weight: 600; }
+  .inline { display: flex; align-items: center; gap: 8px; color: #b85399; font-size: 14px; font-weight: 600; }
+  .grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  @media (max-width: 640px) { .grid.three { grid-template-columns: minmax(0, 1fr); } }
   @media (max-width: 640px) { .row { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } .row > b { grid-column: 1 / -1; } }
 </style>
 </head>
 <body>
 <main>
   <h1>Įkėlimo animacija</h1>
+  <h2 class="sub" style="margin-top:0">Su DI ikona (nauja)</h2>
+  <div class="grid three" id="ai"></div>
+  <h2 class="sub">S iš taškų</h2>
   <p class="lead">Taškai susidėlioja į S arba per S bėga banga. Kiekvienoje eilutėje kitas taškų skaičius. Kortelėje viršuje padidinta, apačioje tikru dydžiu, kaip prototipe. Prototipe perjungiama per Admin → Įkėlimo animacija ir Taškų skaičius.</p>
   <div id="rows"></div>
   <h2 class="sub">Palyginimui: žvaigždutė (kaip buvo)</h2>
@@ -57,6 +63,11 @@
       ${card('morph', n, 'S susidėlioja')}
       ${card('wave', n, 'S banga')}
     </div>`).join('');
+  document.getElementById('ai').innerHTML = [
+    ['ai-dots', 'Taškai susirenka į DI žvaigždę (siūloma)'],
+    ['ai-draw', 'DI žvaigždė nusipiešia'],
+    ['ai-pulse', 'DI žvaigždė kvėpuoja su kometomis'],
+  ].map(([k, t]) => card(k, 7, t)).join('');
   document.getElementById('spark').outerHTML = card('spark', 0, 'Žvaigždutė');
 </script>
 </body>

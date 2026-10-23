@@ -122,7 +122,7 @@
 /* ---------- Skeleton: įkėlimas ir tikslinimas ---------- */
 .sk { display: grid; gap: 10px; margin-bottom: 28px; }
 .sk.is-inline { margin-bottom: 4px; }
-.sk-label { display: flex; align-items: center; gap: 8px; margin: 0 0 4px; color: var(--ai-accent); font-size: 14px; font-weight: 600; }
+.sk-label { display: flex; align-items: center; gap: 8px; margin: 0 0 4px; color: #b85399; font-size: 14px; font-weight: 600; }
 .sk-label .ld-spark svg { animation: sk-spin 1.6s linear infinite; }
 .sk i { display: block; height: 12px; border-radius: 6px; background: linear-gradient(90deg, var(--ms-pill) 0%, #f7fafa 50%, var(--ms-pill) 100%); background-size: 200% 100%; animation: sk-shine 1.2s linear infinite; }
 @keyframes sk-shine { from { background-position: 200% 0; } to { background-position: -200% 0; } }
@@ -313,7 +313,7 @@
 .ch-opts button { height: 36px; padding: 0 14px; border: 1px solid var(--ms-sidebar); border-radius: 8px; background: #fff; color: var(--ms-teal-dark); font-size: 14px; transition: background .15s, border-color .15s; }
 .ch-opts button:hover { background: var(--ms-topbar); border-color: var(--ai-accent); }
 .ch-tools { display: flex; gap: 2px; margin-left: -6px; }
-.ch-typing { display: flex; align-items: center; gap: 8px; margin: 4px 0 0; color: var(--ai-accent); font-size: 14px; font-weight: 600; }
+.ch-typing { display: flex; align-items: center; gap: 8px; margin: 4px 0 0; color: #b85399; font-size: 14px; font-weight: 600; }
 .ch-msg { animation: ch-in .3s var(--ms-ease); }
 @keyframes ch-in { from { opacity: 0; transform: translateY(6px); } }
 

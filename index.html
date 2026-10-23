@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="assets/css/shell.css?v=1025k">
 <link rel="stylesheet" href="assets/css/search.css?v=1025k">
 <link rel="stylesheet" href="assets/css/filters.css?v=1025k">
-<link rel="stylesheet" href="assets/css/search-v2.css?v=1025q">
+<link rel="stylesheet" href="assets/css/search-v2.css?v=1025r">
 <link rel="stylesheet" href="assets/css/loader-ai.css?v=1025k">
 <link rel="stylesheet" href="assets/css/admin.css?v=1025k">
 <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.14.1/dist/cdn.min.js"></script>
@@ -985,7 +985,12 @@
   // Įvertinus 👍/👎 mygtuko vietoje trumpam parodoma varnelė (visuose DI blokuose ir pokalbyje)
   document.addEventListener('click', e => {
     const b = e.target.closest('.a2-vote');
-    if (!b || b.classList.contains('is-save')) return;
+    if (!b) return;
+    // Po veiksmo hover fonas ir fokusas po truputį dingsta, net jei pelė dar ant ikonos
+    clearTimeout(b._calm); b.classList.remove('is-calm');
+    b._calm = setTimeout(() => { b.blur(); b.classList.add('is-calm'); }, 1300);
+    b.addEventListener('mouseleave', () => b.classList.remove('is-calm'), { once: true });
+    if (b.classList.contains('is-save')) return;
     b.classList.remove('is-ok'); void b.offsetWidth; b.classList.add('is-ok');
     clearTimeout(b._ok); b._ok = setTimeout(() => b.classList.remove('is-ok'), 1300);
   });

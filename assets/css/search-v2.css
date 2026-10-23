@@ -118,14 +118,13 @@
 .home-card { display: flex; flex-direction: column; gap: 6px; padding: 0 0 18px; border: 1px solid var(--ms-line); border-radius: 12px; overflow: hidden; background: #fff; color: inherit; text-decoration: none; transition: border-color .18s var(--ms-ease), box-shadow .18s var(--ms-ease), transform .18s var(--ms-ease); }
 .home-card:hover { border-color: var(--ms-line-strong); box-shadow: 0 6px 18px rgba(15, 83, 84, .08); transform: translateY(-2px); }
 .hc-img { display: block; margin-bottom: 10px; aspect-ratio: 16 / 9; overflow: hidden; border-bottom: 1px solid var(--ms-line); }
-.hc-img { background-size: 140% 140%; background-position: 0% 0%; transition: background-position .6s var(--ms-ease); }
-.home-card:hover .hc-img { background-position: 100% 100%; }
-.hc-g1 { background-image: radial-gradient(circle at 20% 25%, #f6dfe9 0, transparent 55%), radial-gradient(circle at 85% 80%, #cfe6e6 0, transparent 60%), linear-gradient(135deg, #f4f1f3, #e4eef0); }
-.hc-g2 { background-image: radial-gradient(circle at 80% 20%, #bcd8d6 0, transparent 55%), radial-gradient(circle at 15% 85%, #e6d9ec 0, transparent 60%), linear-gradient(135deg, #a9c7c5, #d5e6e4); }
-.hc-g3 { background-image: radial-gradient(circle at 25% 75%, #fde3d8 0, transparent 55%), radial-gradient(circle at 80% 25%, #d6ecec 0, transparent 60%), linear-gradient(135deg, #f7efe9, #e2efef); }
-.hc-g4 { background-image: radial-gradient(circle at 75% 70%, #9fc6c3 0, transparent 55%), radial-gradient(circle at 20% 20%, #dcefee 0, transparent 60%), linear-gradient(135deg, #c6dedc, #8fb7b4); }
-.hc-g5 { background-image: radial-gradient(circle at 30% 30%, #e9e2f3 0, transparent 55%), radial-gradient(circle at 80% 80%, #f4dbe6 0, transparent 60%), linear-gradient(135deg, #eef0f7, #f3e8ee); }
-.hc-g6 { background-image: radial-gradient(circle at 70% 25%, #ffd9d4 0, transparent 50%), radial-gradient(circle at 20% 80%, #c4e0de 0, transparent 60%), linear-gradient(135deg, #e3efee, #f5e6e3); }
+.hc-img { background-size: 100% 100%; }
+.hc-g1 { background: linear-gradient(160deg, #2f5e60, #234a4c); }
+.hc-g2 { background: linear-gradient(160deg, #7c9e9c, #67898a); }
+.hc-g3 { background: linear-gradient(160deg, #3e4f57, #2f3d44); }
+.hc-g4 { background: linear-gradient(160deg, #a8bfbd, #93adab); }
+.hc-g5 { background: linear-gradient(160deg, #6e5468, #5a4356); }
+.hc-g6 { background: linear-gradient(160deg, #c9b9a3, #b7a68f); }
 .hc-meta { padding: 0 18px; color: var(--ms-muted); font-size: 12.5px; letter-spacing: .3px; text-transform: uppercase; }
 .hc-title { padding: 0 18px; color: var(--ms-ink); font-size: 16px; font-weight: 600; line-height: 1.4; transition: color .15s; }
 .home-card:hover .hc-title { color: var(--ms-link); }
@@ -812,3 +811,9 @@ body.is-chatmodal { overflow: hidden; }
 .ak-meter.is-mid .ak-bars b:nth-child(-n+2) { background: #d8b46a; }
 .ak-meter.is-good .ak-bars b { background: #6bb08c; }
 .ak-chips button.is-done { border-style: solid; border-color: var(--ms-line); background: var(--ms-surface-soft); color: var(--ms-muted); }
+
+/* Įrankių ikonos: be naršyklės fokuso rėmelio paspaudus pele; po veiksmo hover fonas užgęsta */
+.a2-vote:focus:not(:focus-visible) { outline: none; }
+.a2-vote.is-on { background: none; }
+.a2-vote.is-calm, .a2-vote.is-calm:hover { background: none; transition: background .4s, color .4s; }
+.a2-vote.is-calm:not(.is-on) { color: var(--ms-muted); }

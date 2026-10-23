@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="assets/css/shell.css?v=1026m">
 <link rel="stylesheet" href="assets/css/search.css?v=1025k">
 <link rel="stylesheet" href="assets/css/filters.css?v=1025k">
-<link rel="stylesheet" href="assets/css/search-v2.css?v=1026n">
+<link rel="stylesheet" href="assets/css/search-v2.css?v=1026o">
 <link rel="stylesheet" href="assets/css/loader.css?v=1025z">
 <link rel="stylesheet" href="assets/css/loader-ai.css?v=1026e">
 <link rel="stylesheet" href="assets/css/admin.css?v=1025w">
@@ -138,7 +138,7 @@
         <!-- Tas pats pokalbis: tab'e „DI chatas“ puslapio viduje, „DI pokalbis“ atidaro jį pilname ekrane -->
         <!-- Admin „DI režimas: peržiūra“ = modalas: tamsus fonas, pokalbis dideliame lange -->
         <div class="ch-bd" x-show="chatModal" x-cloak x-transition.opacity.duration.200ms @click="closeChatModal()"></div>
-        <section class="ch" :class="{ 'is-modal': chatModal, 'is-v5': ver === 'v5' }" x-ref="chatBox" x-show="mode === 'chat' || chatModal" x-cloak
+        <section class="ch" :class="{ 'is-modal': chatModal, 'is-v5': ver === 'v5', 'is-rail': ver === 'v4' && p.chatView === 'rail' && !chatModal }" x-ref="chatBox" x-show="mode === 'chat' || chatModal" x-cloak
                  x-effect="if ((mode === 'chat' || chatModal) && phase === 'results') chatEnsure()"
                  @keydown.escape.window="chatModal && !panelOpen && closeChatModal()">
           <header class="chm-bar" x-show="chatModal">
@@ -1016,6 +1016,7 @@
   // Admin parametras (V4): kur rodomas „DI režimas“
   const CHAT_VIEW_PARAM = { key: 'chatView', label: 'DI režimas: peržiūra', type: 'radio', default: 'tab', options: [
     { id: 'tab', label: 'Puslapyje, kaip tab\'as' },
+    { id: 'rail', label: 'Puslapyje, platesnis su ankstesnėmis paieškomis' },
     { id: 'modal', label: 'Dideliame modale' },
   ] };
   // Admin parametras (V4): antraščių šriftas. Serifinis tik akcentams, kad dizainas būtų „žmogiškesnis“

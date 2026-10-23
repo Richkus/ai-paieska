@@ -946,3 +946,12 @@ a.src-pill:not([href]) { cursor: default; }
 /* „Paieškoti plačiau“: tikra paieškos ikona vietoj ⌕ simbolio */
 .a2-row i.is-search { display: inline-grid; place-items: center; align-self: center; }
 .a2-row i.is-search svg { display: block; }
+
+/* V4 „DI režimas puslapyje, platesnis“: puslapis prasiplečia, kairėje atsiranda ankstesnės paieškos su pilka skirtine linija */
+.v2 { transition: max-width .35s var(--ms-ease); }
+@media (min-width: 901px) {
+  .v2:has(.ch.is-rail:not([style*="none"])), .v2.no-side:has(.ch.is-rail:not([style*="none"])) { max-width: calc(760px + 238px + var(--ms-gutter) * 2); grid-template-columns: minmax(0, 998px); }
+  .ch.is-rail .chf-wrap { grid-template-columns: 206px minmax(0, 1fr); gap: 32px; align-items: stretch; }
+  .ch.is-rail .ch-rail { display: grid; position: sticky; top: calc(var(--ms-topbar-h) + 12px); align-self: start; height: calc(100vh - var(--ms-topbar-h) - 32px); min-height: 0; max-height: none; margin-left: -10px; padding: 4px 14px 16px 0; border-right: 1px solid var(--ms-line); animation: rail-in .35s var(--ms-ease); }
+}
+@keyframes rail-in { from { opacity: 0; transform: translateX(-10px); } }

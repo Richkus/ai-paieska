@@ -626,3 +626,22 @@ body.is-chatfull { overflow: hidden; }
 .is-serif .a2-rel-h { font-size: 16.5px; }
 .is-serif .home-tip strong { font-size: 16px; }
 .home-tip .home-new { font-family: 'Open Sans', system-ui, sans-serif; } /* žetonas visada Sans, net kai antraštės serifinės */
+
+/* Skaičiuoklė pokalbyje: kaip SUFLERIO skaičiuoklė (žalsvas fonas, laukeliai, savas select'o rodyklės stilius) */
+.art.is-calc { border-color: #a9cfd1; background: #e6f1f2; }
+.art.is-calc .art-head { border-bottom-color: #c3dfe0; background: transparent; }
+.art.is-calc .art-head b { color: var(--ms-teal-dark); font-size: 16px; font-weight: 700; }
+.art.is-calc .calc { padding: 12px 16px 16px; }
+.calc-row.is-head { color: var(--ms-teal-dark); font-size: 13px; font-weight: 600; padding-bottom: 8px; border-bottom: 1px solid #a9cfd1; margin-bottom: 4px; }
+.calc-row select { -webkit-appearance: none; appearance: none; padding-right: 34px; background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 10 10'%3E%3Cpath d='M2 3.5l3 3 3-3' stroke='%230f5354' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 12px center; border-color: #a9cfd1; cursor: pointer; }
+.calc-row input { border-color: #a9cfd1; text-align: center; }
+.calc-n, .calc-row b { display: flex; align-items: center; justify-content: flex-end; height: 36px; padding: 0 10px; border: 1px solid #b9d8da; border-radius: 8px; background: #d4e7e8; color: var(--ms-teal-dark); font-size: 14px; }
+.calc-row b { font-weight: 600; text-align: right; }
+.calc-add { display: inline-flex; align-items: center; height: 34px; margin: 10px 0 12px; padding: 0 16px; border: 1px solid var(--ms-teal); border-radius: 17px; background: #fff; color: var(--ms-teal-dark); font-weight: 600; }
+.calc-add:hover { background: #f3f9f9; }
+.calc-add:focus-visible { outline: 2px solid var(--ms-teal); outline-offset: 2px; }
+.calc-total { border-top-color: #a9cfd1; }
+.calc-total span { color: var(--ms-teal-dark); font-weight: 600; }
+.calc-total b { color: var(--ms-teal-dark); font-size: 24px; }
+.calc-x { color: var(--ms-teal-dark); }
+.calc-note { color: #5f8c8f; }

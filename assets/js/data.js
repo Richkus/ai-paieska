@@ -163,7 +163,7 @@ window.SCENARIOS = [
         count: 3,
         results: ['r3', 'f4', 'r2'],
         // Rezultatų nedaug ir jie tikslūs: DI neapibendrina, tik vienu sakiniu pasako, kad tai tinka
-        ai: { kind: 'few', heading: 'Šios 3 medžiagos atitinka jūsų klausimą', chips: [] },
+        ai: { kind: 'few', heading: 'Radom 3 medžiagas, kurios tiksliai tinka jūsų klausimui', chips: [] },
       },
     ],
   },

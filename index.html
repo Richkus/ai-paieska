@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="assets/css/shell.css?v=1026g">
 <link rel="stylesheet" href="assets/css/search.css?v=1025k">
 <link rel="stylesheet" href="assets/css/filters.css?v=1025k">
-<link rel="stylesheet" href="assets/css/search-v2.css?v=1026g">
+<link rel="stylesheet" href="assets/css/search-v2.css?v=1026h">
 <link rel="stylesheet" href="assets/css/loader.css?v=1025z">
 <link rel="stylesheet" href="assets/css/loader-ai.css?v=1026e">
 <link rel="stylesheet" href="assets/css/admin.css?v=1025w">
@@ -188,7 +188,7 @@
             <span class="chm-brand" x-show="ver !== 'v5'"><img class="ai-ic" src="assets/img/ai.svg" width="15" height="26" alt="" aria-hidden="true"> DI režimas</span>
             <!-- V5: tas pats perjungiklis kaip paieškos modale -->
             <div class="k5-seg" x-show="ver === 'v5'">
-              <button type="button" @click="closeChatModal(); openK5('search', activeQuery)"><svg width="13" height="13" viewBox="0 0 18 18" aria-hidden="true"><circle cx="7.5" cy="7.5" r="6" stroke="currentColor" stroke-width="1.8" fill="none"/><path d="M12 12l4.5 4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Paieška</button>
+              <button type="button" @click="v5Swap('k5', () => openK5('search', activeQuery), () => closeChatModal())"><svg width="13" height="13" viewBox="0 0 18 18" aria-hidden="true"><circle cx="7.5" cy="7.5" r="6" stroke="currentColor" stroke-width="1.8" fill="none"/><path d="M12 12l4.5 4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Paieška</button>
               <button type="button" class="is-on"><img class="ai-ic" src="assets/img/ai.svg" width="8" height="14" alt="" aria-hidden="true">Klausti DI</button>
             </div>
             <span class="chm-q" x-text="activeQuery"></span>
@@ -803,7 +803,8 @@
   </aside>
 
   <!-- V5 · Paieška modale (kaip Clay): viršuje tik mygtukas, paieška ir DI klausimas atsidaro modale -->
-  <div class="k5-bd" x-show="k5.open" x-cloak @click="k5Close()"></div>
+  <!-- Vienas bendras fonas paieškai ir DI pokalbiui: perjungiant jis nemirkčioja -->
+  <div class="k5-bd" x-show="ver === 'v5' && (k5.open || chatModal)" x-cloak @click="k5.open ? k5Close() : closeChatModal()"></div>
   <div class="k5" x-show="k5.open" x-cloak role="dialog" aria-modal="true" aria-label="Paieška"
        @keydown.escape.stop="panelOpen ? closePanel() : k5Close()">
     <div class="k5-head">
@@ -1860,6 +1861,7 @@
         clearTimeout(this._ct); clearTimeout(this._st);
         if (this.ver === 'v5') this.activeQuery = a.chat.q;   // V5 modalo antraštėje rodomas klausimas
         this.chat = { key: this.scIdx + '|' + this.activeQuery, msgs: [{ who: 'user', text: a.chat.q }, { who: 'ai', stage: 'done', ...a.chat.msg }], step: 99, typing: false, draft: '', misses: 0, expertShown: false };
+        if (this.ver === 'v5' && this.k5.open) return this.v5Swap('chat', () => this.openChatModal(true), () => { this.k5.open = false; });
         this.k5.open = false;
         if (this.p.chatView === 'modal' || this.ver === 'v5') this.openChatModal(true); else { this.setMode('chat'); window.scrollTo({ top: 0 }); }
       },
@@ -1873,7 +1875,7 @@
       k5Close() { this.k5.open = false; },
       k5Tab(t) {
         // Jei pokalbis apie šį klausimą jau vyksta, „Klausti DI“ jį tęsia
-        if (t === 'ask' && this.chat.msgs.length && this.phase === 'results') { this.k5.open = false; return this.openChatModal(); }
+        if (t === 'ask' && this.chat.msgs.length && this.phase === 'results') return this.v5Swap('chat', () => this.openChatModal(), () => { this.k5.open = false; });
         this.k5.tab = t;
         if (t === 'ask' && !this.k5.askQ) this.k5.askQ = this.k5.q;
         this.$nextTick(() => (t === 'search' ? this.$refs.k5In : this.$refs.k5Ask)?.focus());
@@ -1913,8 +1915,29 @@
         const idx = this.S.findIndex(s => s.id === (this.scenarioFor(q.toLowerCase()) || 'nera'));
         this.loadScenario(idx);
         this.query = this.activeQuery = this.origQuery = q;
-        this.k5 = { ...this.k5, open: false, askQ: '' };
-        this.openChatModal();
+        this.k5.askQ = '';
+        this.v5Swap('chat', () => this.openChatModal(), () => { this.k5.open = false; });
+      },
+      // Perėjimas tarp paieškos ir DI pokalbio: atrodo kaip vienas modalas. Naujas parodomas po senuoju,
+      // senasis paslepiamas tik jam atsiradus (Alpine x-show rodo kitame kadre), tada aukštis sklandžiai pasikeičia
+      v5Swap(to, show, hide) {
+        const vis = e => e.getClientRects().length > 0;   // modalai fixed, todėl offsetParent netinka
+        const from = [...document.querySelectorAll('.k5, .ch.is-modal')].find(vis);
+        const h = from ? from.getBoundingClientRect().height : 0;
+        const cls = 'is-swap-' + to;
+        document.body.classList.add(cls);
+        show();
+        const frame = () => new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+        frame().then(() => {
+          hide();
+          const el = [...document.querySelectorAll(to === 'chat' ? '.ch.is-modal' : '.k5')].find(vis);
+          if (el && h) {
+            const nh = el.getBoundingClientRect().height, ease = 'cubic-bezier(.22, .61, .36, 1)';
+            el.animate([{ height: h + 'px' }, { height: nh + 'px' }], { duration: 300, easing: ease });
+            [...el.children].forEach(c => c.animate([{ opacity: 0, transform: 'translateY(4px)' }, { opacity: 1, transform: 'none' }], { duration: 240, delay: 60, easing: ease, fill: 'backwards' }));
+          }
+          setTimeout(() => document.body.classList.remove(cls), 360);
+        });
       },
       // ---------- Greita peržiūra ----------
       pv: { id: null, x: 0, y: 0, place: 'below', mini: false },

@@ -1952,11 +1952,11 @@
       pvLeave() { clearTimeout(this._pvIn); this._pvOut = setTimeout(() => this.pvClose(), 220); },
       pvKeep() { clearTimeout(this._pvOut); },
       SRC_GROUPS: [
-        { h: 'SUFLERIO turinys', items: ['Praktinės situacijos', 'Praktinės situacijos (išplėstos)', 'Vaizdo įrašai', 'Atmintinės'] },
+        { h: 'SUFLERIO turinys', items: ['Praktinės situacijos', 'Kompetencijų centrai', 'Vaizdo įrašai', 'Atmintinės'] },
         { h: 'Išoriniai šaltiniai', items: ['VMI', 'Sodra', 'VDI', 'EUR-Lex', 'e-TAR'] },
       ],
       srcOpen: false,
-      srcSel: ['Praktinės situacijos', 'Praktinės situacijos (išplėstos)', 'Vaizdo įrašai', 'Atmintinės', 'VMI'],
+      srcSel: ['Praktinės situacijos', 'Kompetencijų centrai', 'Vaizdo įrašai', 'Atmintinės', 'VMI'],
       get srcCount() { return this.srcSel.length; },
       copyText(t) { try { navigator.clipboard.writeText(t); } catch (e) {} },
       pvClose() { clearTimeout(this._pvIn); clearTimeout(this._pvOut); this.pv = { ...this.pv, id: null }; },

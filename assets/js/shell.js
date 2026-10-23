@@ -10,7 +10,8 @@
    `searchNote` (užuomina po lauku, pvz. kad nauja paieška pradės naują pokalbį),
    `searchGlow` (kartą po įkėlimo aplink lauką prabėga DI spalvų gradientas),
    `recentSearches` (ankstesnės paieškos dropdown'e),
-   `searchTip`, `tipClose()`, `tipTry()` (pirmo karto užuomina po lauku).
+   `searchTip`, `tipClose()`, `tipTry()` (pirmo karto užuomina po lauku),
+   `searchPH` (besikeičiantis pavyzdinis klausimas lauke).
    ========================================================== */
 (function () {
   const IMG = new URL('../img/', document.currentScript.src).href;
@@ -49,7 +50,7 @@
   const topbar = `
     <form class="ms-search" role="search" :class="{ 'is-rewrite': rewriteFlash, 'is-glow': searchGlow }" @submit.prevent="submitSearch()">
       <!-- Laukas auga žemyn, kai tekstas netelpa vienoje eilutėje; atitraukus fokusą vėl viena eilutė -->
-      <textarea rows="1" x-model="query" x-ref="search" placeholder="Pvz. Ar galiu duoti laisvą dieną už šeštadienį?" aria-label="Paieška" autocomplete="off" spellcheck="false"
+      <textarea rows="1" x-model="query" x-ref="search" :placeholder="searchPH" aria-label="Paieška" autocomplete="off" spellcheck="false"
              x-effect="query; $nextTick(() => { if (document.activeElement === $el) { $el.style.height = 'auto'; $el.style.height = $el.scrollHeight + 'px'; } })"
              @focus="suggestOpen = true; searchTip && tipClose(); $el.style.height = 'auto'; $el.style.height = $el.scrollHeight + 'px'"
              @blur="suggestOpen = false; $el.style.height = ''; $el.scrollTop = 0"

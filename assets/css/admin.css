@@ -74,3 +74,6 @@ body.is-shot .ms-admin { display: none; }
 body.is-shot .brain-btn { display: none; }
 .brain-bg { z-index: 1100; }
 .brain { z-index: 1101; }
+/* Lapelio mygtukas apačioje šalia Admin */
+.brain-btn { top: auto; bottom: calc(12px + env(safe-area-inset-bottom, 0px)); left: 98px; width: 28px; height: 28px; border-radius: 8px; z-index: 450; }
+.brain-btn svg { width: 16px; height: 16px; }

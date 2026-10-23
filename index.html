@@ -97,7 +97,7 @@
         <!-- V4 · Kompetencijų centras (abstrakti versija: 3 kompetencijos su moduliais) -->
         <section class="cc" x-show="ver === 'v4' && mode === 'comp'" x-cloak>
           <div class="fb xf">
-            <span class="fb-count" x-text="compList.length + ' ' + (compList.length === 1 ? 'kompetencija' : 'kompetencijos')"></span>
+            <span class="fb-count" x-text="list.length + ' ' + rezultatai(list.length)"></span>
             <template x-for="g in XF[mode] || []" :key="g.key">
               <div class="fb-item" @click.outside="pop === g.key && (pop = '')">
                 <button type="button" class="fb-pill" :class="{ 'is-set': xfHas(g) }" :aria-expanded="pop === g.key" @click="pop = pop === g.key ? '' : g.key">
@@ -122,26 +122,6 @@
           <p class="cc-hint" x-show="compMatch.length">
             Pagal jūsų paiešką aktualiausia: <b x-text="compMatch.map(c => c.title).join(', ')"></b>
           </p>
-          <div class="cc-grid">
-            <template x-for="c in compList" :key="c.id">
-              <article class="cc-card" :class="{ 'is-match': c.match.includes(sc.id) }">
-                <div class="cc-art">
-                  <span class="cc-badge" x-show="c.match.includes(sc.id)">Atitinka paiešką</span>
-                  <button type="button" class="cc-save" :class="{ 'is-on': ccSaved.includes(c.id) }" @click="ccSaved = ccSaved.includes(c.id) ? ccSaved.filter(x => x !== c.id) : [...ccSaved, c.id]" aria-label="Pasižymėti">
-                    <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8v11l-4-3-4 3Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" :fill="ccSaved.includes(c.id) ? 'currentColor' : 'none'"/></svg>
-                  </button>
-                  <span class="cc-ic" x-html="COMP_ICONS[c.icon]"></span>
-                </div>
-                <h3 x-text="c.title"></h3>
-                <p x-text="c.desc"></p>
-                <small x-text="c.modules.length + ' moduliai'"></small>
-                <button type="button" class="cc-go" @click="ccOpen = ccOpen === c.id ? '' : c.id" x-text="ccOpen === c.id ? 'Suskleisti modulius' : 'Eiti į kompetenciją'"></button>
-                <ol class="cc-mods" x-show="ccOpen === c.id" x-collapse.duration.250ms>
-                  <template x-for="(mo, i) in c.modules" :key="mo"><li><span x-text="(i + 1) + '.'"></span><span x-text="mo"></span><em x-text="i === 0 ? 'Pradėti →' : ''"></em></li></template>
-                </ol>
-              </article>
-            </template>
-          </div>
         </section>
 
         <!-- V4 · Testai, Video, Failai atsisiuntimui: paprastas sąrašas -->
@@ -441,7 +421,6 @@
           </div>
         </div>
 
-        <h3 class="cc-h" x-show="mode === 'comp'" x-cloak>Medžiaga kompetencijose <span x-text="list.length"></span></h3>
         <ul class="sr-list" x-show="!hideLinks">
           <template x-for="id in list" :key="id">
             <li class="sr-item" :class="{ 'is-pl': R[id].playlist }">

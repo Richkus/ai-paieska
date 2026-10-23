@@ -7,12 +7,12 @@
 <title>AI paieška: prototipas</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400..800&family=Source+Serif+4:opsz,wght@8..60,500..700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/shell.css?v=1024w">
-<link rel="stylesheet" href="assets/css/search.css?v=1024w">
-<link rel="stylesheet" href="assets/css/filters.css?v=1024w">
-<link rel="stylesheet" href="assets/css/search-v2.css?v=1024w">
-<link rel="stylesheet" href="assets/css/loader-ai.css?v=1024w">
-<link rel="stylesheet" href="assets/css/admin.css?v=1024w">
+<link rel="stylesheet" href="assets/css/shell.css?v=1024x">
+<link rel="stylesheet" href="assets/css/search.css?v=1024x">
+<link rel="stylesheet" href="assets/css/filters.css?v=1024x">
+<link rel="stylesheet" href="assets/css/search-v2.css?v=1024x">
+<link rel="stylesheet" href="assets/css/loader-ai.css?v=1024x">
+<link rel="stylesheet" href="assets/css/admin.css?v=1024x">
 <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.14.1/dist/cdn.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
 </head>
@@ -152,8 +152,18 @@
         </div>
 
         <!-- Tas pats pokalbis: tab'e „DI chatas“ puslapio viduje, „DI pokalbis“ atidaro jį pilname ekrane -->
-        <section class="ch" x-ref="chatBox" x-show="mode === 'chat'" x-cloak
-                 x-effect="if (mode === 'chat' && phase === 'results') chatEnsure()">
+        <!-- Admin „Atsakymas su DI: peržiūra“ = modalas: tamsus fonas, pokalbis dideliame lange -->
+        <div class="ch-bd" x-show="chatModal" x-cloak x-transition.opacity.duration.200ms @click="closeChatModal()"></div>
+        <section class="ch" :class="{ 'is-modal': chatModal }" x-ref="chatBox" x-show="mode === 'chat' || chatModal" x-cloak
+                 x-effect="if ((mode === 'chat' || chatModal) && phase === 'results') chatEnsure()"
+                 @keydown.escape.window="chatModal && !panelOpen && closeChatModal()">
+          <header class="chm-bar" x-show="chatModal">
+            <span class="chm-brand"><img class="ai-ic" src="assets/img/ai.svg" width="15" height="26" alt="" aria-hidden="true"> Atsakymas su DI</span>
+            <span class="chm-q" x-text="activeQuery"></span>
+            <button type="button" class="pn-btn" @click="closeChatModal()" aria-label="Uždaryti" title="Uždaryti (Esc)">
+              <svg width="18" height="18" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+            </button>
+          </header>
           <div class="chf-wrap">
           <div class="chf-col">
           <template x-for="(m, i) in chat.msgs" :key="i">
@@ -830,9 +840,9 @@
   .transition-pn { transition: transform .32s var(--ms-ease); }
   .pn-off { transform: translateX(100%); }
 </style>
-<script src="assets/js/shell.js?v=1024w"></script>
-<script src="assets/js/data.js?v=1024w"></script>
-<script src="assets/js/loader.js?v=1024w"></script>
+<script src="assets/js/shell.js?v=1024x"></script>
+<script src="assets/js/data.js?v=1024x"></script>
+<script src="assets/js/loader.js?v=1024x"></script>
 <script>
   // Admin parametras: filtrai po vienu mygtuku „Filtrai“ arba visada matomi
   // V4 tab'ai. icon: ai | chat. Kurie rodomi, valdoma Admin'e (TABS_PARAM)
@@ -848,6 +858,11 @@
   ];
   const TABS_PARAM = { key: 'tabs', label: 'Tab\'ai juostoje', type: 'checks', default: ['chat', 'all', 'comp', 'video', 'list', 'tests', 'files', 'plain'],
     options: TABS.map(t => ({ id: t.id, label: t.label })) };
+  // Admin parametras (V4): kur rodomas „Atsakymas su DI“
+  const CHAT_VIEW_PARAM = { key: 'chatView', label: 'Atsakymas su DI: peržiūra', type: 'radio', default: 'tab', options: [
+    { id: 'tab', label: 'Puslapyje, kaip tab\'as' },
+    { id: 'modal', label: 'Dideliame modale' },
+  ] };
   // Admin parametras (V4): antraščių šriftas. Serifinis tik akcentams, kad dizainas būtų „žmogiškesnis“
   const SERIF_PARAM = { key: 'serif', label: 'Antraščių šriftas', type: 'radio', default: 'sans', options: [
     { id: 'sans', label: 'Open Sans (kaip dabar)' },
@@ -928,10 +943,12 @@
         switch (t.id) {
           case 'all': return this.mode === 'ai' && !this.aiOnly;
           case 'list': return this.mode === 'classic';
+          case 'chat': return this.mode === 'chat' || this.chatModal;
           default: return this.mode === t.id;
         }
       },
       selectTab(t) {
+        if (t.id === 'chat' && this.p.chatView === 'modal') return this.openChatModal();
         const m = { di: 'ai', all: 'ai', list: 'classic' }[t.id] || t.id;
         this.setMode(m);
       },
@@ -1026,7 +1043,7 @@
       ask: { q: '', sent: false, edit: false, attach: [], me: { vardas: 'Laurynas', pavarde: 'Petrauskas', imone: 'UAB Įmonita', pareigos: 'Vyr. buhalteris', miestas: 'Vilnius', tel: '+370 600 00000' } },
       // ---------- Versijos ----------
       VERSIONS: [
-        { id: 'v4', label: 'V4 · Kaip Google', desc: 'Susijusios paieškos tampa nauja paieška, grįžtama naršyklės Atgal. Tab\'ai: DI režimas · Viskas · Rezultatų sąrašas', params: [TABS_PARAM, SERIF_PARAM, SIDE_PARAM, TOP_PARAM, AI_STYLE_PARAM, FILTERS_PARAM, LOADER_PARAM] },
+        { id: 'v4', label: 'V4 · Kaip Google', desc: 'Susijusios paieškos tampa nauja paieška, grįžtama naršyklės Atgal. Tab\'ai: DI režimas · Viskas · Rezultatų sąrašas', params: [TABS_PARAM, CHAT_VIEW_PARAM, SERIF_PARAM, SIDE_PARAM, TOP_PARAM, AI_STYLE_PARAM, FILTERS_PARAM, LOADER_PARAM] },
       ],
       ver: (() => {
         const q = new URLSearchParams(location.search).get('v');
@@ -1117,7 +1134,7 @@
       // V4: lauke rodomas klausimas pagal žingsnį
       queryFor(n) { return n === 0 ? this.origQuery : (this.sc.steps[n].rq || this.origQuery); },
       get sources() {
-        if (this.mode === 'chat') return [...new Set(this.chat.msgs.filter(m => m.card).flatMap(m => [m.card.main, ...(m.card.quotes || []), ...(m.card.summary || []).map(x => x.src), ...(m.card.list || [])]).filter(Boolean))];
+        if (this.mode === 'chat' || this.chatModal) return [...new Set(this.chat.msgs.filter(m => m.card).flatMap(m => [m.card.main, ...(m.card.quotes || []), ...(m.card.summary || []).map(x => x.src), ...(m.card.list || [])]).filter(Boolean))];
         return this.ai.kind === 'quotes' ? this.ai.quotes.map(q => q.id) : [];
       },
       get pastSearches() { return this.history.filter(h => h.scIdx !== this.scIdx).slice(0, 5); },
@@ -1360,9 +1377,16 @@
         return `Situacija: ${u[0]}` + (mid.length ? `\nPatikslinimai: ${mid.join('; ').replace(/[.?!]?$/, m => m || '.')}` : '') + `\nKlausimas: ${last}`;
       },
       // Iš rezultatų į pokalbį: jei buvo „DI trumpai“, pokalbis prasideda nuo jo, toliau DI tikslina
+      chatModal: false,
+      openChatModal(skipEnsure = false) {
+        this.chatModal = true; document.body.classList.add('is-chatmodal');
+        if (!skipEnsure) this.chatEnsure();
+        this.$nextTick(() => setTimeout(() => this.$refs.chatIn && this.$refs.chatIn.focus({ preventScroll: true }), 250));
+      },
+      closeChatModal() { this.chatModal = false; document.body.classList.remove('is-chatmodal'); },
       chatFromResults() {
         const sum = this.ai.summary;
-        this.setMode('chat'); window.scrollTo({ top: 0 });
+        if (this.p.chatView === 'modal') this.openChatModal(true); else { this.setMode('chat'); window.scrollTo({ top: 0 }); }
         if (sum) {
           clearTimeout(this._ct);
           this.chat = { key: this.scIdx + '|' + this.activeQuery, msgs: [{ who: 'user', text: this.activeQuery }, { who: 'ai', text: 'Trumpai, ką radau:', card: { summary: sum } }], step: 0, typing: false, draft: '', misses: 0, expertShown: false };

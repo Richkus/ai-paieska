@@ -675,3 +675,19 @@ body.is-chatfull { overflow: hidden; }
 .a2-head.is-label:not(.is-ask) .a2-label { font-size: 15px; }
 .is-serif .a2-head.is-label:not(.is-ask) .a2-label { font-size: 17px; }
 .a2-head.is-label:not(.is-ask) > .ai-ic { height: 26px; margin: -5px -2px -5px -4px; }
+
+/* ==========================================================
+   „Atsakymas su DI“ dideliame modale (Admin)
+   ========================================================== */
+body.is-chatmodal { overflow: hidden; }
+.ch-bd { position: fixed; inset: 0; z-index: 54; background: rgba(20, 45, 48, .45); }
+.ch.is-modal { position: fixed; inset: 28px; z-index: 55; display: block; overflow-y: auto; border-radius: 18px; background: #fff; box-shadow: 0 24px 64px rgba(15, 40, 42, .3); animation: chm-in .25s var(--ms-ease); }
+@keyframes chm-in { from { opacity: 0; transform: translateY(14px) scale(.99); } }
+.chm-bar { position: sticky; top: 0; z-index: 7; display: flex; align-items: center; gap: 14px; height: 60px; padding: 0 16px 0 24px; border-bottom: 1px solid var(--ms-line); background: rgba(255, 255, 255, .96); backdrop-filter: blur(6px); }
+.chm-brand { display: inline-flex; align-items: center; gap: 6px; color: var(--ms-ink); font-size: 15px; font-weight: 700; white-space: nowrap; }
+.chm-brand .ai-ic { margin: -6px 0; }
+.chm-q { flex: 1; min-width: 0; overflow: hidden; color: var(--ms-sub); font-size: 14px; text-overflow: ellipsis; white-space: nowrap; }
+.ch.is-modal .chf-wrap { max-width: 760px; margin: 0 auto; padding: 28px 24px 0; }
+.ch.is-modal .chf-col { min-height: calc(100vh - 56px - 60px - 28px); }
+.ch.is-modal .ch-compose { margin-top: auto; padding-bottom: 20px; }
+@media (max-width: 640px) { .ch.is-modal { inset: 8px; } .chm-q { display: none; } }

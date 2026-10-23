@@ -1113,16 +1113,21 @@
       phCycle() {
         const ex = ['Ar galiu duoti laisvą dieną už šeštadienį?', 'Kokio dydžio dienpinigiai Vokietijoje?', 'Kada reikia registruotis PVM mokėtoju?', 'Kaip žiniaraštyje pažymėti poilsio dieną?', 'Ar dovanų kuponai darbuotojams apmokestinami?'];
         if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-        let k = 0; const pre = 'Pvz. ';
+        // Prasuka 3 pavyzdžius ir sustoja; bet koks paspaudimas ar klavišas sustabdo iškart (kad netrauktų dėmesio)
+        let k = 0, stop = false; const pre = 'Pvz. ';
+        const halt = () => { stop = true; };
+        document.addEventListener('pointerdown', halt, { once: true });
+        document.addEventListener('keydown', halt, { once: true });
         const sleep = t => new Promise(r => setTimeout(r, t));
         const run = async () => {
-          for (;;) {
+          for (let turn = 0; turn < 3; turn++) {
             await sleep(3200);
-            if (this.query) continue;
+            if (stop) return;
+            if (this.query) { turn--; continue; }
             const cur = ex[k % ex.length], nxt = ex[++k % ex.length];
-            for (let i = cur.length; i >= 0; i -= 2) { this.searchPH = pre + cur.slice(0, i); await sleep(14); }
+            for (let i = cur.length; i >= 0; i -= 2) { if (stop) { this.searchPH = pre + cur; return; } this.searchPH = pre + cur.slice(0, i); await sleep(14); }
             await sleep(180);
-            for (let i = 1; i <= nxt.length; i++) { this.searchPH = pre + nxt.slice(0, i); await sleep(32); }
+            for (let i = 1; i <= nxt.length; i++) { if (stop) { this.searchPH = pre + nxt; return; } this.searchPH = pre + nxt.slice(0, i); await sleep(32); }
           }
         };
         run();

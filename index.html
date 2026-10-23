@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="assets/css/shell.css?v=1025s">
 <link rel="stylesheet" href="assets/css/search.css?v=1025k">
 <link rel="stylesheet" href="assets/css/filters.css?v=1025k">
-<link rel="stylesheet" href="assets/css/search-v2.css?v=1025z">
+<link rel="stylesheet" href="assets/css/search-v2.css?v=1026c">
 <link rel="stylesheet" href="assets/css/loader.css?v=1025z">
 <link rel="stylesheet" href="assets/css/loader-ai.css?v=1025k">
 <link rel="stylesheet" href="assets/css/admin.css?v=1025w">
@@ -86,30 +86,23 @@
       <div x-show="phase !== 'start'" :class="{ 'v2': true, 'no-side': ver === 'v4' && p.side !== 'show', 'is-classic': mode === 'classic', 'is-loading': phase === 'loading', 'is-busy': !!busy }">
       <div class="v2-main">
 
-        <!-- V4: tab'ų juosta kaip Google. Kurie tab'ai rodomi, valdoma Admin'e; netelpantys nukeliauja į „Daugiau ▾“ -->
-        <div class="sr-modes tb" x-show="ver === 'v4'" x-ref="tabsBar" role="tablist" aria-label="Paieškos režimas"
-             x-effect="p.tabs; phase; mode; $nextTick(() => { tabGuard(); tabsMeasure(); })" @resize.window.debounce.80ms="tabsMeasure()">
-          <template x-for="t in tabsRow" :key="t.id">
-            <button type="button" role="tab" :class="{ 'is-on': tabActive(t) }" :aria-selected="tabActive(t)" @click="selectTab(t)">
-              <template x-if="t.icon === 'ai'"><span class="tb-ic"><img class="ai-ic" src="assets/img/ai.svg" width="15" height="26" alt="" aria-hidden="true"></span></template>
-              <template x-if="t.icon === 'chat'"><span class="tb-ic"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 4.5a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v4.5a2 2 0 0 1-2 2H7l-3 2.5V11h0a2 2 0 0 1-1.5-2Z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg></span></template>
-              <span x-text="t.label"></span>
-            </button>
-          </template>
-          <div class="tb-more" x-show="tabsMore.length" @click.outside="tabMoreOpen = false" @keydown.escape="tabMoreOpen = false">
-            <button type="button" class="tb-dots" @click="tabMoreOpen = !tabMoreOpen" :aria-expanded="tabMoreOpen" aria-label="Daugiau" title="Daugiau">
-              <svg width="18" height="18" viewBox="0 0 16 16" aria-hidden="true"><circle cx="3" cy="8" r="1.4" fill="currentColor"/><circle cx="8" cy="8" r="1.4" fill="currentColor"/><circle cx="13" cy="8" r="1.4" fill="currentColor"/></svg>
-            </button>
-            <div class="tb-menu" x-show="tabMoreOpen" x-cloak x-transition.opacity.duration.120ms>
-              <template x-for="t in tabsMore" :key="t.id">
-                <button type="button" :class="{ 'is-on': tabActive(t) }" @click="selectTab(t); tabMoreOpen = false" x-text="t.label"></button>
-              </template>
-            </div>
+        <!-- V4: tab'ų juosta kaip Google. Kurie tab'ai rodomi, valdoma Admin'e; netelpantys slenkami horizontaliai (kraštuose fade ir rodyklė) -->
+        <div class="sr-modes tb" x-show="ver === 'v4'" :class="{ 'can-l': tbL, 'can-r': tbR }"
+             x-effect="p.tabs; phase; mode; chatModal; $nextTick(() => { tabGuard(); tbEdges(); tbReveal(); })" @resize.window.debounce.80ms="tbEdges()">
+          <div class="tb-track" x-ref="tabsTrack" role="tablist" aria-label="Paieškos režimas" @scroll.passive="tbEdges()">
+            <template x-for="t in tabsShown" :key="t.id">
+              <button type="button" role="tab" :class="{ 'is-on': tabActive(t) }" :aria-selected="tabActive(t)" @click="selectTab(t); $nextTick(() => tbReveal())">
+                <template x-if="t.icon === 'ai'"><span class="tb-ic"><img class="ai-ic" src="assets/img/ai.svg" width="15" height="26" alt="" aria-hidden="true"></span></template>
+                <span x-text="t.label"></span>
+              </button>
+            </template>
           </div>
-          <!-- Matavimui: visi rodomi tab'ai, nematomi -->
-          <div class="tb-measure" x-ref="tabsMeasure" aria-hidden="true">
-            <template x-for="t in tabsShown" :key="t.id"><button type="button" tabindex="-1"><span class="tb-ic" x-show="t.icon"></span><span x-text="t.label"></span></button></template>
-          </div>
+          <button type="button" class="tb-arrow is-l" x-show="tbL" x-transition.opacity.duration.150ms @click="tbScroll(-1)" aria-label="Ankstesni skirtukai" tabindex="-1">
+            <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3.5 5.5 8l4.5 4.5" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <button type="button" class="tb-arrow is-r" x-show="tbR" x-transition.opacity.duration.150ms @click="tbScroll(1)" aria-label="Daugiau skirtukų" tabindex="-1">
+            <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
         </div>
 
         <!-- V4, plati tema: kryptys pirmos po tab'ais (kaip Google „Refine“), paspaudus perrašomas klausimas lauke -->
@@ -1063,16 +1056,24 @@
       chat: { key: '', msgs: [], step: 0, typing: false, draft: '', misses: 0, expertShown: false },   // V4 · DI chatas
       // ---------- V4 tab'ai ----------
       TABS,
-      tabFit: 99,
-      tabMoreOpen: false,
       get tabsShown() { return TABS.filter(t => (this.p.tabs || []).includes(t.id)); },
-      // Eilutė nejuda (kaip Gmail / Material): jei pasirinktas tab'as yra meniu, „Daugiau“ mygtukas rodo jo pavadinimą ir yra pažymėtas
-      // Kaip Gmail / Notion: pasirinktas punktas iš meniu rodomas eilutėje kaip tab'as, o ⋯ visada gale
-      get tabsRow() {
-        const s = this.tabsShown, row = s.slice(0, this.tabFit), act = s.find(t => this.tabActive(t));
-        return act && !row.includes(act) ? [...row, act] : row;
+      // Netelpantys tab'ai slenkami horizontaliai; kraštuose fade ir apvali rodyklė (kaip filtrų juostoje)
+      tbL: false,
+      tbR: false,
+      tbEdges() {
+        const t = this.$refs.tabsTrack;
+        if (!t) return;
+        this.tbL = t.scrollLeft > 2;
+        this.tbR = t.scrollLeft + t.clientWidth < t.scrollWidth - 2;
       },
-      get tabsMore() { const row = this.tabsRow; return this.tabsShown.filter(t => !row.includes(t)); },
+      tbScroll(dir) { const t = this.$refs.tabsTrack; t && t.scrollBy({ left: dir * t.clientWidth * .6, behavior: 'smooth' }); },
+      tbReveal() {
+        const t = this.$refs.tabsTrack, on = t && t.querySelector('.is-on');
+        if (!on) return;
+        const pad = 48, l = on.offsetLeft - t.offsetLeft, r = l + on.offsetWidth;
+        if (l < t.scrollLeft + pad) t.scrollTo({ left: Math.max(0, l - pad), behavior: 'smooth' });
+        else if (r > t.scrollLeft + t.clientWidth - pad) t.scrollTo({ left: r - t.clientWidth + pad, behavior: 'smooth' });
+      },
       tabActive(t) {
         switch (t.id) {
           case 'all': return this.mode === 'ai' && !this.aiOnly;
@@ -1085,23 +1086,6 @@
         if (t.id === 'chat' && this.p.chatView === 'modal') return this.openChatModal();
         const m = { di: 'ai', all: 'ai', list: 'classic' }[t.id] || t.id;
         this.setMode(m);
-      },
-      // Kiek tab'ų telpa į juostą; likę rodomi „Daugiau ▾“ meniu
-      tabsMeasure() {
-        const bar = this.$refs.tabsBar, meas = this.$refs.tabsMeasure;
-        if (!bar || !meas || !bar.offsetParent) return;
-        const ws = [...meas.querySelectorAll('button')].map(b => b.offsetWidth);
-        const gap = 28, avail = bar.clientWidth - 4, n = ws.length;
-        // Telpa tiek tab'ų, kiek tilptų kartu su ⋯ mygtuku (~32 px) ir, jei pasirinktas punktas iš meniu, juo pačiu.
-        // Jei visi telpa, ⋯ nerodomas. Aktyvus tab'as paryškintas, todėl pridedam kelis px atsargos.
-        const bold = 8, more = 32, act = this.tabsShown.findIndex(t => this.tabActive(t));
-        let fit = 1;
-        for (let k = n; k >= 1; k--) {
-          let row = ws.slice(0, k).reduce((a, w, i) => a + w + (i ? gap : 0), 0) + bold;
-          if (act >= k) row += gap + ws[act];
-          if (row + (k < n ? gap + more : 0) <= avail) { fit = k; break; }
-        }
-        this.tabFit = fit;
       },
       // ---------- Kompetencijų centras, Testai, Video, Failai ----------
       COMP: window.COMPETENCIES,

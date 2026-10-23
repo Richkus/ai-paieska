@@ -831,3 +831,19 @@ a.src-pill[href]:hover { border-color: var(--ms-line-strong); color: var(--ms-in
 a.src-pill:not([href]) { cursor: default; }
 .pv-mini-meta.is-ext { color: #b0564c; font-weight: 600; text-transform: none; }
 .pv-ext-dot { width: 6px; height: 6px; border-radius: 50%; background: #d9796e; }
+
+/* V4 tab'ų juosta: horizontalus slinkimas vietoj ⋯ meniu */
+.sr-modes.tb { position: relative; display: block; gap: 0; border-bottom: 0; }
+.tb-track { display: flex; gap: 28px; overflow-x: auto; overflow-y: hidden; scrollbar-width: none; box-shadow: inset 0 -1px 0 var(--ms-line); overscroll-behavior-x: contain; }
+.tb-track::-webkit-scrollbar { display: none; }
+.tb-track > button { flex: 0 0 auto; }
+.tb-track > button::after { bottom: 0; }
+.sr-modes.tb::before, .sr-modes.tb::after { content: ''; position: absolute; top: 0; bottom: 1px; z-index: 1; width: 64px; pointer-events: none; opacity: 0; transition: opacity .2s; }
+.sr-modes.tb::before { left: 0; background: linear-gradient(to right, #fff 35%, rgba(255, 255, 255, 0)); }
+.sr-modes.tb::after { right: 0; background: linear-gradient(to left, #fff 35%, rgba(255, 255, 255, 0)); }
+.sr-modes.tb.can-l::before, .sr-modes.tb.can-r::after { opacity: 1; }
+.sr-modes .tb-arrow { position: absolute; top: 50%; z-index: 2; display: grid; place-items: center; width: 28px; height: 28px; margin-top: -14px; padding: 0; border: 1px solid var(--ms-line-strong); border-radius: 50%; background: #fff; color: var(--ms-ink); box-shadow: 0 2px 6px rgba(15, 40, 42, .1); transition: background .15s; }
+.sr-modes .tb-arrow::after { display: none; }
+.sr-modes .tb-arrow:hover { background: var(--ms-surface-soft); }
+.sr-modes .tb-arrow.is-l { left: 0; }
+.sr-modes .tb-arrow.is-r { right: 0; }

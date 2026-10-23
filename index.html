@@ -10,9 +10,9 @@
 <link rel="stylesheet" href="assets/css/shell.css?v=1025s">
 <link rel="stylesheet" href="assets/css/search.css?v=1025k">
 <link rel="stylesheet" href="assets/css/filters.css?v=1025k">
-<link rel="stylesheet" href="assets/css/search-v2.css?v=1025u">
+<link rel="stylesheet" href="assets/css/search-v2.css?v=1025v">
 <link rel="stylesheet" href="assets/css/loader-ai.css?v=1025k">
-<link rel="stylesheet" href="assets/css/admin.css?v=1025k">
+<link rel="stylesheet" href="assets/css/admin.css?v=1025v">
 <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.14.1/dist/cdn.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
 </head>
@@ -833,6 +833,22 @@
 
   <!-- Prezentacijai: „Kaip veikia DI paieška“ kaip lipnus lapelis (ne sąsajos dalis) -->
   <button type="button" class="brain-btn" @click="brainOpen = !brainOpen" :aria-expanded="brainOpen" aria-label="Kaip veikia DI paieška" title="Kaip veikia DI paieška"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/><path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"/><path d="M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4"/><path d="M17.6 6.5a3 3 0 0 0 .4-1.4M6 5.1a3 3 0 0 0 .4 1.4M3.5 11a4 4 0 0 1 .5-.7M20 10.3a4 4 0 0 1 .5.7"/></svg></button>
+  <!-- Prototipui: visi DI blokai (artefaktai) vienoje vietoje, kad nereikėtų spaudinėti pokalbio -->
+  <button type="button" class="arts-btn" @click="artsOpen = !artsOpen" :aria-expanded="artsOpen" title="DI blokai ir artefaktai">
+    <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="5" height="5" rx="1.2"/><rect x="9" y="2" width="5" height="5" rx="1.2"/><rect x="2" y="9" width="5" height="5" rx="1.2"/><rect x="9" y="9" width="5" height="5" rx="1.2"/></svg>
+    <span>Artefaktai</span>
+  </button>
+  <div class="arts" x-show="artsOpen" x-cloak x-transition.opacity.duration.150ms @click.outside="if (!$event.target.closest('.arts-btn')) artsOpen = false" @keydown.escape.window="artsOpen = false">
+    <div class="arts-title">DI blokai ir artefaktai <small>Paspaudus atsidaro iškart</small></div>
+    <template x-for="g in ARTS" :key="g.h">
+      <div>
+        <div class="arts-group" x-text="g.h"></div>
+        <template x-for="a in g.items" :key="a.id">
+          <button type="button" class="arts-i" :class="{ 'is-on': artOn === a.id }" @click="showArt(a)"><span x-text="a.label"></span><small x-text="a.where"></small></button>
+        </template>
+      </div>
+    </template>
+  </div>
   <div class="brain-bg" x-show="brainOpen" x-cloak x-transition.opacity.duration.200ms @click="brainOpen = false"></div>
   <aside class="brain" x-show="brainOpen" x-cloak @keydown.escape.window="brainOpen = false"
          x-transition:enter="brain-anim" x-transition:enter-start="brain-off" x-transition:leave="brain-anim" x-transition:leave-end="brain-off" aria-label="Kaip veikia DI paieška">
@@ -1641,6 +1657,61 @@
       },
       get askSuggest() { return this.ai.kind === 'low' ? this.sc.steps[this.step].results.slice(0, 2) : []; },
 
+      // ---------- Artefaktų katalogas (tik prototipui) ----------
+      artsOpen: false,
+      artOn: '',
+      get ARTS() {
+        const S1 = [{ t: 'Jei darbuotojas dirbo poilsio dieną, kuri nebuvo numatyta grafike, jo prašymu vietoj padidinto apmokėjimo galima suteikti kitą poilsio dieną.', src: 'r1' }, { t: 'Prašymas turi būti įformintas raštu.', src: 'r2' }];
+        const S2 = [{ t: 'Dienpinigiai užsienyje mokami pagal šalies normą už kiekvieną komandiruotės dieną.', src: 'k1' }, { t: 'Vienos dienos komandiruotei Lietuvoje jie mokami, jei vykta į kitą vietovę.', src: 'k2' }];
+        const chat = (id, label, q, msg, extra = {}) => ({ id, label, where: 'DI režimas', chat: { q, msg }, ...extra });
+        const scen = (id, label, sid, sum) => ({ id, label, where: 'Visi rezultatai', scen: { sid, sum } });
+        return [
+          { h: 'Paieškos DI blokas', items: [
+            scen('s-cite', 'Santrauka su citatų numeriais', 'savaitgalis', 'cite'),
+            scen('s-quotes', 'Mintis + citatos', 'savaitgalis', 'quotes'),
+            scen('s-dir', 'Plati tema: kryptys tikslinti', 'komandiruote'),
+            scen('s-few', 'Mažai rezultatų: vienas sakinys', 'nedaug'),
+            scen('s-low', 'Žemas panašumas: be DI, ekspertas', 'mazai'),
+            scen('s-none', 'Nieko nerasta', 'nera'),
+          ] },
+          { h: 'DI režimo turinys', items: [
+            chat('c-sum', 'Santrauka su citatų numeriais', 'Ar galima suteikti kitą poilsio dieną?', { text: 'Trumpai, ką radau:', card: { summary: S1 } }),
+            chat('c-gist', 'Mintis + citatos', 'Ar galima suteikti kitą poilsio dieną?', { text: 'Trumpai, ką radau:', card: { summary: S1 } }, { sum: 'quotes' }),
+            chat('c-main', 'Pagrindinis šaltinis', 'Darbuotojas dirbo šeštadienį', { text: 'Labiausiai tinka ši praktinė situacija:', card: { main: 'r1', summary: [S1[0]] } }),
+            chat('c-quote', 'Citatos iš šaltinių', 'Komandiruotė į užsienį', { text: 'SUFLERYJE apie tai rašoma taip:', card: { quotes: ['k3', 'k1'] } }),
+            chat('c-list', 'Medžiagų sąrašas', 'Ką paskaityti apie darbą poilsio dieną?', { text: 'Štai medžiagos šia tema:', card: { list: ['r1', 'r3', 'r7'] } }),
+            chat('c-more', '„Taip pat gali praversti“', 'Darbas poilsio dieną', { text: 'Pagrindinė medžiaga:', card: { main: 'r3', more: ['r5', 'r4'] } }),
+          ] },
+          { h: 'DI režimo artefaktai', items: [
+            chat('a-calc', 'Skaičiuoklė (gyva)', 'Kiek dienpinigių už Vokietiją ir Lenkiją?', { text: 'Suskaičiavau, pakeiskit pagal savo komandiruotę:', card: { summary: S2, artifacts: [{ kind: 'calc', rows: [{ country: 'Vokietija', days: 2 }, { country: 'Lenkija', days: 1 }] }] } }),
+            chat('a-tool', 'Nuoroda į skaičiuoklę', 'Kur paskaičiuoti dienpinigius?', { text: 'Tam yra skaičiuoklė:', card: { tool: 'k4' } }),
+            chat('a-file', 'Failas atsisiuntimui', 'Ar yra prašymo forma?', { text: 'Štai forma ir žiniaraštis:', card: { artifacts: [{ kind: 'file', id: 'r6' }, { kind: 'file', id: 'f4' }] } }),
+            chat('a-video', 'Video nuo konkrečios vietos', 'Kur paaiškinta suminė apskaita?', { text: 'Seminare tai aiškinama čia:', card: { artifacts: [{ kind: 'video', id: 'r4', at: '24:10' }] } }),
+            chat('a-all', 'Visi artefaktai kartu', 'Komandiruotė į Vokietiją ir Lenkiją', { text: 'Štai viskas, ko gali prireikti:', card: { main: 'k3', summary: S2, artifacts: [{ kind: 'calc', rows: [{ country: 'Vokietija', days: 2 }, { country: 'Lenkija', days: 1 }] }, { kind: 'file', id: 'f6' }, { kind: 'video', id: 'k5', at: '31:45' }], more: ['k6'] } }),
+          ] },
+          { h: 'DI režimo situacijos', items: [
+            chat('x-opts', 'Patikslinimo pasirinkimai', 'Ką reikia žinoti apie komandiruotes?', { text: 'Tema plati. Kas jums šiuo metu aktualiausia?', options: ['Dienpinigiai', 'Kelionės ir nakvynės išlaidos', 'Įforminimas ir apskaita'] }),
+            chat('x-recover', 'Tiksliai nerado: atkūrimas', 'Kaip su viršvalandžiais naktį?', { text: 'Tiksliai neradau. Gal turit omeny vieną iš šių?', recover: ['Darbas švenčių dieną ir viršvalandžiai', 'Darbas poilsio dieną', '__wide'] }),
+            chat('x-expert', 'Siūlo klausti eksperto', 'Ar taikyti PVM lengvatą renginiui?', { text: 'Šia tema SUFLERYJE medžiagos neradau. Galiu perduoti jūsų klausimą ekspertui, jis atsakys asmeniškai.', expert: true }),
+            chat('x-off', 'Nukrypimas nuo temos', 'O kaip apmokestinami komandiruotės dienpinigiai?', { text: 'Atrodo, tai jau kita tema. Pradėti naują paiešką?', newSearch: 'Kaip apmokestinami komandiruotės dienpinigiai?', topic: 'poilsio dieną' }),
+          ] },
+        ];
+      },
+      showArt(a) {
+        this.artOn = a.id; this.pvClose(); this.closePanel();
+        if (a.scen) {
+          if (this.chatModal) this.closeChatModal();
+          this.sumMode = a.scen.sum || 'cite'; this.offDemo = false;
+          this.loadScenario(this.S.findIndex(x => x.id === a.scen.sid)); this.setMode('ai');
+          window.scrollTo({ top: 0 }); return;
+        }
+        this.sumMode = a.sum || 'cite'; this.offDemo = false;
+        const idx = this.S.findIndex(x => x.id === 'savaitgalis');
+        if (this.phase !== 'results' || this.scIdx !== idx) this.loadScenario(idx);
+        clearTimeout(this._ct); clearTimeout(this._st);
+        this.chat = { key: this.scIdx + '|' + this.activeQuery, msgs: [{ who: 'user', text: a.chat.q }, { who: 'ai', stage: 'done', ...a.chat.msg }], step: 99, typing: false, draft: '', misses: 0, expertShown: false };
+        if (this.p.chatView === 'modal') this.openChatModal(true); else { this.setMode('chat'); window.scrollTo({ top: 0 }); }
+      },
       // ---------- Greita peržiūra ----------
       pv: { id: null, x: 0, y: 0, place: 'below', mini: false },
       pvEnter(id, el, mini = false) {

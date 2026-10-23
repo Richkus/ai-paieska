@@ -77,3 +77,18 @@ body.is-shot .brain-btn { display: none; }
 /* Lapelio mygtukas apačioje šalia Admin */
 .brain-btn { top: auto; bottom: calc(12px + env(safe-area-inset-bottom, 0px)); left: 98px; width: 28px; height: 28px; border-radius: 8px; z-index: 450; }
 .brain-btn svg { width: 16px; height: 16px; }
+
+/* Artefaktų katalogas (prototipui): mygtukas šalia Admin ir „smegenų“ */
+.arts-btn { position: fixed; left: 136px; bottom: calc(12px + env(safe-area-inset-bottom, 0px)); z-index: 450; display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 10px; border: 0; border-radius: 8px; background: rgba(255, 255, 255, .9); box-shadow: 0 0 0 .5px rgba(0, 0, 0, .12), 0 1px 2px rgba(0, 0, 0, .08); color: #2f4347; font-size: 12.5px; font-weight: 500; }
+.arts-btn svg { color: #5f7a7e; }
+.arts-btn:hover, .arts-btn[aria-expanded="true"] { background: #fff; }
+.arts { position: fixed; left: 12px; bottom: calc(48px + env(safe-area-inset-bottom, 0px)); z-index: 460; width: 300px; max-height: calc(100vh - 72px); overflow-y: auto; padding: 8px; border-radius: 12px; background: #fff; box-shadow: 0 0 0 .5px rgba(0, 0, 0, .12), 0 12px 32px rgba(0, 0, 0, .16); scrollbar-width: thin; }
+.arts-title { display: grid; gap: 1px; padding: 6px 8px 8px; color: #2f4347; font-size: 13px; font-weight: 700; }
+.arts-title small { color: #8aa3a6; font-size: 11.5px; font-weight: 400; }
+.arts-group { margin: 8px 8px 4px; color: #8aa3a6; font-size: 10.5px; font-weight: 700; letter-spacing: .6px; text-transform: uppercase; }
+.arts-i { display: flex; align-items: baseline; gap: 8px; width: 100%; padding: 6px 8px; border: 0; border-radius: 6px; background: none; color: #2f4347; font-size: 13px; text-align: left; }
+.arts-i span { flex: 1; min-width: 0; }
+.arts-i small { flex: 0 0 auto; color: #a3b6b8; font-size: 11px; }
+.arts-i:hover { background: #f3f7f7; }
+.arts-i.is-on { background: #e6f0f0; font-weight: 600; }
+body.is-shot .arts-btn, body.is-shot .arts { display: none; }

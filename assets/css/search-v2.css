@@ -431,15 +431,7 @@ body.is-chatfull { overflow: hidden; }
 .sr-modes .tb-menu button:hover { background: var(--ms-surface-soft); color: var(--ms-ink); }
 .sr-modes .tb-menu button.is-on { color: var(--ms-ink); font-weight: 600; background: var(--ms-topbar); }
 
-/* Bendri pasirinkimo chip'ai (kompetencijos, failų tipai) */
-.cc-chips { display: flex; flex-wrap: wrap; gap: 6px; }
-.cc-chips button { height: 32px; padding: 0 13px; border: 1px solid var(--ms-line-strong); border-radius: 8px; background: #fff; color: var(--ms-sub); font-size: 13.5px; transition: background .15s, border-color .15s, color .15s; }
-.cc-chips button:hover { border-color: var(--ms-sidebar); color: var(--ms-ink); }
-.cc-chips button.is-on { border-color: var(--ms-teal-dark); background: var(--ms-teal-dark); color: #fff; }
-.cc-chips.is-level button.is-on { border-color: var(--ms-sidebar); background: var(--ms-topbar); color: var(--ms-teal-dark); font-weight: 600; }
-
 /* V4 · Kompetencijų centras */
-.cc-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; margin-bottom: 14px; }
 .cc-hint { margin: 0 0 18px; color: var(--ms-sub); font-size: 14px; }
 .cc-hint b { color: var(--ms-ink); font-weight: 600; }
 .cc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 18px; margin-bottom: 40px; }
@@ -460,9 +452,10 @@ body.is-chatfull { overflow: hidden; }
 .cc-mods li em { margin-left: auto; color: var(--ms-link); font-style: normal; font-size: 13px; }
 
 /* V4 · Testai, Video, Failai: antraštė virš sąrašo */
-.tl { display: grid; gap: 12px; padding-bottom: 14px; border-bottom: 1px solid var(--ms-line); }
-.tl-count { margin: 0; color: var(--ms-ink); font-size: 16px; font-weight: 600; }
-.tl-row { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 16px; }
+.tl .fb-count { font-size: 16px; }
+/* Papildomi filtrai (kompetencijos, failai) tuo pačiu .fb stiliumi */
+.fb.xf { flex-wrap: wrap; }
+.cc .fb.xf { margin-bottom: 16px; }
 .sr-file { margin-left: 6px; padding: 1px 6px; border-radius: 4px; background: var(--ms-pill); color: var(--ms-sub); font-style: normal; font-size: 11px; font-weight: 700; letter-spacing: .03em; }
 
 /* Turinys centre, ne prilipęs prie kairės */
@@ -494,3 +487,4 @@ body.is-chatfull { overflow: hidden; }
 .pl-eps button i { display: grid; place-items: center; width: 26px; height: 18px; border-radius: 4px; background: var(--ms-sidebar-active); color: var(--ms-teal-dark); }
 @media (max-width: 640px) { .pl-head { grid-template-columns: minmax(0, 1fr) auto; } .pl-thumb { grid-column: 1 / -1; grid-row: 1; } }
 .tb-menu button.is-on::before { content: '✓'; margin-right: 8px; color: var(--ms-teal-dark); }
+.fb.xf .fb-pop { width: max-content; min-width: 240px; max-width: 360px; }

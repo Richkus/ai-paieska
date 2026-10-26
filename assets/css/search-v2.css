@@ -1014,7 +1014,7 @@ body.is-chatfill { overflow: hidden; }
 @media (max-width: 520px) { .ask-go { padding: 0 12px; font-size: 13px; } }
 
 /* Ilgas DI turinys: suskleistas iki ~260 px su išblukimu, „Rodyti daugiau“ */
-.a2-clamp.is-clamped { max-height: 260px; overflow: hidden; -webkit-mask-image: linear-gradient(to bottom, #000 62%, transparent); mask-image: linear-gradient(to bottom, #000 62%, transparent); }
+.a2-clamp.is-clamped { max-height: var(--clamp, 260px); overflow: hidden; -webkit-mask-image: linear-gradient(to bottom, #000 62%, transparent); mask-image: linear-gradient(to bottom, #000 62%, transparent); }
 .a2-more { display: inline-flex; align-items: center; gap: 6px; height: 32px; margin: 2px 0 4px; padding: 0 14px; border: 1px solid var(--ms-line-strong); border-radius: 16px; background: #fff; color: var(--ms-ink); font-size: 13.5px; font-weight: 600; cursor: pointer; transition: background .15s, border-color .15s; }
 .a2-more:hover { background: var(--ms-surface-soft); border-color: var(--ms-field-text); }
 .a2-more svg { transition: transform .2s var(--ms-ease); }
@@ -1028,3 +1028,13 @@ body.is-chatfill { overflow: hidden; }
 .ask-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .ask-hint { display: inline-flex; align-items: center; gap: 6px; color: var(--ms-muted); font-size: 12.5px; }
 .ask-hint .ai-ic { margin: -3px 0; }
+
+/* Kaip Google AI apžvalga: pilno pločio „Rodyti daugiau“; išskleidus laukas prilimpa ekrano apačioje,
+   turinys lenda iš po jo, o pasiekus bloko galą laukas kyla kartu */
+.a2-more { display: flex; justify-content: center; width: 100%; height: 44px; margin: 6px 0 2px; border-radius: 22px; font-size: 14.5px; }
+.ask-inline.is-sticky { position: sticky; bottom: 16px; z-index: 6; box-shadow: 0 -16px 24px -8px rgba(255, 255, 255, .95), 0 10px 30px rgba(15, 40, 42, .14); }
+.a2-less { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; height: 36px; margin-top: 6px; border: 0; border-radius: 10px; background: none; color: var(--ms-sub); font-size: 13.5px; font-weight: 600; cursor: pointer; }
+.a2-less:hover { background: var(--ms-surface-soft); color: var(--ms-ink); }
+/* Rezultatų skaičius virš DI bloko */
+.res-head { margin: -8px 0 14px; color: var(--ms-muted); font-size: 13.5px; }
+.res-head small { margin-left: 4px; }

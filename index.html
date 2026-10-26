@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="assets/css/shell.css?v=1026r">
 <link rel="stylesheet" href="assets/css/search.css?v=1025k">
 <link rel="stylesheet" href="assets/css/filters.css?v=1025k">
-<link rel="stylesheet" href="assets/css/search-v2.css?v=1026z">
+<link rel="stylesheet" href="assets/css/search-v2.css?v=1027a">
 <link rel="stylesheet" href="assets/css/loader.css?v=1025z">
 <link rel="stylesheet" href="assets/css/loader-ai.css?v=1026e">
 <link rel="stylesheet" href="assets/css/admin.css?v=1025w">
@@ -61,6 +61,9 @@
             <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </button>
         </div>
+
+        <!-- Visi rezultatai: kiek rasta, iškart po tab'ais, virš DI bloko (kaip Google „Apie N rezultatų“) -->
+        <p class="res-head" x-show="ver === 'v4' && mode === 'ai' && phase === 'results' && !busy" x-cloak x-html="countHtml"></p>
 
         <!-- V4, plati tema: kryptys pirmos po tab'ais (kaip Google „Refine“), paspaudus perrašomas klausimas lauke -->
         <div class="rf" x-show="ver === 'v4' && ai.kind === 'directions' && ['ai', 'classic'].includes(mode)" x-cloak>
@@ -420,15 +423,16 @@
             </template>
 
             </div>
-            <button type="button" class="a2-more" x-show="aiOver" x-cloak @click="aiMore = !aiMore" :aria-expanded="aiMore">
-              <span x-text="aiMore ? 'Rodyti mažiau' : 'Rodyti daugiau'"></span>
-              <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true" :style="aiMore && 'transform:rotate(180deg)'"><path d="M3 4.5 6 7.5l3-3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <!-- Kaip Google: suskleistame vaizde tik „Rodyti daugiau“; laukas ir kiti veiksmai atsiranda išskleidus -->
+            <button type="button" class="a2-more" x-show="aiOver && !aiMore" x-cloak @click="aiMore = true" :aria-expanded="aiMore">
+              <span>Rodyti daugiau</span>
+              <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5 6 7.5l3-3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
-            <template x-if="ai.kind === 'quotes' && ai.summary">
+            <template x-if="ai.kind === 'quotes' && ai.summary && (!aiOver || aiMore)">
               <div class="a2-tools" x-data="{ saved: false }"><button type="button" class="a2-vote" @click="copyText(ai.summary.map(x => x.t).join(' '))" aria-label="Kopijuoti" title="Kopijuoti"><svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true"><rect x="5.5" y="5.5" width="8.5" height="8.5" rx="2" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M10.5 3.6V3.5a1.5 1.5 0 0 0-1.5-1.5H4A1.5 1.5 0 0 0 2.5 3.5V9A1.5 1.5 0 0 0 4 10.5h.1" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></button><button type="button" class="a2-vote is-save" :class="{ 'is-on': saved }" @click="saved = !saved" :aria-label="saved ? 'Išsaugota' : 'Išsaugoti'" :title="saved ? 'Išsaugota' : 'Išsaugoti'"><svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8a.5.5 0 0 1 .5.5v11l-4.5-3-4.5 3V3a.5.5 0 0 1 .5-.5Z" :fill="saved ? 'currentColor' : 'none'" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg></button><button type="button" class="a2-vote" :class="{ 'is-on': vote === 1 }" @click="vote = vote === 1 ? 0 : 1" aria-label="Padėjo" title="Padėjo"><svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 7v7H2V7h3Zm0 0 3-5.5c1 0 1.8.8 1.6 1.8L9.2 6H13a1.5 1.5 0 0 1 1.5 1.8l-1 5A1.5 1.5 0 0 1 12 14H5" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg></button><button type="button" class="a2-vote" :class="{ 'is-on': vote === -1 }" @click="vote = vote === -1 ? 0 : -1" aria-label="Nepadėjo" title="Nepadėjo"><svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true" style="transform:scaleY(-1)"><path d="M5 7v7H2V7h3Zm0 0 3-5.5c1 0 1.8.8 1.6 1.8L9.2 6H13a1.5 1.5 0 0 1 1.5 1.8l-1 5A1.5 1.5 0 0 1 12 14H5" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg></button></div>
             </template>
             <!-- Klausti toliau: pilnas laukas iškart po santrauka (virš „Tęskit temą“); paspaudus atsidaro DI režimas su šiuo klausimu -->
-            <form class="ask-inline" @submit.prevent="chatFromResults(askDraft)" @click="$event.target === $el && $refs.askIn.focus()">
+            <form class="ask-inline" :class="{ 'is-sticky': aiOver && aiMore }" x-show="!aiOver || aiMore" @submit.prevent="chatFromResults(askDraft)" @click="$event.target === $el && $refs.askIn.focus()">
               <textarea rows="1" x-ref="askIn" x-model="askDraft" placeholder="Klauskite toliau…" aria-label="Klausti DI toliau"
                         @input="$el.style.height = 'auto'; $el.style.height = Math.min($el.scrollHeight, 160) + 'px'"
                         @keydown.enter="if (!$event.shiftKey) { $event.preventDefault(); chatFromResults(askDraft); }"></textarea>
@@ -437,7 +441,7 @@
                 <button type="submit" class="ask-go">Chatinti su DI <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 3.5 13 8l-4.5 4.5" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
               </div>
             </form>
-            <template x-if="ai.kind === 'quotes' && ai.summary">
+            <template x-if="ai.kind === 'quotes' && ai.summary && (!aiOver || aiMore)">
               <p class="a2-disc a2-disc-ask">Esu DI, tai kaip žinot, galiu suklysti, todėl pasitikrinkit dar papildomai šaltiniuose :]</p>
             </template>
             <div class="a2-foot" x-show="!aiOver || aiMore">
@@ -462,6 +466,7 @@
                 </button>
               </div>
             </div>
+            <button type="button" class="a2-less" x-show="aiOver && aiMore" @click="aiMore = false; $el.closest('.a2').scrollIntoView({ behavior: 'smooth', block: 'start' })">Rodyti mažiau <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 7.5 6 4.5l3 3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
             </div>
           </section>
         </template>
@@ -484,7 +489,7 @@
 
         <!-- Filtrų juosta: veikia abiem režimais. Su AI dalį filtrų pritaiko pati (✦) -->
         <div class="fb" :class="{ 'is-stack': fbStack }" x-show="!hideLinks && !isTyped && mode !== 'comp' && (baseList.length || anyFilter)" @keydown.escape.stop="pop = ''">
-          <span class="fb-count" :class="{ 'is-flash': flash }" x-html="busy ? 'Atnaujinam…' : countHtml"></span>
+          <span class="fb-count" x-show="!(ver === 'v4' && mode === 'ai')" :class="{ 'is-flash': flash }" x-html="busy ? 'Atnaujinam…' : countHtml"></span>
           <!-- V2/V4: filtrai suskleisti po vienu mygtuku (admin parametras) -->
           <button type="button" class="fb-toggle" x-show="!noFilters && fbCollapsible && !fbOpen" @click="fbOpen = true" :aria-expanded="fbOpen">
             <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 4h7M13 4h1M2 12h1M7 12h7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/><circle cx="11" cy="4" r="2" stroke="currentColor" stroke-width="1.5" fill="none"/><circle cx="5" cy="12" r="2" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
@@ -1644,7 +1649,16 @@
       // DI bloko suskleidimas: jei turinys aukštesnis nei ~300 px, rodom pradžią ir „Rodyti daugiau“
       aiOver: false,
       aiMore: false,
-      aiMeasure() { const el = this.$refs.aiClamp; this.aiOver = !!el && el.scrollHeight > 300; },
+      aiMeasure() {
+        const el = this.$refs.aiClamp;
+        if (!el) return (this.aiOver = false);
+        // Suskleidžiam, jei turinys ilgas arba kartu su lauku ir „Tęskit temą“ nustumtų rezultatus žemiau ekrano
+        const top = el.getBoundingClientRect().top + scrollY;
+        // po turiniu: įrankiai, laukas, pastaba (~260), „Tęskit temą“ ir pirmas rezultatas (~140)
+        const below = 260 + (this.related.length ? 50 + this.related.length * 42 : 0) + 140;
+        this.aiOver = el.scrollHeight > 300 || top + el.scrollHeight + below > innerHeight;
+        el.style.setProperty('--clamp', Math.max(120, Math.min(260, el.scrollHeight - 90)) + 'px');
+      },
       chatFromResults(text = '') {
         const sum = this.ai.summary, q = (text || '').trim();
         this.askDraft = '';
@@ -1801,6 +1815,8 @@
         return [
           { h: 'Paieškos DI blokas', items: [
             scen('s-cite', 'Santrauka su citatų numeriais', 'savaitgalis', 'cite'),
+            scen('s-short', 'Trumpa santrauka: laukas „Klauskite toliau“ iškart', 'savaitgalis', 'cite'),
+            scen('s-long', 'Ilga santrauka: „Rodyti daugiau“, laukas prilimpa apačioje', 'savaitgalis', 'quotes'),
             scen('s-quotes', 'Mintis + citatos', 'savaitgalis', 'quotes'),
             scen('s-dir', 'Plati tema: kryptys tikslinti', 'komandiruote'),
             scen('s-few', 'Mažai rezultatų: vienas sakinys', 'nedaug'),

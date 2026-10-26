@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="assets/css/shell.css?v=1026r">
 <link rel="stylesheet" href="assets/css/search.css?v=1025k">
 <link rel="stylesheet" href="assets/css/filters.css?v=1025k">
-<link rel="stylesheet" href="assets/css/search-v2.css?v=1026x">
+<link rel="stylesheet" href="assets/css/search-v2.css?v=1026y">
 <link rel="stylesheet" href="assets/css/loader.css?v=1025z">
 <link rel="stylesheet" href="assets/css/loader-ai.css?v=1026e">
 <link rel="stylesheet" href="assets/css/admin.css?v=1025w">
@@ -375,6 +375,8 @@
 
             <!-- DI apibendrinimas: trumpi sakiniai, kiekvieno gale šaltinis (kaip LRT „Klauskite DI“) -->
             <!-- Variantas: bendra mintis, po ja citatos su šaltiniais -->
+            <!-- Ilgas DI turinys suskleidžiamas (kaip Google AI apžvalga), kad rezultatai liktų matomi be slinkimo -->
+            <div class="a2-clamp" x-ref="aiClamp" :class="{ 'is-clamped': aiOver && !aiMore }" x-effect="sc.id; step; sumMode; p.ext; aiMore = false; $nextTick(() => setTimeout(() => aiMeasure(), 30))">
             <template x-if="ai.kind === 'quotes' && ai.summary && sumMode === 'quotes'">
               <div class="a2-gistq">
                 <template x-for="(g, gi) in (ai.gist || ai.summary.map(x => x.t).join(' ')).split('\n\n')" :key="gi"><p class="a2-gist" x-text="g"></p></template>
@@ -395,12 +397,6 @@
               <template x-if="p.ext === 'pills'"><div class="src-pills"><template x-for="d in srcDomains(ai.summary)" :key="d.k"><a class="src-pill" :class="d.ext ? 'is-ext' : ''" :href="d.url || null" :target="d.url ? '_blank' : null" rel="noopener" @click="!d.url && $event.preventDefault()"><span class="src-dots"><template x-for="t in d.dots" :key="t"><i :class="'is-' + t"></i></template></span><span x-text="d.k"></span><svg x-show="d.url" width="11" height="11" viewBox="0 0 12 12" aria-hidden="true"><path d="M7 2h3v3M10 2 5.5 6.5M9 7.5V10H2V3h2.5" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></template></div></template>
               </div>
               
-            </template>
-            <template x-if="ai.kind === 'quotes' && ai.summary">
-              <div>
-                <div class="a2-tools" x-data="{ saved: false }"><button type="button" class="a2-vote" @click="copyText(ai.summary.map(x => x.t).join(' '))" aria-label="Kopijuoti" title="Kopijuoti"><svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true"><rect x="5.5" y="5.5" width="8.5" height="8.5" rx="2" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M10.5 3.6V3.5a1.5 1.5 0 0 0-1.5-1.5H4A1.5 1.5 0 0 0 2.5 3.5V9A1.5 1.5 0 0 0 4 10.5h.1" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></button><button type="button" class="a2-vote is-save" :class="{ 'is-on': saved }" @click="saved = !saved" :aria-label="saved ? 'Išsaugota' : 'Išsaugoti'" :title="saved ? 'Išsaugota' : 'Išsaugoti'"><svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8a.5.5 0 0 1 .5.5v11l-4.5-3-4.5 3V3a.5.5 0 0 1 .5-.5Z" :fill="saved ? 'currentColor' : 'none'" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg></button><button type="button" class="a2-vote" :class="{ 'is-on': vote === 1 }" @click="vote = vote === 1 ? 0 : 1" aria-label="Padėjo" title="Padėjo"><svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 7v7H2V7h3Zm0 0 3-5.5c1 0 1.8.8 1.6 1.8L9.2 6H13a1.5 1.5 0 0 1 1.5 1.8l-1 5A1.5 1.5 0 0 1 12 14H5" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg></button><button type="button" class="a2-vote" :class="{ 'is-on': vote === -1 }" @click="vote = vote === -1 ? 0 : -1" aria-label="Nepadėjo" title="Nepadėjo"><svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true" style="transform:scaleY(-1)"><path d="M5 7v7H2V7h3Zm0 0 3-5.5c1 0 1.8.8 1.6 1.8L9.2 6H13a1.5 1.5 0 0 1 1.5 1.8l-1 5A1.5 1.5 0 0 1 12 14H5" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg></button></div>
-                <p class="a2-disc a2-disc-under">Esu DI, tai kaip žinot, galiu suklysti, todėl pasitikrinkit dar papildomai šaltiniuose :]</p>
-              </div>
             </template>
             <template x-if="ai.kind === 'quotes' && !ai.summary">
               <ul class="a2-quotes">
@@ -423,14 +419,14 @@
               </ul>
             </template>
 
-            <!-- V4: nieko neradus, kelias į ekspertą su jau įrašytu klausimu -->
-            <template x-if="ver === 'v4' && ai.kind === 'empty'">
-              <div class="a2-empty">
-                <p class="a2-rel-sub">Užduokit klausimą ekspertui, jis atsakys asmeniškai.</p>
-                <button type="button" class="ex-btn" @click="openAsk()">Klausti eksperto</button>
-              </div>
+            </div>
+            <button type="button" class="a2-more" x-show="aiOver" x-cloak @click="aiMore = !aiMore" :aria-expanded="aiMore">
+              <span x-text="aiMore ? 'Rodyti mažiau' : 'Rodyti daugiau'"></span>
+              <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true" :style="aiMore && 'transform:rotate(180deg)'"><path d="M3 4.5 6 7.5l3-3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <template x-if="ai.kind === 'quotes' && ai.summary">
+              <div class="a2-tools" x-data="{ saved: false }"><button type="button" class="a2-vote" @click="copyText(ai.summary.map(x => x.t).join(' '))" aria-label="Kopijuoti" title="Kopijuoti"><svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true"><rect x="5.5" y="5.5" width="8.5" height="8.5" rx="2" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M10.5 3.6V3.5a1.5 1.5 0 0 0-1.5-1.5H4A1.5 1.5 0 0 0 2.5 3.5V9A1.5 1.5 0 0 0 4 10.5h.1" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></button><button type="button" class="a2-vote is-save" :class="{ 'is-on': saved }" @click="saved = !saved" :aria-label="saved ? 'Išsaugota' : 'Išsaugoti'" :title="saved ? 'Išsaugota' : 'Išsaugoti'"><svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5h8a.5.5 0 0 1 .5.5v11l-4.5-3-4.5 3V3a.5.5 0 0 1 .5-.5Z" :fill="saved ? 'currentColor' : 'none'" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg></button><button type="button" class="a2-vote" :class="{ 'is-on': vote === 1 }" @click="vote = vote === 1 ? 0 : 1" aria-label="Padėjo" title="Padėjo"><svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 7v7H2V7h3Zm0 0 3-5.5c1 0 1.8.8 1.6 1.8L9.2 6H13a1.5 1.5 0 0 1 1.5 1.8l-1 5A1.5 1.5 0 0 1 12 14H5" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg></button><button type="button" class="a2-vote" :class="{ 'is-on': vote === -1 }" @click="vote = vote === -1 ? 0 : -1" aria-label="Nepadėjo" title="Nepadėjo"><svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true" style="transform:scaleY(-1)"><path d="M5 7v7H2V7h3Zm0 0 3-5.5c1 0 1.8.8 1.6 1.8L9.2 6H13a1.5 1.5 0 0 1 1.5 1.8l-1 5A1.5 1.5 0 0 1 12 14H5" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg></button></div>
             </template>
-
             <!-- Klausti toliau: pilnas laukas iškart po santrauka (virš „Tęskit temą“); paspaudus atsidaro DI režimas su šiuo klausimu -->
             <form class="ch-field ask-inline" @submit.prevent="chatFromResults(askDraft)">
               <img class="ai-ic" src="assets/img/ai.svg" width="11" height="19" alt="" aria-hidden="true">
@@ -439,7 +435,10 @@
                         @keydown.enter="if (!$event.shiftKey) { $event.preventDefault(); chatFromResults(askDraft); }"></textarea>
               <button type="submit" class="ask-go">Chatinti su DI <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 3.5 13 8l-4.5 4.5" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
             </form>
-            <div class="a2-foot">
+            <template x-if="ai.kind === 'quotes' && ai.summary">
+              <p class="a2-disc a2-disc-ask">Esu DI, tai kaip žinot, galiu suklysti, todėl pasitikrinkit dar papildomai šaltiniuose :]</p>
+            </template>
+            <div class="a2-foot" x-show="!aiOver || aiMore">
               <div x-show="ver === 'v4'">
                 <div x-show="related.length">
                   <p class="a2-rel-h" x-show="ai.kind === 'quotes'">Tęskit temą</p>
@@ -1640,6 +1639,10 @@
       },
       closeChatModal() { this.chatModal = false; document.body.classList.remove('is-chatmodal'); const c = this.$refs.chatBox; if (c) c.style.animation = ''; },
       askDraft: '',
+      // DI bloko suskleidimas: jei turinys aukštesnis nei ~300 px, rodom pradžią ir „Rodyti daugiau“
+      aiOver: false,
+      aiMore: false,
+      aiMeasure() { const el = this.$refs.aiClamp; this.aiOver = !!el && el.scrollHeight > 300; },
       chatFromResults(text = '') {
         const sum = this.ai.summary, q = (text || '').trim();
         this.askDraft = '';

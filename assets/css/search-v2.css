@@ -1004,7 +1004,7 @@ body.is-chatfill { overflow: hidden; }
 .ch.is-fill .chf-col { width: 100%; max-width: 760px; margin: 0 auto; }
 
 /* Laukas „Klauskite toliau…“ po DI santrauka: pilnas input iškart, CTA atidaro DI režimą */
-.ch-field.ask-inline { align-items: center; margin: 18px 0 26px; padding: 6px 6px 6px 14px; box-shadow: 0 4px 16px rgba(15, 40, 42, .06); }
+.ch-field.ask-inline { align-items: center; margin: 16px 0 8px; padding: 6px 6px 6px 14px; box-shadow: 0 4px 16px rgba(15, 40, 42, .06); }
 .ask-inline > .ai-ic { flex: 0 0 auto; margin: -4px 2px -4px 0; }
 .ask-inline textarea { height: 36px; }
 .ask-go { flex: 0 0 auto; display: inline-flex; align-items: center; gap: 7px; height: 36px; padding: 0 14px 0 16px; border: 0; border-radius: 10px; background: linear-gradient(135deg, #ff7f7d, #b85399); color: #fff; font-size: 14px; font-weight: 600; white-space: nowrap; cursor: pointer; box-shadow: 0 2px 6px rgba(184, 83, 153, .25); transition: filter .15s, box-shadow .15s; }
@@ -1012,3 +1012,10 @@ body.is-chatfill { overflow: hidden; }
 .ask-go svg { transition: transform .2s var(--ms-ease); }
 .ask-go:hover svg { transform: translateX(2px); }
 @media (max-width: 520px) { .ask-go { padding: 0 12px; font-size: 13px; } }
+
+/* Ilgas DI turinys: suskleistas iki ~260 px su išblukimu, „Rodyti daugiau“ */
+.a2-clamp.is-clamped { max-height: 260px; overflow: hidden; -webkit-mask-image: linear-gradient(to bottom, #000 62%, transparent); mask-image: linear-gradient(to bottom, #000 62%, transparent); }
+.a2-more { display: inline-flex; align-items: center; gap: 6px; height: 32px; margin: 2px 0 4px; padding: 0 14px; border: 1px solid var(--ms-line-strong); border-radius: 16px; background: #fff; color: var(--ms-ink); font-size: 13.5px; font-weight: 600; cursor: pointer; transition: background .15s, border-color .15s; }
+.a2-more:hover { background: var(--ms-surface-soft); border-color: var(--ms-field-text); }
+.a2-more svg { transition: transform .2s var(--ms-ease); }
+.a2-disc-ask { margin: 0 0 18px; color: var(--ms-muted); font-size: 12px; }

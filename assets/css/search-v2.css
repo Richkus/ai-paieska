@@ -1002,3 +1002,13 @@ body.is-chatfill { overflow: hidden; }
 @media (max-width: 900px) { .ch.is-fill .chf-wrap { grid-template-columns: minmax(0, 1fr); } }
 /* DI režimas per visą langą: pokalbio plotis ribojamas patogiam skaitymui (~70 ženklų eilutė), centruojamas */
 .ch.is-fill .chf-col { width: 100%; max-width: 760px; margin: 0 auto; }
+
+/* Laukas „Klauskite toliau…“ po DI santrauka: pilnas input iškart, CTA atidaro DI režimą */
+.ch-field.ask-inline { align-items: center; margin: 18px 0 26px; padding: 6px 6px 6px 14px; box-shadow: 0 4px 16px rgba(15, 40, 42, .06); }
+.ask-inline > .ai-ic { flex: 0 0 auto; margin: -4px 2px -4px 0; }
+.ask-inline textarea { height: 36px; }
+.ask-go { flex: 0 0 auto; display: inline-flex; align-items: center; gap: 7px; height: 36px; padding: 0 14px 0 16px; border: 0; border-radius: 10px; background: linear-gradient(135deg, #ff7f7d, #b85399); color: #fff; font-size: 14px; font-weight: 600; white-space: nowrap; cursor: pointer; box-shadow: 0 2px 6px rgba(184, 83, 153, .25); transition: filter .15s, box-shadow .15s; }
+.ask-go:hover { filter: brightness(1.05); box-shadow: 0 4px 12px rgba(184, 83, 153, .35); }
+.ask-go svg { transition: transform .2s var(--ms-ease); }
+.ask-go:hover svg { transform: translateX(2px); }
+@media (max-width: 520px) { .ask-go { padding: 0 12px; font-size: 13px; } }

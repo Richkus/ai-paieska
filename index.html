@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="assets/css/shell.css?v=1026r">
 <link rel="stylesheet" href="assets/css/search.css?v=1025k">
 <link rel="stylesheet" href="assets/css/filters.css?v=1025k">
-<link rel="stylesheet" href="assets/css/search-v2.css?v=1026w">
+<link rel="stylesheet" href="assets/css/search-v2.css?v=1026x">
 <link rel="stylesheet" href="assets/css/loader.css?v=1025z">
 <link rel="stylesheet" href="assets/css/loader-ai.css?v=1026e">
 <link rel="stylesheet" href="assets/css/admin.css?v=1025w">
@@ -431,6 +431,14 @@
               </div>
             </template>
 
+            <!-- Klausti toliau: pilnas laukas iškart po santrauka (virš „Tęskit temą“); paspaudus atsidaro DI režimas su šiuo klausimu -->
+            <form class="ch-field ask-inline" @submit.prevent="chatFromResults(askDraft)">
+              <img class="ai-ic" src="assets/img/ai.svg" width="11" height="19" alt="" aria-hidden="true">
+              <textarea rows="1" x-model="askDraft" placeholder="Klauskite toliau…" aria-label="Klausti DI toliau"
+                        @input="$el.style.height = 'auto'; $el.style.height = Math.min($el.scrollHeight, 140) + 'px'"
+                        @keydown.enter="if (!$event.shiftKey) { $event.preventDefault(); chatFromResults(askDraft); }"></textarea>
+              <button type="submit" class="ask-go">Chatinti su DI <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 3.5 13 8l-4.5 4.5" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            </form>
             <div class="a2-foot">
               <div x-show="ver === 'v4'">
                 <div x-show="related.length">
@@ -453,13 +461,6 @@
                 </button>
               </div>
             </div>
-            </div>
-            <!-- „Chatinti toliau su DI“ pririštas prie DI bloko apačios; jei blokas ilgas, prilimpa prie ekrano apačios -->
-            <div class="ask-dock">
-              <button type="button" class="ask-pill" @click="chatFromResults()">
-                <img class="ai-ic" src="assets/img/ai.svg" width="11" height="19" alt="" aria-hidden="true">
-                <span>Chatinti toliau su DI</span>
-              </button>
             </div>
           </section>
         </template>
@@ -1638,14 +1639,17 @@
         this.$nextTick(() => setTimeout(() => this.$refs.chatIn && this.$refs.chatIn.focus({ preventScroll: true }), 250));
       },
       closeChatModal() { this.chatModal = false; document.body.classList.remove('is-chatmodal'); const c = this.$refs.chatBox; if (c) c.style.animation = ''; },
-      chatFromResults() {
-        const sum = this.ai.summary;
+      askDraft: '',
+      chatFromResults(text = '') {
+        const sum = this.ai.summary, q = (text || '').trim();
+        this.askDraft = '';
         if (this.p.chatView === 'modal') this.openChatModal(true); else { this.setMode('chat'); window.scrollTo({ top: 0 }); }
         if (sum) {
           clearTimeout(this._ct);
           this.chat = { key: this.scIdx + '|' + this.activeQuery, msgs: [{ who: 'user', text: this.activeQuery }, { who: 'ai', text: 'Trumpai, ką radau:', card: { summary: sum } }], step: 0, typing: false, draft: '', misses: 0, expertShown: false };
-          this.chatReply();
-        } else this.chatEnsure();
+          // Jei žmogus jau įrašė klausimą po santrauka, jis tampa pirmu tęsinio klausimu
+          if (q) this.chatSend(q); else this.chatReply();
+        } else { this.chatEnsure(); if (q) this.$nextTick(() => setTimeout(() => { this.chat.draft = q; }, 50)); }
         this.$nextTick(() => setTimeout(() => this.$refs.chatIn && this.$refs.chatIn.focus({ preventScroll: true }), 300));
       },
       recoverPick(r) {
